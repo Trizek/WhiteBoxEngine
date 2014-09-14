@@ -246,7 +246,7 @@ WhiteBox::SGlobalVariables::Init();
 
 
 	WhiteBox::CAssetManager assMan;
-//	assMan.Export( "Assets", "Resources" );
+	assMan.Export( "Assets", "Resources" );
 
 	WhiteBox::gVars->pResourceManager->ParseResources( "Resources" );
 
