@@ -4,13 +4,16 @@
 #include <math.h>
 
 
-#define PI 3.14f
+#define PI 3.1419f
+#define DEG2RAD (PI/180.0f)
 
 struct Radian;
 struct Degree
 {
 	explicit Degree( float _angle );
-	Degree( const Radian& radian ); 
+	Degree( const Radian& radian );
+	
+	Degree operator*( float coeff ) const;
 
 	float angle;
 };
@@ -19,9 +22,15 @@ struct Radian
 {
 	explicit Radian( float _angle );
 	Radian( const Degree& degree ); 
+	
+	Radian operator*( float coeff ) const;
 
 	float angle;
 };
+
+float Cos( Radian angle );
+float Sin( Radian angle );
+float Tan( Radian angle );
 
 
 struct Vec4
@@ -154,17 +163,136 @@ struct Vec2
 	float x, y;
 };
 
-/*
-Vec3 operator*( const float scalar, const Vec3& rhs )
-{
-	return Vec3( scalar*rhs.x, scalar*rhs.y, scalar*rhs.z );
-}*/
 
-/*
-Vec3 operator-( const Vec3& rhs )
+Vec3 operator*( const float scalar, const Vec3& rhs );
+Vec3 operator-( const Vec3& rhs );
+
+// (x,y,z) = u sin(angle/2), w = cos(angle/2)
+struct Quat
 {
-	return Vec3( -rhs.x, -rhs.y, -rhs.z );
-}*/
+	Quat()
+		: x(0.0f), y(0.0f), z(0.0f), w(1.0f){}
+		
+	Quat( float _w, float _x, float _y, float _z )
+		: w(_w), x(_x), y(_y), z(_z){}
+		
+	Quat( const Vec3& axis, Radian angle )
+	{
+		float cos = Cos( angle * 0.5f );
+		float sin = Sin( angle * 0.5f );
+		
+		w = cos;
+		x = axis.x * sin;
+		y = axis.y * sin;
+		z = axis.z * sin;
+	}
+	
+	static Quat CreateRotX( Radian angle )
+	{
+		Quat q;
+		q.w = Cos( angle * 0.5f );
+		q.x = Sin( angle * 0.5f );
+		return q;
+	}
+	
+	static Quat CreateRotY( Radian angle )
+	{
+		Quat q;
+		q.w = Cos( angle * 0.5f );
+		q.y = Sin( angle * 0.5f );
+		return q;
+	}
+	
+	static Quat CreateRotZ( Radian angle )
+	{
+		Quat q;
+		q.w = Cos( angle * 0.5f );
+		q.z = Sin( angle * 0.5f );
+		return q;
+	}			
+		
+	Quat( Radian yaw, Radian pitch, Radian roll )
+	{
+		Quat q = CreateRotX( yaw ) * CreateRotY( pitch ) * CreateRotZ( roll );
+		w = q.w;
+		x = q.x;
+		y = q.y;
+		z = q.z;
+	}
+	
+	Quat operator*( const Quat& q ) const
+	{
+		Quat res;
+		res.x = w*q.w - x*q.x - y*q.y - z*q.z;
+		res.y = w*q.x + x*q.w + y*q.z - z*q.y;
+		res.z = w*q.y - x*q.z + y*q.w + z*q.x;
+		res.w = w*q.z + x*q.y - y*q.x + z*q.w;
+		
+		return res; 
+	}
+	
+	Quat getInverse() const
+	{
+		return Quat( -w, x, y, z );
+	}
+	
+	Vec3 operator*( const Vec3& v ) const
+	{
+		Vec3 res;
+		res.x =	(1.0f - 2.0f*y*y - 2.0f*z*z) * v.x +
+				(2.0f*x*y - 2.0f*z*w) * v.y +
+				(2.0f*x*z + 2.0f*y*w) * v.z;
+				
+		res.y =	(2.0f*x*y + 2.0f*z*w) * v.x +
+				(1.0f - 2.0f*x*x - 2.0f*z*z) * v.y +
+				(2.0f*y*z - 2.0f*x*w) * v.z;
+				
+		res.z =	(2.0f*x*z - 2.0f*y*w) * v.x +
+				(2.0f*y*z + 2.0f*x*w) * v.y +
+				(1.0f - 2.0f*x*x - 2.0f*y*y) * v.z;
+				
+		return res;
+	}
+	
+
+
+	float w, x, y, z;
+};
+
+Quat operator!( const Quat& q );
+
+struct Transform
+{
+	Transform()
+		: scale(1.0f){}
+
+	Transform operator*( const Transform& t ) const
+	{
+		Transform res;
+		res.position = position + rotation * t.position;
+		res.rotation = rotation * t.rotation;
+		res.scale = Vec3( scale.x*t.scale.x, scale.y*t.scale.y, scale.z*t.scale.z );
+		
+		return res;
+	}
+	
+	Transform getInverse() const
+	{
+		Transform res;
+		res.position = !rotation * (-position);
+		res.rotation = !rotation;
+		res.scale = Vec3( 1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z );
+		
+		return res;
+	}
+		
+
+	Vec3	position;
+	Quat	rotation;
+	Vec3	scale;
+};
+
+Transform operator!( const Transform& t );
 
 // in fact it's a Matrix4x4 but the last line is (0,0,0,1)
 // M = (V1 V2 V3 T), Rotation = Axis(V1,V2,V3), Translation=T;
