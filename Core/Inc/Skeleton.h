@@ -37,7 +37,7 @@ protected:
 	int		m_parentIndex;
 };
 
-typede std::vector< CBone > TBoneArray;
+typedef std::vector< CBone > TBoneArray;
 
 class CPose
 {
@@ -56,8 +56,8 @@ public:
 	void AddBone( const String& boneName, const String& parentName, const Transform& localTransform )
 	{
 		int parentIndex = -1;
-		TBoneNameToIndexMap::iterator parentIt = m_boneToNameIndex.find( parentName );
-		if ( parentIt != m_boneToNameIndex.end() )
+		TBoneNameToIndexMap::iterator parentIt = m_boneNameToIndex.find( parentName );
+		if ( parentIt != m_boneNameToIndex.end() )
 		{
 			parentIndex = parentIt->second;
 		}
@@ -66,39 +66,42 @@ public:
 		
 		m_bones.push_back( CBone( boneName, boneIndex, parentIndex ) );
 		m_localBindPose.m_boneTransforms.push_back( localTransform );
+		
+		m_boneNameToIndex[ boneName ] = boneIndex;
 	}
 	
 	void ComputeInvertedGlobalBindPose()
 	{
-		m_invertedGlobalBindPose.resize( m_localBindPose.m_boneTransforms.size() );
+		m_invertedGlobalBindPose.m_boneTransforms.resize( m_localBindPose.m_boneTransforms.size() );
 		
 		// Compute global pose
-		for( size_t iBone = 0 ; iBone < m_localBindPose.m_boneTransforms.size() ; ++iBone )
-		{
-			Transform boneTransform = m_localBindPose.m_boneTransforms[ iBone ];
-			int parentIdx = m_bones[ iBone ].GetParentIndex();
-			if ( parentIdx >= 0 )
-			{
-				boneTransform = m_invertedGlobalBindPose.m_boneTransforms[ parentIndex ] * boneTransform;
-			}
-			m_invertedGlobalBindPose.m_boneTransforms[ iBone ] = boneTransform;
-		}
+		ComputeGlobalPose( m_localBindPose, m_invertedGlobalBindPose );
 		
 		// Invert it
-		for( size_t iBone = 0 ; iBone < m_localBindPose.size() ; ++iBone )
+		for( size_t iBone = 0 ; iBone < m_localBindPose.m_boneTransforms.size() ; ++iBone )
 		{
 			m_invertedGlobalBindPose.m_boneTransforms[ iBone ] = !m_invertedGlobalBindPose.m_boneTransforms[ iBone ];
 		}		
 	}
 	
-	void ComputeGlobalPose( const CPose& skelPose, CPose& globalPose ) const
+	void ConvertFromBindToLocalSpace( CPose& pose )
 	{
-		globalPose.resize( m_bones.size() );
+		pose.m_boneTransforms.resize( m_bones.size() );
+	
+		for( size_t iBone = 0 ; iBone < m_localBindPose.m_boneTransforms.size() ; ++iBone )
+		{
+			pose.m_boneTransforms[ iBone ] = m_localBindPose.m_boneTransforms[ iBone ] * pose.m_boneTransforms[ iBone ];
+		}		
+	}
+	
+	void ComputeGlobalPose( const CPose& localPose, CPose& globalPose ) const
+	{
+		globalPose.m_boneTransforms.resize( m_bones.size() );
 		
 		for( size_t iBone = 0 ; iBone < m_localBindPose.m_boneTransforms.size() ; ++iBone )
 		{
-			Transform globalTransf = m_localBindPose.m_boneTransforms[ iBone ] * skelPose.m_boneTransforms[ iBone ];
-			int parentIndex = m_bone[ iBone ].GetParentIndex();
+			Transform globalTransf = localPose.m_boneTransforms[ iBone ];
+			int parentIndex = m_bones[ iBone ].GetParentIndex();
 			if ( parentIndex >= 0.0f )
 			{
 				globalTransf = globalPose.m_boneTransforms[ parentIndex ] * globalTransf;
@@ -109,6 +112,8 @@ public:
 	
 	void ComputeSkinningPose( const CPose& globalPose, CPose& skinPose ) const
 	{		
+		skinPose.m_boneTransforms.resize( m_bones.size() );
+	
 		for( size_t iBone = 0 ; iBone < m_localBindPose.m_boneTransforms.size() ; ++iBone )
 		{
 			skinPose.m_boneTransforms[ iBone ] = globalPose.m_boneTransforms[ iBone ] * m_invertedGlobalBindPose.m_boneTransforms[ iBone ];

@@ -4,6 +4,9 @@
 #include "System.h"
 #include "FileSystem.h"
 
+#define FBX_EXPORTER 0
+#if FBX_EXPORTER
+
 #include <stdio.h>
 
 #include <fbxsdk.h>
@@ -330,5 +333,13 @@ void CFbxExporter::Export( const String& assetFolder, const String& resourceFold
 	gSystem->pFileSystem->CloseFile( file );*/
 
 }
+
+#else
+
+WHITEBOX_BEGIN
+
+void CFbxExporter::Export( const String& assetFolder, const String& resourceFolder, const String& filePath )
+{}
+#endif
 
 WHITEBOX_END

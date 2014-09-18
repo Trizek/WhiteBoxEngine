@@ -27,7 +27,9 @@
 #include "AssetManager.h"
 
 
+#include "Skeleton.h"
 
+using namespace WhiteBox;
 
 GLuint textureID, textureID2;
 
@@ -40,6 +42,22 @@ WhiteBox::CMesh* pMesh1 = NULL, *pMesh2 = NULL;
 	
 	
 	float rot = 0.0f;
+	
+	CSkeleton skel;
+	
+	
+	float phase = 0.0f;
+
+
+static const size_t vert = 20;
+static const size_t hori = 20;
+
+float radius = 0.7f;
+float height = 3.0f;
+
+Vec3 points[ hori * vert ];
+Vec3 points2[ hori * vert ];
+float weights[ hori * vert ];
 
 
 
@@ -59,10 +77,7 @@ void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glEnable(GL_TEXTURE_2D);
-	
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ); // Linear Filtering
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); // Linear Filtering	
-	
+		
 	/*
 	GLfloat mat[] = { 1.0, 1.0, 1.0, 1.0 };
 	glEnable(GL_LIGHTING);
@@ -80,7 +95,7 @@ void display(void) {
 	//rot += 0.1f;
 	//glBindTexture(GL_TEXTURE_2D, textureID);
 	//glScalef(4,4,4); 
-	glTranslatef(0.0f,-1.0f, -3.6f);  //
+	glTranslatef(0.0f,-1.0f, -9.6f);  //
 	//glTranslatef(0.0f,-10.0f, -40.6f); 
 
 		//	glRotatef( rot, 0, 1,0  );
@@ -91,7 +106,7 @@ if (pMesh )
 {
 //	WhiteBox::gSystem->pRenderer->BindTexture( pTex->GetTextureId(), 0 );
 
-	pMesh->Render();
+	//pMesh->Render();
 }
 
 	//glRotatef( -rot, 0, 1, 0 );
@@ -144,50 +159,72 @@ glDisableClientState(GL_VERTEX_ARRAY);*/
 	
 //glTranslatef(-8,0.0f,0.0f); 
 //  glMaterialfv(GL_FRONT, GL_AMBIENT, mat);	
-   
-for(int i=0 ; i < 0 ; ++i )
+
+	phase += 0.5f;
+	
+	float angle = Cos( Degree(phase) ) * 40.0f;
+	float angle3 = Cos( Degree(phase * 0.2f) ) * 90.0f;
+
+
+if (true)
 {
-	WhiteBox::gSystem->pRenderer->BindTexture( pTex->GetTextureId(), 0 );
-//WhiteBox::gSystem->pRenderer->BindTexture( new int(i+1), 0 );
+	size_t count = skel.GetBones().size();
+	
+	skel.ComputeInvertedGlobalBindPose();
+	
+	CPose pose;
+	pose.m_boneTransforms.resize( count );
+	pose.m_boneTransforms[ 1 ].rotation = Quat::CreateRotX( Degree(angle3 ) ) * Quat::CreateRotZ( Degree(angle) );
+	//pose.m_boneTransforms[ 1 ].position.x = 0.5f;
+	skel.ConvertFromBindToLocalSpace( pose );
+	skel.ComputeGlobalPose( pose, pose );
+	
+	printf( "Skel\n" );
+	for( size_t i=0 ; i < count ; ++i )
+	{
+		CBone& bone = skel.GetBones()[ i ];
+		
+		if ( bone.GetParentIndex() >= 0 )
+		{
+			Vec3 parentPos = pose.m_boneTransforms[ bone.GetParentIndex() ].position;
+			gSystem->pRenderer->DrawLine( parentPos, pose.m_boneTransforms[ i ].position, Color::White );
+			
+		}
+		
+		printf( "Bone %s, father:%d, Pos(%.2f,%.2f,%.2f)\n", bone.GetName().c_str(), bone.GetParentIndex(), pose.m_boneTransforms[ i ].position.x, pose.m_boneTransforms[ i ].position.y, pose.m_boneTransforms[ i ].position.z );
+	}
+	
+	CPose skinPose;
+	skel.ComputeSkinningPose( pose, skinPose );
+	
+	for(int i=0 ; i<vert*hori ; ++i)
+	{
+		float w = points[ i ].y / 3.0f;
+	
+		points2[ i ] = (1.0f - w)*(skinPose.m_boneTransforms[ 0] * points[ i ]) + w*(skinPose.m_boneTransforms[ 2] * points[ i ]);
+		
+		
+		
+	}
+	
+	for( size_t i=0 ; i < vert ; ++i )
+	for( size_t j=0 ; j < hori-1 ; ++j )
+	{
+		Vec3& pt1 = points2[ hori * i + j ];
+		Vec3& pt2 = points2[ hori * i + j + 1 ];
+		
+		gSystem->pRenderer->DrawLine( pt1, pt2, Color::Blue );
 
-//glBindTexture( GL_TEXTURE_2D, i+1 );//textureID );
-
-glBegin(GL_QUADS);
-    // Front Face
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);  // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);  // Top Left Of The Texture and Quad
-    // Back Face
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);  // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);  // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-    // Top Face
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);  // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f,  1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);  // Top Right Of The Texture and Quad
-    // Bottom Face
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, -1.0f, -1.0f);  // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-    // Right face
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);  // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);  // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-    // Left Face
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);  // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);  // Top Left Of The Texture and Quad
-glEnd();
-glBindTexture( GL_TEXTURE_2D, 0 );
+		
+		
+	}
+	
+	printf( "   %.2f\n", points[ 0].y );
+	printf( "   %.2f\n", points2[ 0].x ); 
+   
+}
 
 	glTranslatef(0.55f,0.0f,0.0f); 		
-}
     //this draws a square using vertices
   /*  glBegin(GL_QUADS);
     glVertex2i(0, 0);
@@ -211,8 +248,13 @@ void reshape(int width, int height) {
 	
 	float w = 2.41421f; //1.0f / 0.4f;
 	
+	
+	Degree fov( 45.0f );
+	w = 1.0f / Tan( fov * 0.5f );
+	float h = (w * float(height)) / float(width);
+	
 	WhiteBox::Matrix44 projMatrix;
-	WhiteBox::gSystem->pRenderer->ComputeProjectionMatrix( 0.1f, 100.0f, w, w, projMatrix );
+	WhiteBox::gSystem->pRenderer->ComputeProjectionMatrix( 0.1f, 100.0f, h, w, projMatrix );
 	WhiteBox::gSystem->pRenderer->SetProjectionMatrix( projMatrix );
 	
  /*   glMatrixMode(GL_PROJECTION);
@@ -239,17 +281,23 @@ void idle(void) {
     glutPostRedisplay();
 }
 
+
+
 int main(int argc, char *argv) {
 
 WhiteBox::SSystem::Init();
 WhiteBox::SGlobalVariables::Init();
 
 
-	WhiteBox::CAssetManager assMan;
-	assMan.Export( "Assets", "Resources" );
+//	WhiteBox::CAssetManager assMan;
+	//assMan.Export( "Assets", "Resources" );
 
-	WhiteBox::gVars->pResourceManager->ParseResources( "Resources" );
+//	WhiteBox::gVars->pResourceManager->ParseResources( "Resources" );
+	
 
+	skel.AddBone( "root", "", Transform() );
+	skel.AddBone( "child1", "root", Transform( Vec3(0.0f,1.5f,0.0f), Quat() ) );
+	skel.AddBone( "child2", "child1", Transform( Vec3(0.0f,1.5f,0.0f), Quat() ) );
 	/*
 	WhiteBox::gVars->pResourceManager->AddResource( "4bc51fe0_dds.mat" );
 	WhiteBox::gVars->pResourceManager->AddResource( "4bc51fe0.jpg" );
@@ -314,26 +362,29 @@ WhiteBox::SGlobalVariables::Init();
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
 	
-	float vertices[] = 
-	{	0.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f,         // Top
-		-1.0f,-1.0f, 0.0f,    0.0f, 1.0f, 0.0f,          // Bottom Left
-		1.0f,-1.0f, 0.0f,	0.0f, 0.0f, 1.0f
-	} ;
+for( size_t i=0 ; i < vert ; ++i )
+{
+	for( size_t j=0 ; j < hori ; ++j )
+	{
+		Vec3& pt =points[ hori * i + j ];
+		pt.x = Cos( Degree( j * (360.0f/hori) ) ) * radius;
+		pt.z = Sin( Degree( j * (360.0f/hori) ) ) * radius;
+		pt.y = ( float(i) / float(vert-1) ) * height;
+	}
+}	
+
 	
-	uint indices[] =
-	{	0, 0, 1 };
-	
-	pMesh = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CMesh >( "Resources/Borderlands_Zero/zero.msh" ); //"Resources/Ezio/Ezio.msh" ); //"Resources/Vanquish/vanquish.msh" ); //"Resources/Goku/Goku SS2/Goku SS2.msh" );
+	//pMesh = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CMesh >( "Resources/Borderlands_Zero/zero.msh" ); //"Resources/Ezio/Ezio.msh" ); //"Resources/Vanquish/vanquish.msh" ); //"Resources/Goku/Goku SS2/Goku SS2.msh" );
 	//pMesh = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CMesh >( "Resources/Goku/Goku SS2/Goku SS2.msh" );
 
 	
 	//pTex = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CTexture >( "tex" );
 		
-	pTex = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CTexture >( "dirtyinnersuit_d" );
+	//pTex = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CTexture >( "dirtyinnersuit_d" );
 		
 	//	static WhiteBox::CMaterialPtr pMat = WhiteBox::gVars->pResourceManager->GetResource< WhiteBox::CMaterial >( "material" );
 		
-	WhiteBox::gVars->pResourceManager->LoadQueriedResources();
+//	WhiteBox::gVars->pResourceManager->LoadQueriedResources();
 	
 	//printf( "Material shininess %.5f, emissive (%.5f,%.5f,%.5f,%.5f)\n", pMat->m_shininess, pMat->m_emissiveColor.x, pMat->m_emissiveColor.y, pMat->m_emissiveColor.z, pMat->m_emissiveColor.w );
 	

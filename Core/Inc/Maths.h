@@ -223,10 +223,10 @@ struct Quat
 	Quat operator*( const Quat& q ) const
 	{
 		Quat res;
-		res.x = w*q.w - x*q.x - y*q.y - z*q.z;
-		res.y = w*q.x + x*q.w + y*q.z - z*q.y;
-		res.z = w*q.y - x*q.z + y*q.w + z*q.x;
-		res.w = w*q.z + x*q.y - y*q.x + z*q.w;
+		res.w = w*q.w - x*q.x - y*q.y - z*q.z;
+		res.x = w*q.x + x*q.w + y*q.z - z*q.y;
+		res.y = w*q.y - x*q.z + y*q.w + z*q.x;
+		res.z = w*q.z + x*q.y - y*q.x + z*q.w;
 		
 		return res; 
 	}
@@ -265,16 +265,25 @@ struct Transform
 {
 	Transform()
 		: scale(1.0f){}
+		
+	Transform( const Vec3& _position, const Quat& _rotation )
+		: position(_position)
+		, rotation(_rotation)
+		, scale(1.0f){}
 
 	Transform operator*( const Transform& t ) const
 	{
 		Transform res;
 		res.position = position + rotation * t.position;
 		res.rotation = rotation * t.rotation;
-		res.scale = Vec3( scale.x*t.scale.x, scale.y*t.scale.y, scale.z*t.scale.z );
-		
+		res.scale = Vec3( scale.x*t.scale.x, scale.y*t.scale.y, scale.z*t.scale.z );		
 		return res;
 	}
+	
+	Vec3 operator*( const Vec3& v ) const
+	{
+		return position + rotation * Vec3( v.x * scale.x, v.y * scale.y, v.z * scale.z );
+	}	
 	
 	Transform getInverse() const
 	{
@@ -406,6 +415,20 @@ struct Matrix44
 	float a21, a22, a23, a24; // Col 2
 	float a31, a32, a33, a34; // Col 3
 	float a41, a42, a43, a44; // Col 4
+};
+
+struct Color
+{
+	Color() : r(0.0f), g(0.0f), b(0.0f), a(1.0f){}
+	Color( float _r, float _g, float _b ) : r(_r), g(_g), b(_b), a(1.0f){}
+	
+	static const Color Black;
+	static const Color White;
+	static const Color Red;
+	static const Color Green;
+	static const Color Blue;
+
+	float r, g, b, a;
 };
 
 #endif

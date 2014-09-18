@@ -55,6 +55,9 @@ public:
 	// Draw
 	void	RenderBoundTriangles( size_t indexCount );
 	
+	// Debug
+	void	DrawLine( const Vec3& from, const Vec3& to, const Color& color );
+	
 private:
 	void*	m_pSpecificData;
 	std::vector< IRenderTargetPtr >	m_pRenderTargets;

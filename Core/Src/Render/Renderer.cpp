@@ -337,6 +337,17 @@ void	CRenderer::RenderBoundTriangles( size_t indexCount )
 	//glEnd();
 	//glFlush();
 }
+
+void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color )
+{
+	glLineWidth( 2.5f ); 
+	glColor3f( color.r, color.g, color.b );
+	glBegin( GL_LINES );
+	glVertex3f( from.x, from.y, from.z );
+	glVertex3f( to.x, to.y, to.z );
+	glEnd();	
+}
+
 // Draw
 /*
 
