@@ -209,7 +209,13 @@ struct Quat
 		q.w = Cos( angle * 0.5f );
 		q.z = Sin( angle * 0.5f );
 		return q;
-	}			
+	}
+	
+	static ushort	EncodeComponent( float component );
+	static float	DecodeComponent( ushort val );
+	
+	static void		EncodeQuat( const Quat& q, ushort& s0, ushort& s1, ushort& s2 );
+	static float	DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q );
 		
 	Quat( Radian yaw, Radian pitch, Radian roll )
 	{
@@ -219,6 +225,28 @@ struct Quat
 		y = q.y;
 		z = q.z;
 	}
+	
+	float Length() const
+	{
+		return sqrtf( w*w + x*x + y*y + z*z );
+	}
+	
+	float SqrLength() const
+	{
+		return w*w + x*x + y*y + z*z;
+	}
+	
+	void Normalize()
+	{
+		if ( w || x || y || z )
+		{
+			float length = Length();
+			w /= length;
+			x /= length;
+			y /= length;
+			z /= length;
+		}
+	}	
 	
 	Quat operator*( const Quat& q ) const
 	{

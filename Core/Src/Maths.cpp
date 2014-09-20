@@ -53,6 +53,49 @@ Vec3 operator-( const Vec3& rhs )
 	return Vec3( -rhs.x, -rhs.y, -rhs.z );
 }
 
+ushort	Quat::EncodeComponent( float component )
+{
+	static short start = (1 << (sizeof(short)*8-1));
+	static short end = start - 1;
+	
+	short val = (ushort)( (0.5f + component * 0.5f)*int((int)end - (int)start) );
+	return val;
+}
+
+float	Quat::DecodeComponent( ushort val )
+{
+	static short start = (1 << (sizeof(short)*8-1));
+	static short end = start - 1;
+
+	float component = -1.0f + (float(val) / float((int)end - (int)start)) * 2.0f;
+	return component;	
+}
+	
+void	Quat::EncodeQuat( const Quat& q, ushort& s0, ushort& s1, ushort& s2 )
+{
+	if ( q.w < 0.0f )
+	{
+		s0 = EncodeComponent( -q.x );
+		s1 = EncodeComponent( -q.y );
+		s2 = EncodeComponent( -q.z );
+	}
+	else
+	{
+		s0 = EncodeComponent( q.x );
+		s1 = EncodeComponent( q.y );
+		s2 = EncodeComponent( q.z );	
+	}
+}
+
+float	Quat::DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q )
+{
+	q.x = DecodeComponent( s0 );
+	q.y = DecodeComponent( s1 );
+	q.z = DecodeComponent( s2 );
+	q.w = sqrtf( 1.0f - ( q.x*q.x + q.y*q.y + q.z*q.z ) );
+}
+
+
 Quat operator!( const Quat& q )
 {
 	return q.getInverse();

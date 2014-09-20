@@ -3,6 +3,7 @@
 
 #define BIT( n ) (1 << (n)) 
 
+typedef unsigned short ushort;
 typedef unsigned int uint;
 
 #include <vector>

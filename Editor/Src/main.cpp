@@ -27,7 +27,7 @@
 #include "AssetManager.h"
 
 
-#include "Skeleton.h"
+#include "Animation/Skeleton.h"
 
 using namespace WhiteBox;
 
@@ -62,6 +62,14 @@ float weights[ hori * vert ];
 
 
 void display(void) {
+
+
+	float component = -0.8213f;
+	
+	short val = Quat::EncodeComponent( component );
+	float comp2 = Quat::DecodeComponent( val );
+	
+	printf("Quantizing: %.5f -> %d -> %.5f\n", component, val, comp2);
 
     //clear white, draw with black
     glClearColor(0, 0, 0, 0);

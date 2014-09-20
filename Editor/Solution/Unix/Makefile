@@ -5,7 +5,7 @@ FRAMEWORK = -framework OpenGL -framework GLUT -framework Carbon -framework Syste
 LIBS_PATHS = -L../../../Core/Libs/FreeImage -L../../../Editor/Libs/OsX/FbxSdk/lib/ 
 LIBS = -lfreeimage 
 #-lfbxsdk_gcc4_ub -lm -lstdc++ -liconv -fexceptions -lz 
-SOURCE = ../../../Core/Src/*.cpp ../../../Core/Src/Render/*.cpp ../../../Core/Src/System/*.cpp ../../../Editor/Src/*.cpp
+SOURCE = ../../../Core/Src/*.cpp ../../../Core/Src/Render/*.cpp ../../../Core/Src/System/*.cpp ../../../Core/Src/Animation/*.cpp ../../../Editor/Src/*.cpp
 
 all:
 	$(CC) $(INCLUDE) $(LIBS_PATHS) $(FRAMEWORK) $(LIBS) $(SOURCE) -o test
