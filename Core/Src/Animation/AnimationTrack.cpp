@@ -55,5 +55,16 @@ void	CAnimationTrack::Sample( float animTime, Transform& fromKeyFrame, Transform
 	weight = animTime - (float)fromKeyIndex;
 }
 
+void	CAnimationTrack::AccumulateSample( float animTime, float sampleWeight, Transform& accTransform, float& accWeight ) const
+{
+	float weight;
+	Transform fromKeyFrame, toKeyFrame;
+	Sample( animTime, fromKeyFrame, toKeyFrame, weight );
+	
+	accTransform = accTransform + sampleWeight * (1.0f - weight) * fromKeyFrame + sampleWeight * weight * toKeyFrame;
+	sampleWeight += weight;
+}
+
+
 
 WHITEBOX_END

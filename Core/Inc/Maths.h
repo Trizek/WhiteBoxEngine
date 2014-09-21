@@ -248,6 +248,11 @@ struct Quat
 		}
 	}	
 	
+	Quat operator+( const Quat& q ) const
+	{
+		return Quat( w + q.w, x + q.x, y + q.y, z + q.z );
+	}
+	
 	Quat operator*( const Quat& q ) const
 	{
 		Quat res;
@@ -288,6 +293,7 @@ struct Quat
 };
 
 Quat operator!( const Quat& q );
+Quat operator*( float factor, const Quat& q );
 
 struct Transform
 {
@@ -298,6 +304,11 @@ struct Transform
 		: position(_position)
 		, rotation(_rotation)
 		, scale(1.0f){}
+		
+	Transform operator+( const Transform& t ) const
+	{
+		return Transform( position + t.position, rotation + t.rotation );
+	}
 
 	Transform operator*( const Transform& t ) const
 	{
@@ -330,6 +341,7 @@ struct Transform
 };
 
 Transform operator!( const Transform& t );
+Transform operator*( float factor, const Transform& t );
 
 // in fact it's a Matrix4x4 but the last line is (0,0,0,1)
 // M = (V1 V2 V3 T), Rotation = Axis(V1,V2,V3), Translation=T;

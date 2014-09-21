@@ -101,9 +101,19 @@ Quat operator!( const Quat& q )
 	return q.getInverse();
 }
 
+Quat operator*( float factor, const Quat& q )
+{
+	return Quat( factor * q.w, factor * q.x, factor * q.y, factor * q.z );
+}
+
 Transform operator!( const Transform& t )
 {
 	return t.getInverse();
+}
+
+Transform operator*( float factor, const Transform& t )
+{
+	return Transform( factor * t.position, factor * t.rotation );
 }
 
 const Color Color::Black = Color( 0.0f, 0.0f, 0.0f );
