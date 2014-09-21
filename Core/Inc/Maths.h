@@ -4,6 +4,24 @@
 #include <math.h>
 
 
+template< class T >
+T	Min( const T& a, const T& b )
+{
+	return ( a < b )? a : b;
+}
+
+template< class T >
+T	Max( const T& a, const T& b )
+{
+	return ( a < b )? a : b;
+}
+
+template< class T >
+T	Clamp( const T& x, const T& a, const T& b )
+{
+	return Min( Max( x, a ), b );
+}
+
 #define PI 3.1419f
 #define DEG2RAD (PI/180.0f)
 

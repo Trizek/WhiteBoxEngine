@@ -48,7 +48,7 @@ void	CAnimationTrack::GetKeyFrame( size_t index, Transform& keyFrame ) const
 void	CAnimationTrack::Sample( float animTime, Transform& fromKeyFrame, Transform& toKeyFrame, float& weight ) const
 {
 	size_t fromKeyIndex = size_t(animTime * AnimationFrameRate);
-	size_t toKeyIndex = fromKeyIndex + 1;
+	size_t toKeyIndex = Min( fromKeyIndex + 1, m_keyFrameCount - 1 );
 	
 	GetKeyFrame( fromKeyIndex, fromKeyFrame );
 	GetKeyFrame( toKeyIndex, toKeyFrame );
