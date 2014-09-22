@@ -18,6 +18,11 @@ CAnimationTrack::~CAnimationTrack()
 	}
 }
 
+float	CAnimationTrack::GetLength() const
+{
+	return float(m_keyFrameCount) / float(AnimationFrameRate);
+}
+
 void	CAnimationTrack::GetKeyFrame( size_t index, Transform& keyFrame ) const
 {
 	switch( m_keyFrameFormat )
@@ -55,14 +60,13 @@ void	CAnimationTrack::Sample( float animTime, Transform& fromKeyFrame, Transform
 	weight = animTime - (float)fromKeyIndex;
 }
 
-void	CAnimationTrack::AccumulateSample( float animTime, float sampleWeight, Transform& accTransform, float& accWeight ) const
+void	CAnimationTrack::AccumulateSample( float animTime, float sampleWeight, Transform& accTransform ) const
 {
 	float weight;
 	Transform fromKeyFrame, toKeyFrame;
 	Sample( animTime, fromKeyFrame, toKeyFrame, weight );
 	
 	accTransform = accTransform + sampleWeight * (1.0f - weight) * fromKeyFrame + sampleWeight * weight * toKeyFrame;
-	sampleWeight += weight;
 }
 
 

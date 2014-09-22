@@ -4,15 +4,18 @@
 #include "BaseTypes.h"
 
 #include "AnimationTrack.h"
+#include "Skeleton.h"
 
 WHITEBOX_BEGIN
 
 class CAnimation
 {
-public:	
+public:
+	CAnimation();
+
 	void	AddAnimationTack( CAnimationTrack* pAnimTrack );
 	
-	void	AccumulatePose( float animTime, float animWeight, CPose& accPose, float& accWeight ) const;
+	void	AccumulateSamplePose( float animTime, float animWeight, CPose& accPose, float& accWeight ) const;
 
 private:
 	typedef std::vector< CAnimationTrack* >	TAnimationTrackArray;

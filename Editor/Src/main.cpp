@@ -66,6 +66,16 @@ void display(void) {
 
 	float component = -0.8213f;
 	
+	Quat q(-1,0,0,0);
+	
+	ushort s0,s1,s2;
+	Quat::EncodeQuat( q, s0, s1, s2 );
+	
+	Quat q2;
+	Quat::DecodeQuat( s0, s1, s2, q2 );
+	
+	printf( "(%.5f, %.5f,%.5f,%.5f)\n", q2.w, q2.x, q2.y, q2.z );
+	
 	short val = Quat::EncodeComponent( component );
 	float comp2 = Quat::DecodeComponent( val );
 	

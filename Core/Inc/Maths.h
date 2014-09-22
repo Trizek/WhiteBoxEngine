@@ -134,6 +134,11 @@ struct Vec3
 		return Vec3( y*rhs.z - z*rhs.y, z*rhs.x - x*rhs.z, x*rhs.y - y*rhs.x );
 	}
 	
+	bool IsNull( float epsilon = 0.01f ) const
+	{
+		return ( SqrLength() <= epsilon * epsilon );
+	}
+	
 	float Length() const
 	{
 		return sqrtf( x*x + y*y + z*z );
@@ -242,6 +247,11 @@ struct Quat
 		x = q.x;
 		y = q.y;
 		z = q.z;
+	}
+	
+	bool IsNull( float epsilon = 0.01f ) const
+	{
+		return ( SqrLength() <= epsilon * epsilon );
 	}
 	
 	float Length() const
@@ -488,5 +498,102 @@ struct Color
 
 	float r, g, b, a;
 };
+
+class Matrix22
+{
+	Matrix22()
+		: a(0.0f), b(0.0f), c(0.0f), d(0.0f){}
+
+	Matrix22( float _a, float _b, float _c, float _d )
+		: a(_a), b(_b), c(_c), d(_d){}
+		
+	bool	Inverse( Matrix22& inverse ) const
+	{
+		float det = a*d - b*c;
+		if ( det != 0.0f )
+		{
+			return false;
+		}
+		
+		float coeff = 1.0f / det;
+		inverse.a = coeff * d;
+		inverse.b = -coeff * b;
+		inverse.c = -coeff * c;
+		inverse.d = coeff * a;
+	}
+	
+	Matrix22 operator*( const Matrix22& mat ) const
+	{
+		Matrix22 res;
+		res.a = a*mat.a + b*mat.c;
+		res.b = a*mat.b + b*mat.d;
+		res.c = c*mat.a + d*mat.c;
+		res.d = c*mat.b + d*mat.d;
+		
+		return res;
+	}
+	
+	Vec2 operator*( const Vec2& v ) const
+	{
+		return Vec2( a*v.x + b*v.y, c*v.x + d*v.y );
+	}
+
+	float a, b, c, d;
+};
+
+template< class T >
+T CubicInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, const T& P1Derivative, t, T& interpolated )
+{
+	float t01 = t1 - t0;
+	float t01Sqr = t01 * t01;
+	float t01Cube = t01Sqr * t01;
+	Matrix22 A( t01Cube, t01Sqr, 3.0f * t01Sqr, 2.0f * t01 );
+	Matrix22 invA;
+	A.Inverse( invA );
+		
+	T Bx = P1 - P0 - t01 * P0Derivative;
+	T By = P1Derivative - P0Derivative;
+	
+	T a = invA.a * Bx + invA.b * By;
+	T b = invA.c * Bx + invA.d * By;
+	const T& c = P0Derivative;
+	const T& d = P0;
+	
+	float t0t = t - t0;
+	float t0tSqr = t0t * t0t;
+	float t0tCube = t01Sqr * t0t;
+	interpolated = t0tCube * a + t0tSqr * b + t0t * c + d;
+}
+
+template< class T >
+T CubicInterpolate( float t0, const T& P0,
+					float t1, const T& P1,
+					float t2, const T& P2,
+					float t3, const T& P3,
+					t, T& interpolated )
+{
+	T P1Derivative = (1.0f/(t2 - t0)) * (P2 - P0);
+	T P2Derivative = (1.0f/(t3 - t1)) * (P3 - P1);
+	
+	CubicInterpolate( t1, P1, P1Derivative, t2, P2, P2Derivative, t, interpolated );
+}
+
+template< class T >
+T QuadraticInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, float t, T& interpolated )
+{
+	float t01 = t1 - t0;
+	float t01Sqr = t01 * t01;
+	T a = (P1 - P0 - t01 * P0Derivative) / t01Sqr;
+	const T& b = P0Derivative;
+	const T& c = P0;
+	
+	interpolated = t01Sqr * a + t01 * b + c;
+}
+
+template< class T >
+T QuadraticInterpolate( float t0, const T& P0, float t1, const T& P1, const T& P1Derivative, float t, T& interpolated )
+{
+	QuadraticInterpolate( -t1, P1, P1Derivative, -t0, P0, -t, interpolated );
+}
 
 #endif

@@ -20,10 +20,13 @@ public:
 	CAnimationTrack( EKeyFrameFormat keyFrameFormat, void* keyFrames, size_t keyFrameCount );
 	~CAnimationTrack();
 	
+	float	GetLength() const;
+	
 	void	GetKeyFrame( size_t index, Transform& keyFrame ) const;
 	void	Sample( float animTime, Transform& fromKeyFrame, Transform& toKeyFrame, float& toWeight ) const;
-	void	AccumulateSample( float animTime, float sampleWeight, Transform& accTransform, float& accWeight ) const;
+	void	AccumulateSample( float animTime, float sampleWeight, Transform& accTransform ) const;
 
+	
 private:
 	EKeyFrameFormat	m_keyFrameFormat;
 	void*			m_keyFrames;
