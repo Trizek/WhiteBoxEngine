@@ -350,7 +350,12 @@ struct Transform
 	Vec3 operator*( const Vec3& v ) const
 	{
 		return position + rotation * Vec3( v.x * scale.x, v.y * scale.y, v.z * scale.z );
-	}	
+	}
+	
+	void Normalize()
+	{
+		rotation.Normalize();
+	}
 	
 	Transform getInverse() const
 	{
@@ -541,8 +546,16 @@ class Matrix22
 	float a, b, c, d;
 };
 
+
 template< class T >
-T CubicInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, const T& P1Derivative, t, T& interpolated )
+void LinearInterpolate( float t0, const T& P0, float t1, const T& P1, float t, T& interpolated )
+{
+	float w = (t - t0) / (t1 - t0);
+	interpolated = (1.0f - w) * P0 + w * P1;
+}
+
+template< class T >
+void CubicInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, const T& P1Derivative, float t, T& interpolated )
 {
 	float t01 = t1 - t0;
 	float t01Sqr = t01 * t01;
@@ -566,7 +579,7 @@ T CubicInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, cons
 }
 
 template< class T >
-T CubicInterpolate( float t0, const T& P0,
+void CubicInterpolate( float t0, const T& P0,
 					float t1, const T& P1,
 					float t2, const T& P2,
 					float t3, const T& P3,
@@ -579,7 +592,7 @@ T CubicInterpolate( float t0, const T& P0,
 }
 
 template< class T >
-T QuadraticInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, float t, T& interpolated )
+void QuadraticInterpolateDerivEnd( float t0, const T& P0, const T& P0Derivative, float t1, const T& P1, float t, T& interpolated )
 {
 	float t01 = t1 - t0;
 	float t01Sqr = t01 * t01;
@@ -591,9 +604,170 @@ T QuadraticInterpolate( float t0, const T& P0, const T& P0Derivative, float t1, 
 }
 
 template< class T >
-T QuadraticInterpolate( float t0, const T& P0, float t1, const T& P1, const T& P1Derivative, float t, T& interpolated )
+void QuadraticInterpolateDerivBegin( float t0, const T& P0, float t1, const T& P1, const T& P1Derivative, float t, T& interpolated )
 {
-	QuadraticInterpolate( -t1, P1, P1Derivative, -t0, P0, -t, interpolated );
+	QuadraticInterpolateDerivEnd( -t1, P1, P1Derivative, -t0, P0, -t, interpolated );
 }
+
+template< class T >
+void QuadraticInterpolateBegin( float t0, const T& P0, float t1, const T& P1, float t2, const T& P2, float t, T& interpolated )
+{
+	T P1Derivative = (1.0f/(t2 - t0)) * (P2 - P0);
+	QuadraticInterpolateDerivBegin( t0, P0, t1, P1, P1Derivative, t, interpolated );
+}
+
+template< class T >
+void QuadraticInterpolateEnd( float t0, const T& P0, float t1, const T& P1, float t2, const T& P2, float t, T& interpolated )
+{
+	T P1Derivative = (1.0f/(t2 - t0)) * (P2 - P0);
+	QuadraticInterpolateDerivEnd( t1, P1, P1Derivative, t2, P2, t, interpolated );
+}
+
+template< class T >
+class CubicSpline
+{
+public:
+	class CKey
+	{
+	public:
+		struct SCompare
+		{
+			bool operator()( const CKey& a, const CKey& b ) const
+			{
+				return ( a.m_time < b.m_time );
+			}
+		};
+		
+		CKey()
+			: m_time(0.0f){}
+	
+		CKey( float time, const T& val )
+			: m_time(time), m_val(val){}
+	
+		float		m_time;
+		T			m_val;
+	};
+	
+	void	FindSurroundingKeys( float animTime, size_t& leftKey, size_t& rightKey ) const
+	{
+		for( size_t iKey = 0 ; iKey < m_keys.size() ; ++iKey )
+		{
+			float time = m_keyFrames[ iKey ].m_time;
+			if ( time >= animTime )
+			{
+				if ( iKey == 0 )
+				{
+					leftKey = 0;
+					rightKey = 1;
+				}
+				else
+				{
+					rightKey = iKey;
+					leftKey = iKey - 1;
+				}
+				return;
+			}
+		}
+		
+		rightKey = m_keyFrames.size() - 1;
+		leftKey = rightKey - 1;
+	}
+	
+	bool	Empty() const
+	{
+		return m_keys.size() == 0;
+	}
+	
+	float	GetLength() const
+	{
+		return (Empty())? 0.0f : m_keys.back().m_time;
+	}
+	
+	void	AddKey( float time, const T& val )
+	{
+		m_keys.push_back( CKey( time, val ) );
+		SortKeys();
+	}
+	
+	void	SortKeys()
+	{
+		std::sort( m_keys.begin(), m_keys.end(), CKey::SCompare() );
+	}
+	
+	T GetValue( float time ) const
+	{
+		if ( Empty() )
+		{
+			return T();
+		}
+	
+		time = Clamp( time, 0.0f, GetLength() );
+	
+		if( m_keys.size() == 1 )
+		{
+			return m_keys[ 0 ].m_val;
+		}
+		
+		T interpolated;
+		if( m_keys.size() == 2 )
+		{
+			LinearInterpolate(
+				m_keys[ 0 ].m_time,
+				m_keys[ 0 ].m_val,
+				m_keys[ 1 ].m_time,
+				m_keys[ 1 ].m_val,
+				animTime, interpolated );
+		}
+		else
+		{
+			size_t leftKey, rightKey;
+			FindSurroundingKeys( time, leftKey, rightKey );
+			
+			if ( leftKey == 0 )
+			{
+				// First segment
+				QuadraticInterpolateBegin( 
+					m_keys[ leftKey ].m_time, 
+					m_keys[ leftKey ].m_val, 
+					m_keys[ rightKey ].m_time, 
+					m_keys[ rightKey ].m_val,  
+					m_keys[ rightKey + 1 ].m_time, 
+					m_keys[ rightKey + 1 ].m_val,  
+					animTime, interpolated );
+			}
+			else if ( rightKey == m_keyFrames.size() - 1 )
+			{
+				// Last segment
+				QuadraticInterpolateEnd( 
+					m_keys[ leftKey - 1 ].m_time, 
+					m_keys[ leftKey - 1 ].m_val, 
+					m_keys[ leftKey ].m_time, 
+					m_keys[ leftKey ].m_val,
+					m_keys[ rightKey ].m_time, 
+					m_keys[ rightKey ].m_val,  
+					animTime, interpolated );				
+			}
+			else
+			{
+				CubicInterpolate(
+					m_keys[ leftKey - 1 ].m_time, 
+					m_keys[ leftKey - 1 ].m_val, 
+					m_keys[ leftKey ].m_time, 
+					m_keys[ leftKey ].m_val, 
+					m_keys[ rightKey ].m_time, 
+					m_keys[ rightKey ].m_val,
+					m_keys[ rightKey + 1 ].m_time, 
+					m_keys[ rightKey + 1 ].m_val,  
+					animTime, interpolated );					
+			}
+		}
+
+		return interpolated;		
+	}
+	
+
+	typedef std::vector< CKey > TKeyArray;
+	TKeyArray	m_key;	
+};
 
 #endif
