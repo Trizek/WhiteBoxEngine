@@ -189,11 +189,11 @@ public:
 		res.Allocate();
 		if ( m_str != NULL )
 		{
-			strcpy( res.m_str, m_str );
+			strcpy_s( res.m_str, strlen(m_str), m_str );
 		}
 		if ( rhs.m_str != NULL )
 		{
-			strcpy( res.m_str + m_length, rhs.m_str );
+			strcpy_s( res.m_str + m_length, strlen(rhs.m_str) + 1, rhs.m_str );
 		}
 		res.m_str[ res.m_length ] = '\0';
 		res.ComputeHash();
@@ -234,7 +234,7 @@ private:
 		{
 			m_length = strlen( str );
 			Allocate();
-			strcpy( m_str, str );
+			strcpy_s( m_str, m_length + 1, str );
 			ComputeHash();
 		}
 	}
@@ -245,7 +245,7 @@ private:
 		{
 			m_length = length;
 			Allocate();
-			strncpy( m_str, str, length );
+			strncpy_s( m_str, length, str, length );
 			m_str[ length ] = '\0';
 			ComputeHash();			
 		}
@@ -304,7 +304,7 @@ namespace __gnu_cxx
 	};
 }
 
-#elif defined( WIN32 )
+#elif defined( _WIN64 ) || defined( _WIN32 )
 
 #include <xfunctional>
 #include <xhash>

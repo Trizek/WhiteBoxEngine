@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{82DF0D52-3DCD-489B-9E49-E0205EB648EE}</ProjectGuid>
+    <RootNamespace>WhiteBoxEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;D:\GitHub\WhiteBoxEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\include;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\lib\x64;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Build\Windows;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;FreeImage.lib;glu32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;D:\GitHub\WhiteBoxEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\include;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\lib\x64;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Build\Windows;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;FreeImage.lib;glu32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;D:\GitHub\WhiteBoxEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\include;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\lib\x64;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Build\Windows;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;FreeImage.lib;glu32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;D:\GitHub\WhiteBoxEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\include;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\lib\x64;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Build\Windows;D:\GitHub\WhiteBoxEngine\Editor\Libs\Windows\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;FreeImage.lib;glu32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\AnimationTrack.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\Skeleton.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\DataStream.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\GlobalVariables.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Maths.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\IndexBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Material.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MaterialHelper.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MaterialSerializer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Mesh.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MeshHelper.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MeshSerializer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Picture.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Renderer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\RenderWindow.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Texture.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\TextureSerializer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Render\VertexBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceDescriptor.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceManager.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceSpecificManager.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Script.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\ScriptResourceSerializer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\ScriptSerializer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\System.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\System\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\System\OperatingSystem.cpp" />
+    <ClCompile Include="..\..\..\Src\AssetExporter.cpp" />
+    <ClCompile Include="..\..\..\Src\AssetManager.cpp" />
+    <ClCompile Include="..\..\..\Src\CopyExporter.cpp" />
+    <ClCompile Include="..\..\..\Src\main.cpp" />
+    <ClCompile Include="..\..\..\Src\MtlExporter.cpp" />
+    <ClCompile Include="..\..\..\Src\ObjExporter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Core\Inc\System\OperatingSystem.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

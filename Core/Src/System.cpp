@@ -2,6 +2,7 @@
 
 #include "FileSystem.h"
 #include "Render/Renderer.h"
+#include "System/OperatingSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -13,6 +14,7 @@ void SSystem::Init()
 	
 	gSystem->pFileSystem = new CFileSystem();
 	gSystem->pRenderer = new CRenderer();
+	gSystem->pOperatingSystem = new COperatingSystem();
 }
 
 WHITEBOX_END

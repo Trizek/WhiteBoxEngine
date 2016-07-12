@@ -1,0 +1,91 @@
+src = $(wildcard src/*.c)
+obj = $(src:.c=.o)
+dep = $(obj:.o=.d)
+
+abi = 0
+rev = 2
+
+lib_a = $(name).a
+
+ifeq ($(shell uname -s), Darwin)
+	lib_so = $(name).dylib
+	sharedopt = -dynamiclib
+
+	libgl = -framework OpenGL -lGLEW
+else
+	soname = $(name).so.$(abi)
+	lib_so = $(soname).$(rev)
+	linkname = $(name).so
+	sharedopt = -shared -Wl,-soname,$(soname)
+
+	libgl = -lGL -lGLU -lGLEW
+endif
+
+CC = gcc
+CFLAGS = -pedantic -Wall -g -fPIC -I$(PREFIX)/include $(ft2_cflags)
+LDFLAGS = -L$(PREFIX)/lib $(ft2_libs) $(libgl)
+
+.PHONY: all
+all: $(lib_a) $(lib_so)
+
+$(lib_a): $(obj)
+	$(AR) rcs $@ $(obj)
+
+$(lib_so): $(obj)
+	$(CC) $(sharedopt) -o $@ $(obj) $(LDFLAGS)
+
+-include $(dep)
+
+%.d: %.c
+	@$(CPP) $(CFLAGS) -MM $< >$@
+
+.PHONY: cleanobj
+cleanobj:
+	rm -f $(obj)
+
+.PHONY: clean
+clean:
+	rm -f $(obj) $(lib_a) $(lib_so)
+
+.PHONY: cleandep
+cleandep:
+	rm -f $(dep)
+
+.PHONY: install
+install: $(lib_a) $(lib_so)
+	mkdir -p $(PREFIX)/lib $(PREFIX)/include
+	cp $(lib_a) $(PREFIX)/lib/$(lib_a)
+	cp $(lib_so) $(PREFIX)/lib/$(lib_so)
+	cp src/drawtext.h $(PREFIX)/include/drawtext.h
+	[ -n "$(linkname)" ] && \
+		rm -f $(PREFIX)/lib/$(linkname) $(PREFIX)/lib/$(soname) && \
+		cd $(PREFIX)/lib && ln -s $(lib_so) $(linkname) && ln -s $(lib_so) $(soname) || true
+
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(PREFIX)/lib/$(lib_a)
+	rm -f $(PREFIX)/lib/$(lib_so)
+	rm -f $(PREFIX)/lib/$(linkname)
+	rm -f $(PREFIX)/lib/$(soname)
+	rm -f $(PREFIX)/include/drawtext.h
+
+
+.PHONY: both
+both:
+	./configure --disable-freetype
+	$(MAKE) cleanobj
+	$(MAKE)
+	./configure --enable-freetype
+	$(MAKE) cleanobj
+	$(MAKE)
+
+.PHONY: both-install
+both-install:
+	./configure --disable-freetype
+	$(MAKE) cleanobj
+	$(MAKE) install
+	./configure --enable-freetype
+	$(MAKE) cleanobj
+	$(MAKE) install
+	$(MAKE) cleanobj

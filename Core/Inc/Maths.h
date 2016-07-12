@@ -238,7 +238,7 @@ struct Quat
 	static float	DecodeComponent( ushort val );
 	
 	static void		EncodeQuat( const Quat& q, ushort& s0, ushort& s1, ushort& s2 );
-	static float	DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q );
+	static void		DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q );
 		
 	Quat( Radian yaw, Radian pitch, Radian roll )
 	{
@@ -583,7 +583,7 @@ void CubicInterpolate( float t0, const T& P0,
 					float t1, const T& P1,
 					float t2, const T& P2,
 					float t3, const T& P3,
-					t, T& interpolated )
+					float t, T& interpolated )
 {
 	T P1Derivative = (1.0f/(t2 - t0)) * (P2 - P0);
 	T P2Derivative = (1.0f/(t3 - t1)) * (P3 - P1);

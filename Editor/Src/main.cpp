@@ -1,3 +1,17 @@
+#include "System/OperatingSystem.h"
+#include "GlobalVariables.h"
+#include "System.h"
+
+int main(int argc, char *argv)
+{
+	WhiteBox::SSystem::Init();
+	WhiteBox::SGlobalVariables::Init();
+
+
+}
+
+#if 0
+
 #include <GLUT/glut.h>
 
 #include "Render/Mesh.h"
@@ -517,3 +531,6 @@ for( size_t i=0 ; i < vert ; ++i )
     return 0;
 
 }
+
+
+#endif

@@ -2385,7 +2385,7 @@ SaveOneTIFF(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flag
 
 		if (page >= 0) {
 			char page_number[20];
-			sprintf(page_number, "Page %d", page);
+			sprintf2(page_number, "Page %d", page);
 
 			TIFFSetField(out, TIFFTAG_SUBFILETYPE, (uint32)FILETYPE_PAGE);
 			TIFFSetField(out, TIFFTAG_PAGENUMBER, (uint16)page, (uint16)0);

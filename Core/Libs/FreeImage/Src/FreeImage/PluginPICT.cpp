@@ -725,7 +725,7 @@ UnpackBits( FreeImageIO *io, fi_handle handle, FIBITMAP* dib, MacRect* bounds, W
 				PixelPerRLEUnit = 1;
 				break;
 			default:
-				sprintf( outputMessage, "Illegal bpp value in unpackbits: %d\n", pixelSize );
+				sprintf2( outputMessage, "Illegal bpp value in unpackbits: %d\n", pixelSize );
 				throw outputMessage;
 		}
 		
@@ -1206,7 +1206,7 @@ Load(FreeImageIO *io, fi_handle handle, int page, int flags, void *data) {
 				io->seek_proc(handle, ((opcode >> 7) & 255), SEEK_CUR);				
 			}
 			else {
-				sprintf( outputMessage, "Can't handle opcode %x.\n", opcode );
+				sprintf2( outputMessage, "Can't handle opcode %x.\n", opcode );
 				throw outputMessage;
 			}
 

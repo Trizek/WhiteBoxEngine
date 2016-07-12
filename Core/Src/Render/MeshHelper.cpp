@@ -36,7 +36,7 @@ CMesh::CPart* CMeshPartHelper::ConvertToMeshPart()
 
 void CMeshPartHelper::Print() const
 {
-	printf( "Index count : %d\n", m_indexArray.size() );
+	printf( "Index count : %zd\n", m_indexArray.size() );
 	printf( "Material name : %s\n", m_materialName.c_str() );
 }
 
@@ -119,7 +119,7 @@ CMesh* CMeshHelper::ConvertToMesh() const
 	
 	CVertexFormat vertexFormat = GetVertexFormat();
 	
-	printf( "Creating %d vertices of %d bytes\n", m_positionArray.size(), vertexFormat.GetSize() );
+	printf( "Creating %zd vertices of %zd bytes\n", m_positionArray.size(), vertexFormat.GetSize() );
 	char* pVertices = BuildVertexArray( vertexFormat );
 	pMesh->SetSharedVertices( vertexFormat, m_positionArray.size(), pVertices );	
 	delete[] pVertices;
@@ -326,16 +326,16 @@ CVertexFormat CMeshHelper::GetVertexFormat() const
 	
 void CMeshHelper::Print() const
 {
-	printf( "Position count : %d\n", m_positionArray.size() );
-	printf( "Normal count : %d\n", m_normalArray.size() );
-	printf( "Color count : %d\n", m_colorArray.size() );
-	printf( "UV0 count : %d\n", m_uv0Array.size() );
+	printf( "Position count : %zd\n", m_positionArray.size() );
+	printf( "Normal count : %zd\n", m_normalArray.size() );
+	printf( "Color count : %zd\n", m_colorArray.size() );
+	printf( "UV0 count : %zd\n", m_uv0Array.size() );
 
 
-	printf( "Part count : %d\n", m_meshParts.size() );
+	printf( "Part count : %zd\n", m_meshParts.size() );
 	for( size_t iPart = 0 ; iPart < m_meshParts.size() ; ++iPart )
 	{
-		printf( "--- Part %d ----\n", iPart );
+		printf( "--- Part %zd ----\n", iPart );
 		m_meshParts[ iPart ]->Print();
 	}
 }

@@ -21,7 +21,8 @@ TFileHandle	CFileSystem::OpenFile( const char* path, bool bRead, bool bWrite )
 		mode = "rb";
 	}
 
-	FILE* pFile = fopen( path, mode );
+	FILE* pFile = nullptr;
+	fopen_s( &pFile, path, mode );
 	return static_cast< TFileHandle >( pFile );
 }
 
@@ -50,7 +51,7 @@ bool	CFileSystem::SetCursor( TFileHandle fileHandle, size_t cursor )
 	FILE* pFile = static_cast< FILE* >( fileHandle );
 	if ( pFile != NULL )
 	{
-		return ( fseek( pFile, cursor, SEEK_SET ) == 0 );
+		return ( fseek( pFile, (long)cursor, SEEK_SET ) == 0 );
 	}	
 	
 	return false;
@@ -73,7 +74,7 @@ size_t	CFileSystem::GetFileSize( TFileHandle fileHandle )
 		size = (size_t)ftell( pFile );
 		
 		// restore cursor
-		fseek( pFile, cursor, SEEK_SET );
+		fseek( pFile, (long)cursor, SEEK_SET );
 		
 		return size;
 	}
@@ -133,8 +134,9 @@ bool	CFileSystem::WriteByte( TFileHandle fileHandle, char byte )
 }
 
 
+#if 0
 
-#include<unistd.h>
+#include <unistd.h>
 
 
 #include <errno.h> // for errno
@@ -262,6 +264,8 @@ void	CFileSystem::CreateFileDir( const String& filePath )
 		}
 	}
 }
+
+#endif
 
 
 WHITEBOX_END

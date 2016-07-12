@@ -55,7 +55,7 @@ Vec3 operator-( const Vec3& rhs )
 
 ushort	Quat::EncodeComponent( float component )
 {
-	static short start = (1 << (sizeof(short)*8-1));
+	static short start = (short)(1 << (sizeof(short)*8-1));
 	static short end = start - 1;
 	
 	short val = (ushort)( (0.5f + component * 0.5f)*int((int)end - (int)start) );
@@ -64,7 +64,7 @@ ushort	Quat::EncodeComponent( float component )
 
 float	Quat::DecodeComponent( ushort val )
 {
-	static short start = (1 << (sizeof(short)*8-1));
+	static short start = (short)(1 << (sizeof(short)*8-1));
 	static short end = start - 1;
 
 	float component = -1.0f + (float(val) / float((int)end - (int)start)) * 2.0f;
@@ -87,7 +87,7 @@ void	Quat::EncodeQuat( const Quat& q, ushort& s0, ushort& s1, ushort& s2 )
 	}
 }
 
-float	Quat::DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q )
+void	Quat::DecodeQuat( ushort s0, ushort s1, ushort s2, Quat& q )
 {
 	q.x = DecodeComponent( s0 );
 	q.y = DecodeComponent( s1 );

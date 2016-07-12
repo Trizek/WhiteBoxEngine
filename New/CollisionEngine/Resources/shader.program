@@ -1,0 +1,31 @@
+Program
+{
+	Shader
+	{
+		name = "vertex.vs"
+	}
+
+	Shader
+	{
+		name = "fragment.ps"
+	}
+
+
+
+
+	Attribute
+	{
+		name = "inputPosition"
+	}
+
+	Attribute
+	{
+		name = "normal"
+	}
+
+	Attribute
+	{
+		name = "uv0"
+	}
+
+}

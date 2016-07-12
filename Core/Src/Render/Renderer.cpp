@@ -1,7 +1,9 @@
 #include "Render/Renderer.h"
 
-#include <OpenGL/gl.h> //OS x libs
-#include <OpenGL/glu.h>
+//#include <OpenGL/gl.h> //OS x libs
+//#include <OpenGL/glu.h>
+
+#include <GL/glew.h>
 
 WHITEBOX_BEGIN
 
@@ -81,13 +83,13 @@ void	CRenderer::BindVertexBuffer( void* pBufferId, size_t vertexCount, const CVe
 
 	// Position
 	glEnableClientState( GL_VERTEX_ARRAY );
-	glVertexPointer( 3, GL_FLOAT, vertexFormat.GetSize(), (void*)vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_Position ) );
+	glVertexPointer( 3, GL_FLOAT, (GLsizei)vertexFormat.GetSize(), (void*)vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_Position ) );
 
 	// Normal
 	if ( vertexFormat.HasSingleElement( CVertexFormat::eSE_Normal ) )
 	{
 		glEnableClientState( GL_NORMAL_ARRAY );
-		glNormalPointer( GL_FLOAT, vertexFormat.GetSize(), (void*)vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_Normal ) );
+		glNormalPointer( GL_FLOAT, (GLsizei)vertexFormat.GetSize(), (void*)vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_Normal ) );
 	}
 
 	// Color
@@ -101,7 +103,7 @@ void	CRenderer::BindVertexBuffer( void* pBufferId, size_t vertexCount, const CVe
 	for( size_t iInstance = 0 ; iInstance < vertexFormat.GetMultipleElementCount( CVertexFormat::eME_UV ) ; ++iInstance )
 	{
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-		glTexCoordPointer( 2, GL_FLOAT, vertexFormat.GetSize(), (void*)vertexFormat.GetMultipleElementOffset( CVertexFormat::eME_UV, iInstance ) );
+		glTexCoordPointer( 2, GL_FLOAT, (GLsizei)vertexFormat.GetSize(), (void*)vertexFormat.GetMultipleElementOffset( CVertexFormat::eME_UV, iInstance ) );
 	}
 }
 
@@ -321,7 +323,7 @@ void	CRenderer::SetProjectionMatrix( const Matrix44& projMatrix )
 
 CRenderWindow* CRenderer::CreateRenderWindow( size_t x, size_t y, size_t width, size_t height )
 {
-	CRenderWindow* pRenderWindow = new CRenderWindow( x, y, width, height );
+	CRenderWindow* pRenderWindow = new CRenderWindow( (uint)x, (uint)y, (uint)width, (uint)height );
 	m_pRenderTargets.push_back( pRenderWindow );
 	return pRenderWindow;
 }
@@ -333,7 +335,7 @@ void CRenderer::BindRenderWindow( CRenderWindow* pWindow )
 
 void	CRenderer::RenderBoundTriangles( size_t indexCount )
 {
-	glDrawElements( GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (void*)0 );
+	glDrawElements( GL_TRIANGLES, (GLsizei)indexCount, GL_UNSIGNED_INT, (void*)0 );
 	//glEnd();
 	//glFlush();
 }

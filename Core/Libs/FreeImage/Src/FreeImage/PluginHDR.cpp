@@ -272,26 +272,26 @@ rgbe_WriteHeader(FreeImageIO *io, fi_handle handle, unsigned width, unsigned hei
 		programtype = info->programtype;
 	}
 	// The #? is to identify file type, the programtype is optional
-	sprintf(buffer, "#?%s\n", programtype);
+	sprintf2(buffer, "#?%s\n", programtype);
 	if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 		return rgbe_Error(rgbe_write_error, NULL);
-	sprintf(buffer, "%s\n", info->comment);
+	sprintf2(buffer, "%s\n", info->comment);
 	if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 		return rgbe_Error(rgbe_write_error, NULL);
-	sprintf(buffer, "FORMAT=32-bit_rle_rgbe\n");
+	sprintf2(buffer, "FORMAT=32-bit_rle_rgbe\n");
 	if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 		return rgbe_Error(rgbe_write_error, NULL);
 	if(info && (info->valid & RGBE_VALID_GAMMA)) {
-		sprintf(buffer, "GAMMA=%g\n", info->gamma);
+		sprintf2(buffer, "GAMMA=%g\n", info->gamma);
 		if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 			return rgbe_Error(rgbe_write_error, NULL);
 	}
 	if(info && (info->valid & RGBE_VALID_EXPOSURE)) {
-		sprintf(buffer,"EXPOSURE=%g\n", info->exposure);
+		sprintf2(buffer,"EXPOSURE=%g\n", info->exposure);
 		if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 			return rgbe_Error(rgbe_write_error, NULL);
 	}
-	sprintf(buffer, "\n-Y %d +X %d\n", height, width);
+	sprintf2(buffer, "\n-Y %d +X %d\n", height, width);
 	if(io->write_proc(buffer, 1, (unsigned int)strlen(buffer), handle) < 1)
 		return rgbe_Error(rgbe_write_error, NULL);
 
@@ -677,7 +677,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 	// fill the header with correct gamma and exposure
 	rgbe_WriteMetadata(dib, &header_info);
 	// fill a comment
-	sprintf(header_info.comment, "# Made with FreeImage %s", FreeImage_GetVersion());
+	sprintf2(header_info.comment, "# Made with FreeImage %s", FreeImage_GetVersion());
 	if(!rgbe_WriteHeader(io, handle, width, height, &header_info)) {
 		return FALSE;
 	}

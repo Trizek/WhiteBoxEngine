@@ -54,10 +54,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			BYTE *pvalue = (BYTE*)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld",	(LONG) pvalue[0]);
+			sprintf2(format, "%ld",	(LONG) pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %ld",	(LONG) pvalue[i]);
+				sprintf2(format, " %ld",	(LONG) pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -66,10 +66,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			unsigned short *pvalue = (unsigned short *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%hu", pvalue[0]);
+			sprintf2(format, "%hu", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %hu",	pvalue[i]);
+				sprintf2(format, " %hu",	pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -78,10 +78,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			DWORD *pvalue = (DWORD *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%lu", pvalue[0]);
+			sprintf2(format, "%lu", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %lu",	pvalue[i]);
+				sprintf2(format, " %lu",	pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -90,10 +90,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			DWORD *pvalue = (DWORD*)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld/%ld", pvalue[0], pvalue[1]);
+			sprintf2(format, "%ld/%ld", pvalue[0], pvalue[1]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %ld/%ld", pvalue[2*i], pvalue[2*i+1]);
+				sprintf2(format, " %ld/%ld", pvalue[2*i], pvalue[2*i+1]);
 				buffer += format;
 			}
 			break;
@@ -102,10 +102,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			char *pvalue = (char*)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld",	(LONG) pvalue[0]);
+			sprintf2(format, "%ld",	(LONG) pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %ld",	(LONG) pvalue[i]);
+				sprintf2(format, " %ld",	(LONG) pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -114,10 +114,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			short *pvalue = (short *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%hd", pvalue[0]);
+			sprintf2(format, "%hd", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %hd",	pvalue[i]);
+				sprintf2(format, " %hd",	pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -126,10 +126,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			LONG *pvalue = (LONG *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld", pvalue[0]);
+			sprintf2(format, "%ld", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %ld",	pvalue[i]);
+				sprintf2(format, " %ld",	pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -138,10 +138,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			LONG *pvalue = (LONG*)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld/%ld", pvalue[0], pvalue[1]);
+			sprintf2(format, "%ld/%ld", pvalue[0], pvalue[1]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %ld/%ld", pvalue[2*i], pvalue[2*i+1]);
+				sprintf2(format, " %ld/%ld", pvalue[2*i], pvalue[2*i+1]);
 				buffer += format;
 			}
 			break;
@@ -150,10 +150,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			float *pvalue = (float *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%f", (double) pvalue[0]);
+			sprintf2(format, "%f", (double) pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, "%f", (double) pvalue[i]);
+				sprintf2(format, "%f", (double) pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -162,10 +162,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			double *pvalue = (double *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%f", pvalue[0]);
+			sprintf2(format, "%f", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, "%f", pvalue[i]);
+				sprintf2(format, "%f", pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -174,10 +174,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			DWORD *pvalue = (DWORD *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%X", pvalue[0]);
+			sprintf2(format, "%X", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " %X",	pvalue[i]);
+				sprintf2(format, " %X",	pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -186,10 +186,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			RGBQUAD *pvalue = (RGBQUAD *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "(%d,%d,%d,%d)", pvalue[0].rgbRed, pvalue[0].rgbGreen, pvalue[0].rgbBlue, pvalue[0].rgbReserved);
+			sprintf2(format, "(%d,%d,%d,%d)", pvalue[0].rgbRed, pvalue[0].rgbGreen, pvalue[0].rgbBlue, pvalue[0].rgbReserved);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, " (%d,%d,%d,%d)", pvalue[i].rgbRed, pvalue[i].rgbGreen, pvalue[i].rgbBlue, pvalue[i].rgbReserved);
+				sprintf2(format, " (%d,%d,%d,%d)", pvalue[i].rgbRed, pvalue[i].rgbGreen, pvalue[i].rgbBlue, pvalue[i].rgbReserved);
 				buffer += format;
 			}
 			break;
@@ -199,10 +199,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			UINT64 *pvalue = (UINT64 *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld", pvalue[0]);
+			sprintf2(format, "%ld", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, "%ld", pvalue[i]);
+				sprintf2(format, "%ld", pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -212,10 +212,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			UINT64 *pvalue = (UINT64 *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%X", pvalue[0]);
+			sprintf2(format, "%X", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, "%X", pvalue[i]);
+				sprintf2(format, "%X", pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -225,10 +225,10 @@ ConvertAnyTag(FITAG *tag) {
 		{
 			INT64 *pvalue = (INT64 *)FreeImage_GetTagValue(tag);
 
-			sprintf(format, "%ld", pvalue[0]);
+			sprintf2(format, "%ld", pvalue[0]);
 			buffer += format;
 			for(i = 1; i < tag_count; i++) {
-				sprintf(format, "%ld", pvalue[i]);
+				sprintf2(format, "%ld", pvalue[i]);
 				buffer += format;
 			}
 			break;
@@ -312,7 +312,7 @@ ConvertExifTag(FITAG *tag) {
 				if(pvalue[11])
 					whiteB = (int)(pvalue[10] / pvalue[11]);
 
-				sprintf(format, "[%d,%d,%d] [%d,%d,%d]", blackR, blackG, blackB, whiteR, whiteG, whiteB);
+				sprintf2(format, "[%d,%d,%d] [%d,%d,%d]", blackR, blackG, blackB, whiteR, whiteG, whiteB);
 				buffer += format;
 				return buffer.c_str();
 			}
@@ -416,7 +416,7 @@ ConvertExifTag(FITAG *tag) {
 			FIRational r(tag);
 			LONG apexValue = r.longValue();
 			LONG apexPower = 1 << apexValue;
-			sprintf(format, "1/%d sec", (int)apexPower);
+			sprintf2(format, "1/%d sec", (int)apexPower);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -429,7 +429,7 @@ ConvertExifTag(FITAG *tag) {
 			double apertureApex = r.doubleValue();
 	        double rootTwo = sqrt((double)2);
 			double fStop = pow(rootTwo, apertureApex);
-			sprintf(format, "F%.1f", fStop);
+			sprintf2(format, "F%.1f", fStop);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -439,7 +439,7 @@ ConvertExifTag(FITAG *tag) {
 		{
 			FIRational r(tag);
 			double fnumber = r.doubleValue();
-			sprintf(format, "F%.1f", fnumber);
+			sprintf2(format, "F%.1f", fnumber);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -449,7 +449,7 @@ ConvertExifTag(FITAG *tag) {
 		{
 			FIRational r(tag);
 			double focalLength = r.doubleValue();
-			sprintf(format, "%.1f mm", focalLength);
+			sprintf2(format, "%.1f mm", focalLength);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -458,7 +458,7 @@ ConvertExifTag(FITAG *tag) {
 		case TAG_FOCAL_LENGTH_IN_35MM_FILM:
 		{
 			unsigned short focalLength = *((unsigned short *)FreeImage_GetTagValue(tag));
-			sprintf(format, "%hu mm", focalLength);
+			sprintf2(format, "%hu mm", focalLength);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -513,7 +513,7 @@ ConvertExifTag(FITAG *tag) {
 				case 0x005F:
 					return "Flash fired, auto mode, return light detected, red-eye reduction mode";
 				default:
-					sprintf(format, "Unknown (%d)", flash);
+					sprintf2(format, "Unknown (%d)", flash);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -526,7 +526,7 @@ ConvertExifTag(FITAG *tag) {
 			if (sceneType == 1) {
 				return "Directly photographed image";
 			} else {
-				sprintf(format, "Unknown (%d)", sceneType);
+				sprintf2(format, "Unknown (%d)", sceneType);
 				buffer += format;
 				return buffer.c_str();
 			}
@@ -542,7 +542,7 @@ ConvertExifTag(FITAG *tag) {
 				return "Distance unknown";
 			} else {
 				double distance = r.doubleValue();
-				sprintf(format, "%.3f meters", distance);
+				sprintf2(format, "%.3f meters", distance);
 				buffer += format;
 				return buffer.c_str();
 			}
@@ -658,7 +658,7 @@ ConvertExifTag(FITAG *tag) {
 			if (fileSource == 3) {
 				return "Digital Still Camera (DSC)";
 			} else {
-				sprintf(format, "Unknown (%d)", fileSource);
+				sprintf2(format, "Unknown (%d)", fileSource);
 				buffer += format;
 				return buffer.c_str();
 			}
@@ -687,7 +687,7 @@ ConvertExifTag(FITAG *tag) {
 				case 8:
 					return "Landscape mode";
 				default:
-					sprintf(format, "Unknown program (%d)", exposureProgram);
+					sprintf2(format, "Unknown program (%d)", exposureProgram);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -704,7 +704,7 @@ ConvertExifTag(FITAG *tag) {
 				case 1:
 					return "Custom process";
 				default:
-					sprintf(format, "Unknown rendering (%d)", customRendered);
+					sprintf2(format, "Unknown rendering (%d)", customRendered);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -723,7 +723,7 @@ ConvertExifTag(FITAG *tag) {
 				case 2:
 					return "Auto bracket";
 				default:
-					sprintf(format, "Unknown mode (%d)", exposureMode);
+					sprintf2(format, "Unknown mode (%d)", exposureMode);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -740,7 +740,7 @@ ConvertExifTag(FITAG *tag) {
 				case 1:
 					return "Manual white balance";
 				default:
-					sprintf(format, "Unknown (%d)", whiteBalance);
+					sprintf2(format, "Unknown (%d)", whiteBalance);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -761,7 +761,7 @@ ConvertExifTag(FITAG *tag) {
 				case 3:
 					return "Night scene";
 				default:
-					sprintf(format, "Unknown (%d)", sceneType);
+					sprintf2(format, "Unknown (%d)", sceneType);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -784,7 +784,7 @@ ConvertExifTag(FITAG *tag) {
 				case 4:
 					return "High gain down";
 				default:
-					sprintf(format, "Unknown (%d)", gainControl);
+					sprintf2(format, "Unknown (%d)", gainControl);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -803,7 +803,7 @@ ConvertExifTag(FITAG *tag) {
 				case 2:
 					return "Hard";
 				default:
-					sprintf(format, "Unknown (%d)", contrast);
+					sprintf2(format, "Unknown (%d)", contrast);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -822,7 +822,7 @@ ConvertExifTag(FITAG *tag) {
 				case 2:
 					return "High saturation";
 				default:
-					sprintf(format, "Unknown (%d)", saturation);
+					sprintf2(format, "Unknown (%d)", saturation);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -841,7 +841,7 @@ ConvertExifTag(FITAG *tag) {
 				case 2:
 					return "Hard";
 				default:
-					sprintf(format, "Unknown (%d)", sharpness);
+					sprintf2(format, "Unknown (%d)", sharpness);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -862,7 +862,7 @@ ConvertExifTag(FITAG *tag) {
 				case 3:
 					return "Distant view";
 				default:
-					sprintf(format, "Unknown (%d)", distanceRange);
+					sprintf2(format, "Unknown (%d)", distanceRange);
 					buffer += format;
 					return buffer.c_str();
 			}
@@ -875,7 +875,7 @@ ConvertExifTag(FITAG *tag) {
 			if (isoEquiv < 50) {
 				isoEquiv *= 200;
 			}
-			sprintf(format, "%d", isoEquiv);
+			sprintf2(format, "%d", isoEquiv);
 			buffer += format;
 			return buffer.c_str();
 		}
@@ -899,80 +899,80 @@ ConvertExifTag(FITAG *tag) {
 			WORD compression = *((WORD*)FreeImage_GetTagValue(tag));
 			switch(compression) {
 				case TAG_COMPRESSION_NONE:
-					sprintf(format, "dump mode (%d)", compression);
+					sprintf2(format, "dump mode (%d)", compression);
 					break;
 				case TAG_COMPRESSION_CCITTRLE:
-					sprintf(format, "CCITT modified Huffman RLE (%d)", compression);
+					sprintf2(format, "CCITT modified Huffman RLE (%d)", compression);
 					break;
 				case TAG_COMPRESSION_CCITTFAX3:
-					sprintf(format, "CCITT Group 3 fax encoding (%d)", compression);
+					sprintf2(format, "CCITT Group 3 fax encoding (%d)", compression);
 					break;
 				/*
 				case TAG_COMPRESSION_CCITT_T4:
-					sprintf(format, "CCITT T.4 (TIFF 6 name) (%d)", compression);
+					sprintf2(format, "CCITT T.4 (TIFF 6 name) (%d)", compression);
 					break;
 				*/
 				case TAG_COMPRESSION_CCITTFAX4:
-					sprintf(format, "CCITT Group 4 fax encoding (%d)", compression);
+					sprintf2(format, "CCITT Group 4 fax encoding (%d)", compression);
 					break;
 				/*
 				case TAG_COMPRESSION_CCITT_T6:
-					sprintf(format, "CCITT T.6 (TIFF 6 name) (%d)", compression);
+					sprintf2(format, "CCITT T.6 (TIFF 6 name) (%d)", compression);
 					break;
 				*/
 				case TAG_COMPRESSION_LZW:
-					sprintf(format, "LZW (%d)", compression);
+					sprintf2(format, "LZW (%d)", compression);
 					break;
 				case TAG_COMPRESSION_OJPEG:
-					sprintf(format, "!6.0 JPEG (%d)", compression);
+					sprintf2(format, "!6.0 JPEG (%d)", compression);
 					break;
 				case TAG_COMPRESSION_JPEG:
-					sprintf(format, "JPEG (%d)", compression);
+					sprintf2(format, "JPEG (%d)", compression);
 					break;
 				case TAG_COMPRESSION_NEXT:
-					sprintf(format, "NeXT 2-bit RLE (%d)", compression);
+					sprintf2(format, "NeXT 2-bit RLE (%d)", compression);
 					break;
 				case TAG_COMPRESSION_CCITTRLEW:
-					sprintf(format, "CCITTRLEW (%d)", compression);
+					sprintf2(format, "CCITTRLEW (%d)", compression);
 					break;
 				case TAG_COMPRESSION_PACKBITS:
-					sprintf(format, "PackBits Macintosh RLE (%d)", compression);
+					sprintf2(format, "PackBits Macintosh RLE (%d)", compression);
 					break;
 				case TAG_COMPRESSION_THUNDERSCAN:
-					sprintf(format, "ThunderScan RLE (%d)", compression);
+					sprintf2(format, "ThunderScan RLE (%d)", compression);
 					break;
 				case TAG_COMPRESSION_PIXARFILM:
-					sprintf(format, "Pixar companded 10bit LZW (%d)", compression);
+					sprintf2(format, "Pixar companded 10bit LZW (%d)", compression);
 					break;
 				case TAG_COMPRESSION_PIXARLOG:
-					sprintf(format, "Pixar companded 11bit ZIP (%d)", compression);
+					sprintf2(format, "Pixar companded 11bit ZIP (%d)", compression);
 					break;
 				case TAG_COMPRESSION_DEFLATE:
-					sprintf(format, "Deflate compression (%d)", compression);
+					sprintf2(format, "Deflate compression (%d)", compression);
 					break;
 				case TAG_COMPRESSION_ADOBE_DEFLATE:
-					sprintf(format, "Adobe Deflate compression (%d)", compression);
+					sprintf2(format, "Adobe Deflate compression (%d)", compression);
 					break;
 				case TAG_COMPRESSION_DCS:
-					sprintf(format, "Kodak DCS encoding (%d)", compression);
+					sprintf2(format, "Kodak DCS encoding (%d)", compression);
 					break;
 				case TAG_COMPRESSION_JBIG:
-					sprintf(format, "ISO JBIG (%d)", compression);
+					sprintf2(format, "ISO JBIG (%d)", compression);
 					break;
 				case TAG_COMPRESSION_SGILOG:
-					sprintf(format, "SGI Log Luminance RLE (%d)", compression);
+					sprintf2(format, "SGI Log Luminance RLE (%d)", compression);
 					break;
 				case TAG_COMPRESSION_SGILOG24:
-					sprintf(format, "SGI Log 24-bit packed (%d)", compression);
+					sprintf2(format, "SGI Log 24-bit packed (%d)", compression);
 					break;
 				case TAG_COMPRESSION_JP2000:
-					sprintf(format, "Leadtools JPEG2000 (%d)", compression);
+					sprintf2(format, "Leadtools JPEG2000 (%d)", compression);
 					break;
 				case TAG_COMPRESSION_LZMA:
-					sprintf(format, "LZMA2 (%d)", compression);
+					sprintf2(format, "LZMA2 (%d)", compression);
 					break;
 				default:
-					sprintf(format, "Unknown type (%d)", compression);
+					sprintf2(format, "Unknown type (%d)", compression);
 					break;
 			}
 
@@ -1024,7 +1024,7 @@ ConvertExifGPSTag(FITAG *tag) {
 				mm = (int)(ss / 60) - dd * 60;
 				ss = ss - dd * 3600 - mm * 60;
 
-				sprintf(format, "%d:%d:%.2f", dd, mm, ss);
+				sprintf2(format, "%d:%d:%.2f", dd, mm, ss);
 				buffer += format;
 				return buffer.c_str();
 			}

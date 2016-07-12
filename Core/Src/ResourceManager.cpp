@@ -53,11 +53,11 @@ void CResourceManager::LoadQueriedResources()
 		IResource* pResource = pDescriptor->GetResourceType()->GetSerializer()->Load( dataStream, *pDescriptor );
 		if ( pResource == NULL )
 		{
-			printf( "FAILED loading resource %s\n" );
+			printf( "FAILED loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		else
 		{
-			printf( "Succeeded loading resource %s\n" );
+			printf( "Succeeded loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		
 		pDescriptor->SetResource( pResource );
@@ -98,7 +98,7 @@ void CResourceManager::AddResource( const String& path, size_t size /*=0*/ )
 		gSystem->pFileSystem->CloseFile( file );	
 	}
 	
-	printf( "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), size, path.c_str() );
+	printf( "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), (int)size, path.c_str() );
 	
 	pResourceType->GetResourceSpecificManager()->AddResource( name, path, extension, size, pResourceType, this );	
 }

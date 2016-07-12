@@ -15,7 +15,7 @@ namespace FreeImageWrapper
 		}
 		
 		pStream->Read( size, count, buffer );
-		return total_size;
+		return (unsigned)total_size;
 	}
 	
 	inline unsigned FreeImage_WriteProc(void *buffer, unsigned size, unsigned count, fi_handle handle)
@@ -29,7 +29,7 @@ namespace FreeImageWrapper
 		}
 		
 		pStream->Write( size, count, buffer );
-		return total_size;	
+		return (unsigned)total_size;
 	}
 
 	inline int  FreeImage_SeekProc(fi_handle handle, long offset, int origin)
@@ -58,7 +58,7 @@ namespace FreeImageWrapper
 	inline long FreeImage_TellProc(fi_handle handle)
 	{
 		WhiteBox::CDataStream* pStream = (WhiteBox::CDataStream*)handle;
-		return pStream->GetCursor();
+		return (long)pStream->GetCursor();
 	}	
 };
 
@@ -132,11 +132,11 @@ void CPicture::Load( const char* extension, CDataStream& dataStream )
 	
 	FreeImageIO io;
 
-	io.read_proc  = FreeImageWrapper::FreeImage_ReadProc;
-	io.write_proc = FreeImageWrapper::FreeImage_WriteProc;
-	io.tell_proc  = FreeImageWrapper::FreeImage_TellProc;
-	io.seek_proc  = FreeImageWrapper::FreeImage_SeekProc;
-		
+	//io.read_proc  = FreeImageWrapper::FreeImage_ReadProc;
+	//io.write_proc = FreeImageWrapper::FreeImage_WriteProc;
+	//io.tell_proc  = FreeImageWrapper::FreeImage_TellProc;
+	//io.seek_proc  = FreeImageWrapper::FreeImage_SeekProc;
+	//	
 	
 	m_pPixelDataInfo = FreeImage_LoadFromHandle( fif, &io, (fi_handle)&dataStream );
 	m_width = FreeImage_GetWidth( (FIBITMAP*)m_pPixelDataInfo );

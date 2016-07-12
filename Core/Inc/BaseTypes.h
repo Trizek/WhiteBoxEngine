@@ -22,13 +22,14 @@ class Map : public __gnu_cxx::hash_map< Key, Value >
 
 WHITEBOX_END
 
-#elif defined( WIN32 )
+#elif defined( _WIN64 ) || defined( _WIN32 )
 
-#include <hash_map>
+#include <unordered_map>
 WHITEBOX_BEGIN
 
+
 template< class Key, class Value >
-class Map : public std::hash_map< Key, Value >
+class Map : public std::unordered_map< Key, Value >
 {
 };
 
@@ -62,5 +63,16 @@ return 0;
 WHITEBOX_BEGIN
 #include "Maths.h"
 WHITEBOX_END
+
+enum class Key : unsigned int
+{
+	F1 = 0,
+	F2,
+	F3,
+	F4,
+	F5,
+
+	Count,
+};
 
 #endif
