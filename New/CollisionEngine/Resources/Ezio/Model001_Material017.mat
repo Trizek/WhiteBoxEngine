@@ -1,0 +1,15 @@
+
+
+Material
+{
+  emissiveColor = ()
+  ambientColor = ()
+  shininess = 0.00000
+  diffuseColor = ()
+  specularColor = ()
+  
+  TextureLayer
+  {
+    texture = "Ezio/CR_U_Ezio_ArmShield_R3_DiffuseMap.dds"
+  }
+}

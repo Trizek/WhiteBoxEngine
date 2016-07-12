@@ -51,6 +51,8 @@ public:
 		{
 			m_pDescriptor->Acquire();
 		}
+
+		return *this;
 	}	
 
 	const TResourceType*	operator->() const

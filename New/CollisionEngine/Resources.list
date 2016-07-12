@@ -1,0 +1,917 @@
+
+
+Resources
+{
+  
+  Resource
+  {
+    path = "detour.program"
+    size = 198
+    
+    Dependency
+    {
+      path = "detourvertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "detourfragment.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "detourfragment.ps"
+    size = 551
+  }
+  
+  Resource
+  {
+    path = "detourvertex.vs"
+    size = 986
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_Universal_TeethClean_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_Universal_TeethClean_SpecularMap.dds"
+    size = 43832
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R3_DiffuseMap.dds"
+    size = 349680
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R3_SpecularMap.dds"
+    size = 43832
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R4_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Blason_DiffuseMap.dds"
+    size = 43856
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Blason_SpecularMap.dds"
+    size = 5608
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Boots_R3-4_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Boots_R3-4_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    size = 174904
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Bracer_a_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Chest_R3_DiffuseMap.dds"
+    size = 349672
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    size = 349680
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Down_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    size = 699192
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Gant_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    size = 174904
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_HiddenBladeGun_DiffuseMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Poutch_a_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ShoulderPad_R3_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/CU_EzioFlorentin_Hair_Textures_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/Ezio.msh"
+    size = 829527
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material001.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material002.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material003.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material004.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material005.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material006.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material007.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material008.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material009.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material010.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material011.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material012.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material013.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material014.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material015.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material016.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material017.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material018.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material019.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material020.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material021.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material022.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material023.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material024.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material025.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material026.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material027.mat"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material001.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material002.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material003.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material004.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material005.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material006.mat"
+    size = 196
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material007.mat"
+    size = 218
+    
+    Dependency
+    {
+      path = "Ezio/CR_Universal_TeethClean_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material008.mat"
+    size = 214
+    
+    Dependency
+    {
+      path = "Ezio/Universal_Male_Hand_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material009.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material010.mat"
+    size = 219
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_HiddenBladeGun_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material011.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material012.mat"
+    size = 215
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Boots_R3-4_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material013.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material014.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material015.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material016.mat"
+    size = 209
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Gant_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material017.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_ArmShield_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material018.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material019.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material020.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material021.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material022.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Chest_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material023.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material024.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material025.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Poutch_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material026.mat"
+    size = 211
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Blason_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material027.mat"
+    size = 219
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_ShoulderPad_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Universal_Male_Hand_DiffuseMap.dds"
+    size = 87528
+  }
+  
+  Resource
+  {
+    path = "Ezio/Universal_Male_Hand_SpecularMap.dds"
+    size = 21992
+  }
+  
+  Resource
+  {
+    path = "fragment.ps"
+    size = 985
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/18d679fb.jpg"
+    size = 13267
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/30ccb2c6.jpg"
+    size = 36510
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/3378c10d.jpg"
+    size = 31187
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/4bc51fe0.jpg"
+    size = 12963
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/691524bf.jpg"
+    size = 30497
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/6fcfa7ef.jpg"
+    size = 13550
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/772d019a.jpg"
+    size = 31128
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/774b1982.jpg"
+    size = 21728
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/946ea76f.jpg"
+    size = 14933
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/ae6dcce1.jpg"
+    size = 30897
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/c071add4.jpg"
+    size = 21863
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS2/f664140d.jpg"
+    size = 22351
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/029d014a.jpg"
+    size = 29566
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/18d679fb.jpg"
+    size = 13267
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/61286add.jpg"
+    size = 37298
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/732f1f6a.jpg"
+    size = 14955
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/7aabb596.jpg"
+    size = 31525
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/9ad243c9.jpg"
+    size = 42078
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/aa93fed6.jpg"
+    size = 22632
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/aa9d0f99.jpg"
+    size = 17857
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/e7cf5069.jpg"
+    size = 13417
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/ede6472c.jpg"
+    size = 15787
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/fbce52a3.jpg"
+    size = 25072
+  }
+  
+  Resource
+  {
+    path = "Goku/Goku SS3/Goku SS3.msh"
+    size = 233976
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/029d014a_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/61286add_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/aa9d0f99_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/9ad243c9_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/fbce52a3_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/aa93fed6_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/7aabb596_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/ede6472c_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/e7cf5069_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/732f1f6a_dds.mat"
+    }
+    
+    Dependency
+    {
+      path = "Goku/Goku SS3/18d679fb_dds.mat"
+    }
+  }
+  
+  Resource
+  {
+    path = "gun8/0c57caec.dds"
+    size = 87528
+  }
+  
+  Resource
+  {
+    path = "gun8/e31d3340.dds"
+    size = 349672
+  }
+  
+  Resource
+  {
+    path = "gun8/e4fa3435.dds"
+    size = 349672
+  }
+  
+  Resource
+  {
+    path = "gun8/faaaf9bf.dds"
+    size = 87528
+  }
+  
+  Resource
+  {
+    path = "gun8/gm.msh"
+    size = 19226
+    
+    Dependency
+    {
+      path = "gun8/Material__751.mat"
+    }
+  }
+  
+  Resource
+  {
+    path = "gun8/Map__61_Normal_Bump.tga"
+    size = 10779
+  }
+  
+  Resource
+  {
+    path = "gun8/Material__751.mat"
+    size = 192
+    
+    Dependency
+    {
+      path = "gun8/e4fa3435.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "meca.msh"
+    size = 102844
+  }
+  
+  Resource
+  {
+    path = "mesh.msh"
+    size = 7849472
+  }
+  
+  Resource
+  {
+    path = "shader.program"
+    size = 232
+    
+    Dependency
+    {
+      path = "vertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "fragment.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "vertex.vs"
+    size = 1053
+  }
+  
+  Resource
+  {
+    path = "white.program"
+    size = 229
+    
+    Dependency
+    {
+      path = "vertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "white.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "white.ps"
+    size = 977
+  }
+}

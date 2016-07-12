@@ -8,31 +8,31 @@ WHITEBOX_BEGIN
 
 IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescriptor& descriptor )
 {
-	printf("Loading... file size %d\n", dataStream.GetSize() );
+	printf("Loading... file size %zd\n", dataStream.GetSize() );
 
 	// Vertex count
 	size_t vertexCount = 0;
 	if ( !dataStream.Read( vertexCount ) )	return NULL;
-	printf( "Vertex count %d\n", vertexCount );
+	printf( "Vertex count %zd\n", vertexCount );
 	
 	// Vertex format
 	CVertexFormat vertexFormat;
 	
 	size_t singleElementFlags = 0;
 	if ( !dataStream.Read( singleElementFlags ) ) return NULL;
-	vertexFormat.SetSingleElementsFlags( singleElementFlags );
-	printf( "Single elem flags %d\n", singleElementFlags );
+	vertexFormat.SetSingleElementsFlags( (int)singleElementFlags );
+	printf( "Single elem flags %zd\n", singleElementFlags );
 	
 	for( size_t iElem = 0 ; iElem < CVertexFormat::eME_Count ; ++iElem )
 	{
 		size_t elemCount = 0;
 		if ( !dataStream.Read( elemCount ) ) return NULL;
 		vertexFormat.SetMultipleElementCount( (CVertexFormat::EMultipleElement)iElem, elemCount );
-		printf( "Multiple elem %d count %d\n", iElem, elemCount );
+		printf( "Multiple elem %zd count %zd\n", iElem, elemCount );
 	}
 	
 	vertexFormat.Build();
-	printf(" Vertex format size : %d\n", vertexFormat.GetSize() );
+	printf(" Vertex format size : %zd\n", vertexFormat.GetSize() );
 	
 	// Vertices
 	CMesh* pMesh = new CMesh();
@@ -42,7 +42,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 	// Parts
 	size_t partCount = 0;
 	if ( !dataStream.Read( partCount ) ) return NULL;
-	printf( "Part count %d\n", partCount );
+	printf( "Part count %zd\n", partCount );
 	for( size_t iPart = 0 ; iPart < partCount ; ++iPart )
 	{
 		size_t indexCount = 0;	
@@ -51,7 +51,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 			delete pMesh;
 			return NULL;
 		}
-		printf( "Index count %d\n", indexCount );
+		printf( "Index count %zd\n", indexCount );
 		
 		CMesh::CPart* pMeshPart = new CMesh::CPart();
 		pMeshPart->SetIndices( indexCount, (uint*)dataStream.GetCursorData() );

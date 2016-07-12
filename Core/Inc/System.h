@@ -7,12 +7,14 @@ WHITEBOX_BEGIN
 
 class CFileSystem;
 class CRenderer;
+class COperatingSystem;
 struct SSystem
 {
 	static void Init();
 
 	CFileSystem* pFileSystem;
 	CRenderer*	pRenderer;
+	COperatingSystem*	pOperatingSystem;
 };
 
 extern SSystem* gSystem;

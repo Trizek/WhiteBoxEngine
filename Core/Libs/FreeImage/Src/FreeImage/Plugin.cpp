@@ -40,6 +40,8 @@
 
 #include "../Metadata/FreeImageTag.h"
 
+#if 0
+
 // =====================================================================
 
 using namespace std;
@@ -820,3 +822,5 @@ FreeImage_Validate(FREE_IMAGE_FORMAT fif, FreeImageIO *io, fi_handle handle) {
 
 	return FALSE;
 }
+
+#endif

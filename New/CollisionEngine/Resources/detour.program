@@ -1,0 +1,22 @@
+Program
+{
+	Shader
+	{
+		name = "detourvertex.vs"
+	}
+
+	Shader
+	{
+		name = "detourfragment.ps"
+	}
+
+	Attribute
+	{
+		name = "inputPosition"
+	}
+
+	Attribute
+	{
+		name = "normal"
+	}
+}

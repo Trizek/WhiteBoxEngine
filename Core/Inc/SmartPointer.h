@@ -64,6 +64,8 @@ public:
 		DecreaseRefCount();
 		m_pData = smartPtr.m_pData;
 		IncreaseRefCount();
+
+		return *this;
 	}
 	
 	CSmartPointer& operator=( Type* pointer )

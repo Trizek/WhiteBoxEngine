@@ -1018,7 +1018,7 @@ Load(FreeImageIO *io, fi_handle handle, int page, int flags, void *data) {
 					io->read_proc(&b, 1, 1, handle);
 				}
 				comment.append(1, '\0');
-				sprintf(buf, "Comment%d", idx);
+				sprintf2(buf, "Comment%d", idx);
 				DWORD comment_size = (DWORD)comment.size();
 				FreeImage_SetMetadataEx(FIMD_COMMENTS, dib, buf, 1, FIDT_ASCII, comment_size, comment_size, comment.c_str());
 			}

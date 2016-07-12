@@ -1534,7 +1534,7 @@ TagLib::getTagFieldName(MDMODEL md_model, WORD tagID, char *defaultKey) {
 	const TagInfo *info = getTagInfo(md_model, tagID);
 	if(NULL == info) {
 		if(defaultKey != NULL) {
-			sprintf(defaultKey, "Tag 0x%04X", tagID);
+			sprintf2(defaultKey, "Tag 0x%04X", tagID);
 			return &defaultKey[0];
 		} else {
 			return NULL;

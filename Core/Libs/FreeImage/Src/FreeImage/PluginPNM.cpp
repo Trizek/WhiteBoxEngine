@@ -591,11 +591,11 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 	// Write the header info
 
-	sprintf(buffer, "P%d\n%d %d\n", magic, width, height);
+	sprintf2(buffer, "P%d\n%d %d\n", magic, width, height);
 	io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
 	if (bpp != 1) {
-		sprintf(buffer, "%d\n", maxval);
+		sprintf2(buffer, "%d\n", maxval);
 		io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 	}
 
@@ -627,7 +627,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 						BYTE *bits = FreeImage_GetScanLine(dib, height - 1 - y);
 						
 						for (x = 0; x < width; x++) {
-							sprintf(buffer, "%3d %3d %3d ", bits[FI_RGBA_RED], bits[FI_RGBA_GREEN], bits[FI_RGBA_BLUE]);
+							sprintf2(buffer, "%3d %3d %3d ", bits[FI_RGBA_RED], bits[FI_RGBA_GREEN], bits[FI_RGBA_BLUE]);
 
 							io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
@@ -635,7 +635,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 							if(length > 58) {
 								// No line should be longer than 70 characters
-								sprintf(buffer, "\n");
+								sprintf2(buffer, "\n");
 								io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 								length = 0;
 							}
@@ -667,7 +667,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 						BYTE *bits = FreeImage_GetScanLine(dib, height - 1 - y);
 
 						for (x = 0; x < width; x++) {
-							sprintf(buffer, "%3d ", bits[x]);
+							sprintf2(buffer, "%3d ", bits[x]);
 
 							io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
@@ -675,7 +675,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 							if (length > 66) {
 								// No line should be longer than 70 characters
-								sprintf(buffer, "\n");
+								sprintf2(buffer, "\n");
 								io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 								length = 0;
 							}
@@ -707,7 +707,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 						for (x = 0; x < (int)FreeImage_GetLine(dib) * 8; x++)	{
 							color = (bits[x>>3] & (0x80 >> (x & 0x07))) != 0;
 
-							sprintf(buffer, "%c ", color ? '1':'0');
+							sprintf2(buffer, "%c ", color ? '1':'0');
 
 							io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
@@ -715,7 +715,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 							if (length > 68) {
 								// No line should be longer than 70 characters
-								sprintf(buffer, "\n");
+								sprintf2(buffer, "\n");
 								io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 								length = 0;
 							}
@@ -746,7 +746,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 				WORD *bits = (WORD*)FreeImage_GetScanLine(dib, height - 1 - y);
 
 				for (x = 0; x < width; x++) {
-					sprintf(buffer, "%5d ", bits[x]);
+					sprintf2(buffer, "%5d ", bits[x]);
 
 					io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
@@ -754,7 +754,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 					if (length > 64) {
 						// No line should be longer than 70 characters
-						sprintf(buffer, "\n");
+						sprintf2(buffer, "\n");
 						io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 						length = 0;
 					}
@@ -783,7 +783,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 				FIRGB16 *bits = (FIRGB16*)FreeImage_GetScanLine(dib, height - 1 - y);
 				
 				for (x = 0; x < width; x++) {
-					sprintf(buffer, "%5d %5d %5d ", bits[x].red, bits[x].green, bits[x].blue);
+					sprintf2(buffer, "%5d %5d %5d ", bits[x].red, bits[x].green, bits[x].blue);
 
 					io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 
@@ -791,7 +791,7 @@ Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void
 
 					if(length > 52) {
 						// No line should be longer than 70 characters
-						sprintf(buffer, "\n");
+						sprintf2(buffer, "\n");
 						io->write_proc(&buffer, (unsigned int)strlen(buffer), 1, handle);
 						length = 0;
 					}

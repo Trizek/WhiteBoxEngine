@@ -18,6 +18,7 @@ size_t	CDataStream::GetCursor() const
 bool	CDataStream::SetCursor( size_t cursor )
 {
 	m_cursor = cursor;
+	return true;
 }
 
 size_t	CDataStream::GetSize() const

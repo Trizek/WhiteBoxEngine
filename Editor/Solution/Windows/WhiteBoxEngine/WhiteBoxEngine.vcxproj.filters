@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\Core">
+      <UniqueIdentifier>{63ffcd53-43d9-4ac1-9779-45b12fd3b985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Editor">
+      <UniqueIdentifier>{0b8b2cc8-0dc8-4d65-9e13-688668e67fda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core\Render">
+      <UniqueIdentifier>{a83a903c-b21e-4a05-96df-08f73440b480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core\Animation">
+      <UniqueIdentifier>{9ac5de8f-a8a3-42ec-b811-08f47100f879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core\System">
+      <UniqueIdentifier>{149eaba1-6d98-406f-ae88-e48d70c973f0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Core\Src\DataStream.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\GlobalVariables.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Maths.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceDescriptor.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceManager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\ResourceSpecificManager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Script.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\ScriptResourceSerializer.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\ScriptSerializer.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\System.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\IndexBuffer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Material.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MaterialHelper.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MaterialSerializer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Mesh.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MeshHelper.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\MeshSerializer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Picture.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Renderer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\RenderWindow.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\Texture.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\TextureSerializer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Render\VertexBuffer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\System\FileSystem.cpp">
+      <Filter>Fichiers sources\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\Animation.cpp">
+      <Filter>Fichiers sources\Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\AnimationTrack.cpp">
+      <Filter>Fichiers sources\Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\Animation\Skeleton.cpp">
+      <Filter>Fichiers sources\Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\AssetExporter.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\AssetManager.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\CopyExporter.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\main.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\MtlExporter.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Src\ObjExporter.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Core\Src\System\OperatingSystem.cpp">
+      <Filter>Fichiers sources\Core\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Core\Inc\System\OperatingSystem.h">
+      <Filter>Fichiers sources\Core\System</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
