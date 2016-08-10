@@ -13,6 +13,7 @@ class CResourcePointer
 public:
 	CResourcePointer()
 		: m_pDescriptor(NULL){}
+<<<<<<< HEAD
 
 
 	CResourcePointer( TResourceType* pResource )
@@ -26,6 +27,9 @@ public:
 		}
 	}
 
+=======
+		
+>>>>>>> master
 	CResourcePointer( CResourceDescriptor* pDescriptor )
 		: m_pDescriptor(pDescriptor)
 	{
@@ -81,7 +85,11 @@ public:
 	{
 		if ( m_pDescriptor )
 		{
+<<<<<<< HEAD
 			return static_cast< const TResourceType* >( m_pDescriptor->GetResource() );
+=======
+			return m_pDescriptor->GetResource();
+>>>>>>> master
 		}
 		else
 		{

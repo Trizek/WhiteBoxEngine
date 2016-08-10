@@ -6,6 +6,7 @@
 #include "ObjExporter.h"
 #include "Render/Shader.h"
 #include "Render/ShaderProgram.h"
+<<<<<<< HEAD
 #include "Render/Material.h"
 #include "Render/Texture.h"
 #include "AssetManager.h"
@@ -14,6 +15,11 @@
 #include "Render/TextMesh.h"
 
 
+=======
+#include "Render/Texture.h"
+#include "AssetManager.h"
+#include "Render/RenderPipeline.h"
+>>>>>>> master
 
 WHITEBOX_BEGIN
 
@@ -31,10 +37,14 @@ CMeshPtr meca;
 
 CTexturePtr ezioTexture;
 
+<<<<<<< HEAD
 CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
 
 CFontPtr font;
 CTextMesh textMesh, textMesh2;
+=======
+CShaderProgramPtr shader, detourshader, whiteshader;
+>>>>>>> master
 
 
 void CApplication::Init( uint width, uint height )
@@ -62,13 +72,17 @@ void CApplication::Init( uint width, uint height )
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
 	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
+<<<<<<< HEAD
 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
+=======
+>>>>>>> master
 
 	gVars->pResourceManager->UpdateResourceLoading();
 
 
 	CMeshHelper mh;
 
+<<<<<<< HEAD
 
 		CMaterialPtr pMat( new CMaterial() );
 		pMat->m_textureLayers[0].m_pTexture = ezioTexture;
@@ -119,6 +133,39 @@ void CApplication::Init( uint width, uint height )
 		gVars->pResourceManager->UpdateResourceLoading();
 
 	//
+=======
+	mh.AddPosition(Vec3(-10.0f, 0.0f, -10.0f));
+	mh.AddPosition(Vec3(10.0f, 0.0f, -10.0f));
+	mh.AddPosition(Vec3(10.0f, 0.0f, 10.0f));
+	mh.AddPosition(Vec3(-10.0f, 0.0f, 10.0f));
+	mh.AddMeshPart();
+
+	mh.AddColor(Vec3(1, 0, 0));
+	mh.AddColor(Vec3(0, 1, 0));
+	mh.AddColor(Vec3(0, 0, 1));
+	mh.AddColor(Vec3(0, 0, 1));
+
+	mh.AddUV0(Vec2(0, 0));
+	mh.AddUV0(Vec2(1, 0));
+	mh.AddUV0(Vec2(1, 1));
+	mh.AddUV0(Vec2(0, 1));
+
+	mh.AddNormal(Vec3(0, 1, 0));
+	mh.AddNormal(Vec3(0, 1, 0));
+	mh.AddNormal(Vec3(0, 1, 0));
+	mh.AddNormal(Vec3(0, 1, 0));
+
+	mh.GetMeshPart(0)->AddIndex(0);
+	mh.GetMeshPart(0)->AddIndex(2);
+	mh.GetMeshPart(0)->AddIndex(1);
+
+	mh.GetMeshPart(0)->AddIndex(3);
+	mh.GetMeshPart(0)->AddIndex(2);
+	mh.GetMeshPart(0)->AddIndex(0);
+
+
+	quad = mh.ConvertToMesh();
+>>>>>>> master
 }
 
 void CApplication::Resize( uint width, uint height )
@@ -141,11 +188,14 @@ void CApplication::FrameUpdate()
 
 	float fps = 1.0f / frameTime;
 
+<<<<<<< HEAD
 	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
 	textMesh.SetText(text, font);
 
 	CText txt2( U"François Fournel était\ndans la place" );
 	textMesh2.SetText(txt2, font);
+=======
+>>>>>>> master
 
 	bool bClick = gVars->pOperatingSystem->GetMouseButton(0);
 
@@ -199,6 +249,7 @@ void CApplication::FrameUpdate()
 
 
 
+<<<<<<< HEAD
 	Transform textTransf;
 	
 	textTransf = m_pRenderPipeline->mainCamera.transform;
@@ -212,6 +263,23 @@ void CApplication::FrameUpdate()
 
 	Vec3 lightDirection = m_pRenderPipeline->mainCamera.transform.TransformVector(Vec3(1.0f, 1.0f, 0.0f));
 
+=======
+
+
+
+	Vec3 lightDirection = m_pRenderPipeline->mainCamera.transform.TransformVector(Vec3(1.0f, 1.0f, 0.0f));
+	lightDirection = m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
+	lightDirection = Vec3(lightDirection.x, lightDirection.z, -lightDirection.y);
+	lightDirection.Normalize();
+
+	{
+		SShaderProgramParams shaderParams;
+		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
+		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
+
+		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+	}
+>>>>>>> master
 
 
 
@@ -247,6 +315,7 @@ void CApplication::FrameUpdate()
 		}
 	}
 
+<<<<<<< HEAD
 	lightDirection = m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
 	lightDirection = Vec3(lightDirection.x, lightDirection.z, -lightDirection.y);
 	lightDirection.Normalize();
@@ -262,6 +331,8 @@ void CApplication::FrameUpdate()
 
 	}
 
+=======
+>>>>>>> master
 
 	m_pRenderPipeline->Render();
 }

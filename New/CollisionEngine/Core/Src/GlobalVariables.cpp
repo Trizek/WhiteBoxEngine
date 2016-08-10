@@ -1,7 +1,10 @@
 #include "GlobalVariables.h"
 
 #include "FileSystem.h"
+<<<<<<< HEAD
 #include "FontSystem.h"
+=======
+>>>>>>> master
 #include "Render/Renderer.h"
 #include "System/OperatingSystem.h"
 #include "ResourceManager.h"
@@ -16,7 +19,10 @@ void SGlobalVariables::Init()
 	gVars = new SGlobalVariables();
 
 	gVars->pFileSystem = new CFileSystem();
+<<<<<<< HEAD
 	gVars->pFontSystem = new CFontSystem();
+=======
+>>>>>>> master
 	gVars->pRenderer = new CRenderer();
 	gVars->pOperatingSystem = new COperatingSystem();
 	gVars->pApplication = new CApplication();
@@ -24,6 +30,7 @@ void SGlobalVariables::Init()
 };
 
 
+<<<<<<< HEAD
 template< class T >
 CString ToString(const T& val)
 {
@@ -47,6 +54,8 @@ CString ToString< float >(const float& val)
 }
 
 
+=======
+>>>>>>> master
 
 WHITEBOX_END
 

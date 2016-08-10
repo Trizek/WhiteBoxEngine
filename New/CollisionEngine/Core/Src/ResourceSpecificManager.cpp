@@ -4,11 +4,16 @@ WHITEBOX_BEGIN
 
 CResourceDescriptor* CResourceSpecificManager::AddResource( const String& name, const String& path, const String& extension, size_t size, CResourceType* pResourceType, CResourceManager* pResourceManager )
 {
+<<<<<<< HEAD
 	CResourceDescriptor* pDescriptor = new CResourceDescriptor( name, path, extension, size, false, pResourceType, pResourceManager );
+=======
+	CResourceDescriptor* pDescriptor = new CResourceDescriptor(name, path, extension, size, pResourceType, pResourceManager);
+>>>>>>> master
 	m_resources[ path ] = pDescriptor;
 	return pDescriptor;
 }
 
+<<<<<<< HEAD
 // CResourceDescriptor* CResourceSpecificManager::AddProceduralResource( const String& name, const String& extension, IResource* pResource, CResourceType* pResourceType, CResourceManager* pResourceManager )
 // {
 // 	String path = String("__PROCEDURAL__") + name;
@@ -18,6 +23,8 @@ CResourceDescriptor* CResourceSpecificManager::AddResource( const String& name, 
 // 	return pDescriptor;
 // }
 
+=======
+>>>>>>> master
 CResourceDescriptor* CResourceSpecificManager::GetResourceDescriptor( const String& path )
 {
 	TResourceDescriptorMap::iterator itResDesc = m_resources.find( path );

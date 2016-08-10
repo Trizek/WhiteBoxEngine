@@ -133,6 +133,7 @@ public:
 	size_t					GetVertexCount() const;
 	void*					GetBufferId() const;
 
+<<<<<<< HEAD
 	void*					Lock( bool bRead, bool bWrite );
 	void					Unlock();
 
@@ -141,6 +142,8 @@ public:
 	Vec2&					GetUV0( void* pLockedData, size_t index ) const;
 
 
+=======
+>>>>>>> master
 private:
 	CVertexFormat		m_vertexFormat;
 	size_t				m_vertexCount;

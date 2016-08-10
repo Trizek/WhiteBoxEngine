@@ -408,6 +408,7 @@ private:
 
 typedef CString String;
 
+<<<<<<< HEAD
 template< class T >
 CString ToString(const T& val);
 
@@ -417,6 +418,8 @@ CString ToString< int >(const int& val);
 template<>
 CString ToString< float >(const float& val);
 
+=======
+>>>>>>> master
 WHITEBOX_END
 
 #ifdef __APPLE__

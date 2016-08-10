@@ -13,7 +13,11 @@ T	Min( const T& a, const T& b )
 template< class T >
 T	Max( const T& a, const T& b )
 {
+<<<<<<< HEAD
 	return ( a > b )? a : b;
+=======
+	return ( a < b )? a : b;
+>>>>>>> master
 }
 
 template< class T >

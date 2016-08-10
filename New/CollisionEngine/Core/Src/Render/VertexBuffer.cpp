@@ -31,6 +31,7 @@ void* CVertexBuffer::GetBufferId() const
 	return m_pBufferId;
 }
 
+<<<<<<< HEAD
 void*	CVertexBuffer::Lock( bool bRead, bool bWrite )
 {
 	return gVars->pRenderer->LockVertexBuffer( m_pBufferId, bRead, bWrite );
@@ -56,4 +57,6 @@ Vec2& CVertexBuffer::GetUV0( void* pLockedData, size_t index ) const
 	return *(Vec2*)(((char*)pLockedData) + m_vertexFormat.GetMultipleElementOffset(CVertexFormat::eME_UV, 0) + index * m_vertexFormat.GetSize());
 }
 
+=======
+>>>>>>> master
 WHITEBOX_END

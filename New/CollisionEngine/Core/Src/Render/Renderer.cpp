@@ -239,7 +239,10 @@ void	CRenderer::UnbindVertexBuffer()
 void*	CRenderer::LockVertexBuffer( void* pBufferId, bool bRead, bool bWrite )
 {
 	GLenum access = (bRead && bWrite)? GL_READ_WRITE : ( (bWrite)? GL_WRITE_ONLY : GL_READ_ONLY );
+<<<<<<< HEAD
 	glBindBuffer( GL_ARRAY_BUFFER, *static_cast<GLuint*>(pBufferId) );
+=======
+>>>>>>> master
 	return glMapBuffer( GL_ARRAY_BUFFER, access );
 }
 
@@ -383,8 +386,12 @@ void*	CRenderer::CreateTexture( uint width, uint height, uint mipMapCount, CPict
 	}
 	else
 	{
+<<<<<<< HEAD
 		glTexImage2D( GL_TEXTURE_2D, 0, glFormat, width, height, 0, glFormat, type, pPixelData );
 		glGenerateMipmap( GL_TEXTURE_2D );
+=======
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, glFormat, type, pPixelData );
+>>>>>>> master
 	}
 
 

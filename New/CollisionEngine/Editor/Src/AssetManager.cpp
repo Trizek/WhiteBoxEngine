@@ -26,7 +26,10 @@ CAssetManager::CAssetManager()
 	AddExporter( "vs", new CCopyExporter() );
 	AddExporter( "program", new CCopyExporter() );
 	AddExporter( "msh", new CCopyExporter() );
+<<<<<<< HEAD
 	AddExporter( "ttf", new CCopyExporter() );
+=======
+>>>>>>> master
 }
 
 void	CAssetManager::AddExporter( const String& extension, IAssetExporter* pExporter )

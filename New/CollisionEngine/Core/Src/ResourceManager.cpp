@@ -10,7 +10,10 @@
 #include "Render/TextureSerializer.h"
 #include "Render/ShaderSerializer.h"
 #include "Render/ShaderProgramSerializer.h"
+<<<<<<< HEAD
 #include "Render/FontSerializer.h"
+=======
+>>>>>>> master
 
 WHITEBOX_BEGIN
 
@@ -27,8 +30,11 @@ CResourceManager::CResourceManager()
 	AddResourceExtension< CShader >( "ps" );
 
 	AddResourceType< CShaderProgram, CShaderProgramSerializer >( "program" );
+<<<<<<< HEAD
 
 	AddResourceType< CFont, CFontSerializer >( "ttf" );
+=======
+>>>>>>> master
 }
 
 void CResourceManager::AddResourceType( const String& name, const String& extension, IResourceSerializer* pSerializer )
@@ -48,10 +54,14 @@ void CResourceManager::AddResourceExtension( const String& typeName, const Strin
 
 void CResourceManager::AddLoadResourceQuery( CResourceDescriptor& descriptor )
 {
+<<<<<<< HEAD
 	if ( !descriptor.IsProcedural() )
 	{
 		m_resourceLoadQueries.push_back( &descriptor );
 	}
+=======
+	m_resourceLoadQueries.push_back( &descriptor );
+>>>>>>> master
 }
 
 void CResourceManager::AddUnloadResourceQuery( CResourceDescriptor& descriptor )

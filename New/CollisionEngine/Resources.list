@@ -5,12 +5,15 @@ Resources
   
   Resource
   {
+<<<<<<< HEAD
     path = "cube.msh"
     size = 228
   }
   
   Resource
   {
+=======
+>>>>>>> master
     path = "detour.program"
     size = 198
     
@@ -610,12 +613,15 @@ Resources
   
   Resource
   {
+<<<<<<< HEAD
     path = "font.ttf"
     size = 217360
   }
   
   Resource
   {
+=======
+>>>>>>> master
     path = "fragment.ps"
     size = 985
   }
@@ -901,6 +907,7 @@ Resources
   
   Resource
   {
+<<<<<<< HEAD
     path = "text.program"
     size = 226
     
@@ -929,6 +936,8 @@ Resources
   
   Resource
   {
+=======
+>>>>>>> master
     path = "vertex.vs"
     size = 1053
   }

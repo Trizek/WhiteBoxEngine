@@ -3,12 +3,17 @@
 #include "System/OperatingSystem.h"
 
 
+<<<<<<< HEAD
 
 
 int main(int argc, char *argv)
 {
 
 
+=======
+int main(int argc, char *argv)
+{
+>>>>>>> master
 	WhiteBox::SGlobalVariables::Init();
 
 	WhiteBox::gVars->pOperatingSystem->Init( 1600, 800 );
@@ -326,7 +331,11 @@ WhiteBox::SGlobalVariables::Init();
 
 
 //	WhiteBox::CAssetManager assMan;
+<<<<<<< HEAD
 //	assMan.Export( "Assets", "Resources" );
+=======
+	//assMan.Export( "Assets", "Resources" );
+>>>>>>> master
 
 //	WhiteBox::gVars->pResourceManager->ParseResources( "Resources" );
 	

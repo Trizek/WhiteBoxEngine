@@ -9,7 +9,10 @@ WHITEBOX_BEGIN
 
 
 class CFileSystem;
+<<<<<<< HEAD
 class CFontSystem;
+=======
+>>>>>>> master
 class CRenderer;
 class COperatingSystem;
 class CApplication;
@@ -19,7 +22,10 @@ struct SGlobalVariables
 	static void Init();
 
 	CFileSystem* pFileSystem;
+<<<<<<< HEAD
 	CFontSystem*	pFontSystem;
+=======
+>>>>>>> master
 	CRenderer*	pRenderer;
 	COperatingSystem*	pOperatingSystem;
 	CApplication*	pApplication;

@@ -13,7 +13,11 @@ class CResourceDescriptor
 {
 public:
 	CResourceDescriptor();
+<<<<<<< HEAD
 	CResourceDescriptor( const String& name, const String& path, const String& extension, size_t size, bool bProcedural, CResourceType* pResourceType, CResourceManager* pResourceManager );
+=======
+	CResourceDescriptor( const String& name, const String& path, const String& extension, size_t size, CResourceType* pResourceType, CResourceManager* pResourceManager );
+>>>>>>> master
 	~CResourceDescriptor();
 
 	void				Acquire();
@@ -24,8 +28,11 @@ public:
 	const String&		GetPath() const;
 	const String&		GetExtension() const;
 	size_t				GetSize() const;
+<<<<<<< HEAD
 	bool				IsProcedural() const;
 
+=======
+>>>>>>> master
 	const std::vector< String >&	GetDependencies() const;
 	std::vector< String >&			GetDependencies();
 
@@ -42,7 +49,10 @@ private:
 	String					m_path;
 	String					m_extension;
 	size_t					m_size;
+<<<<<<< HEAD
 	bool					m_bProcedural;
+=======
+>>>>>>> master
 	std::vector< String >	m_dependencies;
 
 	IResource*				m_pResource;
