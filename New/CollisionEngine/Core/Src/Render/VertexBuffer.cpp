@@ -31,4 +31,29 @@ void* CVertexBuffer::GetBufferId() const
 	return m_pBufferId;
 }
 
+void*	CVertexBuffer::Lock( bool bRead, bool bWrite )
+{
+	return gVars->pRenderer->LockVertexBuffer( m_pBufferId, bRead, bWrite );
+}
+
+void	CVertexBuffer::Unlock()
+{
+	gVars->pRenderer->UnlockVertexBuffer();
+}
+
+Vec3& CVertexBuffer::GetPosition( void* pLockedData, size_t index ) const
+{
+	return *(Vec3*)(((char*)pLockedData) + index * m_vertexFormat.GetSize());
+}
+
+Vec3& CVertexBuffer::GetNormal(void* pLockedData, size_t index) const
+{
+	return *(Vec3*)(((char*)pLockedData) + m_vertexFormat.GetSingleElementOffset(CVertexFormat::eSE_Normal) + index * m_vertexFormat.GetSize());
+}
+
+Vec2& CVertexBuffer::GetUV0( void* pLockedData, size_t index ) const
+{
+	return *(Vec2*)(((char*)pLockedData) + m_vertexFormat.GetMultipleElementOffset(CVertexFormat::eME_UV, 0) + index * m_vertexFormat.GetSize());
+}
+
 WHITEBOX_END

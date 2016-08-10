@@ -5,6 +5,12 @@ Resources
   
   Resource
   {
+    path = "cube.msh"
+    size = 228
+  }
+  
+  Resource
+  {
     path = "detour.program"
     size = 198
     
@@ -604,6 +610,12 @@ Resources
   
   Resource
   {
+    path = "font.ttf"
+    size = 217360
+  }
+  
+  Resource
+  {
     path = "fragment.ps"
     size = 985
   }
@@ -885,6 +897,34 @@ Resources
     {
       path = "fragment.ps"
     }
+  }
+  
+  Resource
+  {
+    path = "text.program"
+    size = 226
+    
+    Dependency
+    {
+      path = "text.vs"
+    }
+    
+    Dependency
+    {
+      path = "text.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "text.ps"
+    size = 747
+  }
+  
+  Resource
+  {
+    path = "text.vs"
+    size = 1053
   }
   
   Resource

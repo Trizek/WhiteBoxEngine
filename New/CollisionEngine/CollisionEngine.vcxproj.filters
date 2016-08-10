@@ -234,6 +234,21 @@
     <ClInclude Include="Core\Inc\Render\RenderPipeline.h">
       <Filter>Fichiers d%27en-tête\Core\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Inc\Render\Font.h">
+      <Filter>Fichiers d%27en-tête\Core\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Inc\Render\FontSerializer.h">
+      <Filter>Fichiers d%27en-tête\Core\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Inc\FontSystem.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Inc\Render\TextMesh.h">
+      <Filter>Fichiers d%27en-tête\Core\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Inc\Text.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Src\DataStream.cpp">
@@ -354,6 +369,18 @@
       <Filter>Fichiers sources\Core\Render</Filter>
     </ClCompile>
     <ClCompile Include="Core\Src\Render\RenderPipeline.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Src\Render\Font.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Src\Render\FontSerializer.cpp">
+      <Filter>Fichiers sources\Core\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Src\FontSystem.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Src\Render\TextMesh.cpp">
       <Filter>Fichiers sources\Core\Render</Filter>
     </ClCompile>
   </ItemGroup>

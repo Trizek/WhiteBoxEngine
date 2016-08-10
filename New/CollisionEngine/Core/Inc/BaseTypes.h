@@ -6,10 +6,12 @@
 typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long int ulong;
+typedef char32_t wchar;
 
 #include <vector>
 
 #include "WhiteBoxString.h"
+#include "Text.h"
 
 #ifdef __APPLE__
 

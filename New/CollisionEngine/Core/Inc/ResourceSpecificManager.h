@@ -12,6 +12,7 @@ class CResourceSpecificManager
 {
 public:
 	CResourceDescriptor*	AddResource( const String& name, const String& path, const String& extension, size_t size, CResourceType* pResourceType, CResourceManager* pResourceManager );
+	//CResourceDescriptor*	AddProceduralResource( const String& name, const String& extension, IResource* pResource, CResourceType* pResourceType, CResourceManager* pResourceManager );
 	CResourceDescriptor*	GetResourceDescriptor( const String& path );
 
 private:

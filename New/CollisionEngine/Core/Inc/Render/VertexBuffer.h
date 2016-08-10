@@ -133,6 +133,14 @@ public:
 	size_t					GetVertexCount() const;
 	void*					GetBufferId() const;
 
+	void*					Lock( bool bRead, bool bWrite );
+	void					Unlock();
+
+	Vec3&					GetPosition( void* pLockedData, size_t index ) const;
+	Vec3&					GetNormal( void* pLockedData, size_t index ) const;
+	Vec2&					GetUV0( void* pLockedData, size_t index ) const;
+
+
 private:
 	CVertexFormat		m_vertexFormat;
 	size_t				m_vertexCount;

@@ -45,8 +45,11 @@ void			CRenderPipeline::SortRenderQueue( TRenderQueue& renderQueue )
 
 }
 
-void			CRenderPipeline::RenderQueue( const TRenderQueue& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix )
+void			CRenderPipeline::RenderQueue( const TRenderQueue& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount )
 {
+	drawCalls = renderQueue.size();
+	polyCount = 0;
+
 	const SRenderUnit* pLastRenderUnit = nullptr;
 	for (size_t i = 0; i < renderQueue.size(); ++i)
 	{
@@ -72,6 +75,16 @@ void			CRenderPipeline::RenderQueue( const TRenderQueue& renderQueue, IRenderTar
 				}
 
 				gVars->pRenderer->BindTexture(pTexture->GetTextureId(), iTex);
+
+// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+// 
+//   				glEnable(GL_BLEND);
+// 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 			}
 		}
 
@@ -91,6 +104,8 @@ void			CRenderPipeline::RenderQueue( const TRenderQueue& renderQueue, IRenderTar
 		gVars->pRenderer->RenderBoundTriangles( renderUnit.pIndexBuffer->GetIndexCount() );
 
 		pLastRenderUnit = &renderUnit;
+
+		polyCount += renderUnit.pIndexBuffer->GetIndexCount();
 	}
 }
 
@@ -116,7 +131,7 @@ void			CRenderPipeline::Render()
 	glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
 	glLoadIdentity();
 
-	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix );
+	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix, m_drawCalls, m_polyCount );
 	mainRenderQueue.clear();
 
 	gVars->pRenderer->UnbindIndexBuffer();
@@ -148,6 +163,17 @@ void			CRenderPipeline::Render()
 /*		dtx_flush();*/
 
 
+}
+
+
+size_t			CRenderPipeline::GetDrawCalls() const
+{
+	return m_drawCalls;
+}
+
+size_t			CRenderPipeline::GetPolyCount() const
+{
+	return m_polyCount;
 }
 
 WHITEBOX_END

@@ -6,9 +6,14 @@
 #include "ObjExporter.h"
 #include "Render/Shader.h"
 #include "Render/ShaderProgram.h"
+#include "Render/Material.h"
 #include "Render/Texture.h"
 #include "AssetManager.h"
 #include "Render/RenderPipeline.h"
+#include "Render/Font.h"
+#include "Render/TextMesh.h"
+
+
 
 WHITEBOX_BEGIN
 
@@ -26,7 +31,10 @@ CMeshPtr meca;
 
 CTexturePtr ezioTexture;
 
-CShaderProgramPtr shader, detourshader, whiteshader;
+CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
+
+CFontPtr font;
+CTextMesh textMesh, textMesh2;
 
 
 void CApplication::Init( uint width, uint height )
@@ -54,43 +62,63 @@ void CApplication::Init( uint width, uint height )
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
 	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
+	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
 	gVars->pResourceManager->UpdateResourceLoading();
 
 
 	CMeshHelper mh;
 
-	mh.AddPosition(Vec3(-10.0f, 0.0f, -10.0f));
-	mh.AddPosition(Vec3(10.0f, 0.0f, -10.0f));
-	mh.AddPosition(Vec3(10.0f, 0.0f, 10.0f));
-	mh.AddPosition(Vec3(-10.0f, 0.0f, 10.0f));
-	mh.AddMeshPart();
 
-	mh.AddColor(Vec3(1, 0, 0));
-	mh.AddColor(Vec3(0, 1, 0));
-	mh.AddColor(Vec3(0, 0, 1));
-	mh.AddColor(Vec3(0, 0, 1));
-
-	mh.AddUV0(Vec2(0, 0));
-	mh.AddUV0(Vec2(1, 0));
-	mh.AddUV0(Vec2(1, 1));
-	mh.AddUV0(Vec2(0, 1));
-
-	mh.AddNormal(Vec3(0, 1, 0));
-	mh.AddNormal(Vec3(0, 1, 0));
-	mh.AddNormal(Vec3(0, 1, 0));
-	mh.AddNormal(Vec3(0, 1, 0));
-
-	mh.GetMeshPart(0)->AddIndex(0);
-	mh.GetMeshPart(0)->AddIndex(2);
-	mh.GetMeshPart(0)->AddIndex(1);
-
-	mh.GetMeshPart(0)->AddIndex(3);
-	mh.GetMeshPart(0)->AddIndex(2);
-	mh.GetMeshPart(0)->AddIndex(0);
+		CMaterialPtr pMat( new CMaterial() );
+		pMat->m_textureLayers[0].m_pTexture = ezioTexture;
 
 
-	quad = mh.ConvertToMesh();
+		mh.AddPosition(Vec3(-100.0f, 0.0f, 0.0f));
+		mh.AddPosition(Vec3(-80.0f, 0.0f, 0.0f));
+		mh.AddPosition(Vec3(-80.0f, 0.0f, 20.0f));
+		mh.AddPosition(Vec3(-100.0f, 0.0f, 20.0f));
+		mh.AddMeshPart();
+
+		// 	mh.AddColor(Vec3(1, 0, 0));
+		// 	mh.AddColor(Vec3(0, 1, 0));
+		// 	mh.AddColor(Vec3(0, 0, 1));
+		// 	mh.AddColor(Vec3(0, 0, 1));
+
+		mh.AddUV0(Vec2(0, 0));
+		mh.AddUV0(Vec2(1, 0));
+		mh.AddUV0(Vec2(1, 1));
+		mh.AddUV0(Vec2(0, 1));
+
+		mh.AddNormal(Vec3(0, 1, 0));
+		mh.AddNormal(Vec3(0, 1, 0));
+		mh.AddNormal(Vec3(0, 1, 0));
+		mh.AddNormal(Vec3(0, 1, 0));
+
+		mh.GetMeshPart(0)->AddIndex(0);
+		mh.GetMeshPart(0)->AddIndex(2);
+		mh.GetMeshPart(0)->AddIndex(1);
+
+		mh.GetMeshPart(0)->AddIndex(3);
+		mh.GetMeshPart(0)->AddIndex(2);
+		mh.GetMeshPart(0)->AddIndex(0);
+
+
+		quad = mh.ConvertToMesh();
+
+
+		quad->GetPart(0)->SetMaterial( pMat );
+
+		font = gVars->pResourceManager->GetResource< CFont >( "font.ttf" );
+
+
+
+
+
+	
+		gVars->pResourceManager->UpdateResourceLoading();
+
+	//
 }
 
 void CApplication::Resize( uint width, uint height )
@@ -113,6 +141,11 @@ void CApplication::FrameUpdate()
 
 	float fps = 1.0f / frameTime;
 
+	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
+	textMesh.SetText(text, font);
+
+	CText txt2( U"François Fournel était\ndans la place" );
+	textMesh2.SetText(txt2, font);
 
 	bool bClick = gVars->pOperatingSystem->GetMouseButton(0);
 
@@ -166,21 +199,19 @@ void CApplication::FrameUpdate()
 
 
 
+	Transform textTransf;
+	
+	textTransf = m_pRenderPipeline->mainCamera.transform;
+	textTransf.position = textTransf.position + m_pRenderPipeline->mainCamera.transform.rotation * Vec3(-500.0f, 1000.0f, 0.0f);
+	//textTransf.rotation = Quat();
 
+
+	m_pRenderPipeline->mainCamera.ComputeProjectionMatrix();
+	m_pRenderPipeline->mainCamera.ComputeTransformMatrix();
 
 
 	Vec3 lightDirection = m_pRenderPipeline->mainCamera.transform.TransformVector(Vec3(1.0f, 1.0f, 0.0f));
-	lightDirection = m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
-	lightDirection = Vec3(lightDirection.x, lightDirection.z, -lightDirection.y);
-	lightDirection.Normalize();
 
-	{
-		SShaderProgramParams shaderParams;
-		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
-		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
-
-		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
-	}
 
 
 
@@ -214,6 +245,21 @@ void CApplication::FrameUpdate()
 			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, whiteshader.get(), shaderParams, true );
 			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, detourshader.get(), SShaderProgramParams(), false );
 		}
+	}
+
+	lightDirection = m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
+	lightDirection = Vec3(lightDirection.x, lightDirection.z, -lightDirection.y);
+	lightDirection.Normalize();
+
+	{
+		SShaderProgramParams shaderParams;
+		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
+		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
+
+		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+		CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, textTransf, m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
+		CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh2.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
+
 	}
 
 

@@ -13,7 +13,19 @@ class CResourcePointer
 public:
 	CResourcePointer()
 		: m_pDescriptor(NULL){}
-		
+
+
+	CResourcePointer( TResourceType* pResource )
+	{
+		m_pDescriptor = new CResourceDescriptor( "", "", "", 0, true, nullptr, nullptr );
+		m_pDescriptor->SetResource( pResource );
+
+		if ( m_pDescriptor )
+		{
+			m_pDescriptor->Acquire();
+		}
+	}
+
 	CResourcePointer( CResourceDescriptor* pDescriptor )
 		: m_pDescriptor(pDescriptor)
 	{
@@ -69,7 +81,7 @@ public:
 	{
 		if ( m_pDescriptor )
 		{
-			return m_pDescriptor->GetResource();
+			return static_cast< const TResourceType* >( m_pDescriptor->GetResource() );
 		}
 		else
 		{

@@ -408,6 +408,15 @@ private:
 
 typedef CString String;
 
+template< class T >
+CString ToString(const T& val);
+
+template<>
+CString ToString< int >(const int& val);
+
+template<>
+CString ToString< float >(const float& val);
+
 WHITEBOX_END
 
 #ifdef __APPLE__

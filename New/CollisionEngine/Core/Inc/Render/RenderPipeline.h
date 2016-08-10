@@ -53,13 +53,20 @@ public:
 	static SRenderUnit&		AddRenderUnit( TRenderQueue& renderQueue );
 	static void				AddMeshToRenderQueue( CMesh* pMesh, TRenderQueue& renderQueue, const Transform& meshTransform, const Matrix34& inverseCameraMatrix, CShaderProgram* pShaderProgram, SShaderProgramParams& shaderParams, bool bCullFace );
 	static void				SortRenderQueue( TRenderQueue& renderQueue );
-	static void				RenderQueue( const TRenderQueue& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix );
+	static void				RenderQueue( const TRenderQueue& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount );
 
 	void					Init( uint width, uint height );
 	void					Render();
 
+	size_t					GetDrawCalls() const;
+	size_t					GetPolyCount() const;
+
 	CCamera					mainCamera;
 	TRenderQueue			mainRenderQueue;
+
+private:
+	size_t					m_drawCalls;
+	size_t					m_polyCount;
 };
 
 

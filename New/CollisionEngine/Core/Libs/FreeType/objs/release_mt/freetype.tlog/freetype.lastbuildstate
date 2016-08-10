@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
+Release Multithreaded|Win32|D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\builds\win32\visualc\|

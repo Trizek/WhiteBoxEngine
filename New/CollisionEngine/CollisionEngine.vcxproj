@@ -53,15 +53,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);C:\Users\Francois\Downloads\FreeImage3170\FreeImage\Source;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;D:\CollisionEngine\CollisionEngine_VS2015\Libs\libdrawtext-0.2.1\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\include;%(AdditionalIncludeDirectories);C:\Users\Francois\Downloads\FreeImage3170\FreeImage\Source;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;D:\CollisionEngine\CollisionEngine_VS2015\Libs\libdrawtext-0.2.1\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\CollisionEngine\CollisionEngine_VS2015\Libs\freetype-2.4.10\objs;D:\CollisionEngine\CollisionEngine_VS2015\Libs\libdrawtext-0.2.1\Debug;$(SolutionDir)\Libs\SDL2-2.0.3\lib\x86;$(SolutionDir)\Libs\glut;$(SolutionDir)\Libs\glew\lib\Release\Win32;C:\Users\Francois\Downloads\FreeImage3170\FreeImage\Win32\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;FreeImaged.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Core\Libs\Glew\lib\Release\Win32;Core\Libs\FreeType\objs;Core\Libs\SDL\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype240MT.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,15 +75,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;$(SolutionDir)\Libs\libdrawtext-0.2.1\src;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\include;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src;$(SolutionDir)\Libs\libdrawtext-0.2.1\src;$(SolutionDir)\Libs\glew\include;$(SolutionDir)\CollisionEngine;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Inc;D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Editor\Inc;D:\GitHub\WhiteBoxEngine\Core\Libs\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libs\libdrawtext-0.2.1\Debug;$(SolutionDir)\Libs\SDL2-2.0.3\lib\x86;$(SolutionDir)\Libs\glut;$(SolutionDir)\Libs\glew\lib\Release\Win32;D:\GitHub\WhiteBoxEngine\Core\Libs\FreeImage\Src\FreeImageLib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libdrawtext.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Core\Libs\Glew\lib\Release\Win32;Core\Libs\FreeType\objs;Core\Libs\SDL\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype240MT.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -99,6 +101,7 @@
     <ClInclude Include="Core\Inc\DataStream.h" />
     <ClInclude Include="Core\Inc\Event.h" />
     <ClInclude Include="Core\Inc\FileSystem.h" />
+    <ClInclude Include="Core\Inc\FontSystem.h" />
     <ClInclude Include="Core\Inc\GlobalVariables.h" />
     <ClInclude Include="Core\Inc\Handle.h" />
     <ClInclude Include="Core\Inc\InputManager.h" />
@@ -110,6 +113,8 @@
     <ClInclude Include="Core\Inc\RenderAPI.h" />
     <ClInclude Include="Core\Inc\RenderTypes.h" />
     <ClInclude Include="Core\Inc\Render\Camera.h" />
+    <ClInclude Include="Core\Inc\Render\Font.h" />
+    <ClInclude Include="Core\Inc\Render\FontSerializer.h" />
     <ClInclude Include="Core\Inc\Render\IndexBuffer.h" />
     <ClInclude Include="Core\Inc\Render\Material.h" />
     <ClInclude Include="Core\Inc\Render\MaterialHelper.h" />
@@ -126,6 +131,7 @@
     <ClInclude Include="Core\Inc\Render\ShaderProgram.h" />
     <ClInclude Include="Core\Inc\Render\ShaderProgramSerializer.h" />
     <ClInclude Include="Core\Inc\Render\ShaderSerializer.h" />
+    <ClInclude Include="Core\Inc\Render\TextMesh.h" />
     <ClInclude Include="Core\Inc\Render\Texture.h" />
     <ClInclude Include="Core\Inc\Render\TextureSerializer.h" />
     <ClInclude Include="Core\Inc\Render\VertexBuffer.h" />
@@ -145,6 +151,7 @@
     <ClInclude Include="Core\Inc\smartpointer.h" />
     <ClInclude Include="Core\Inc\System\OperatingSystem.h" />
     <ClInclude Include="Core\Inc\Temp.h" />
+    <ClInclude Include="Core\Inc\Text.h" />
     <ClInclude Include="Core\Inc\WhiteBoxNameSpace.h" />
     <ClInclude Include="Core\Inc\whiteboxstring.h" />
     <ClInclude Include="Editor\Inc\AssetExporter.h" />
@@ -163,8 +170,11 @@
     <ClCompile Include="Core\Src\Application.cpp" />
     <ClCompile Include="Core\Src\Camera.cpp" />
     <ClCompile Include="Core\Src\DataStream.cpp" />
+    <ClCompile Include="Core\Src\FontSystem.cpp" />
     <ClCompile Include="Core\Src\GlobalVariables.cpp" />
     <ClCompile Include="Core\Src\Maths.cpp" />
+    <ClCompile Include="Core\Src\Render\Font.cpp" />
+    <ClCompile Include="Core\Src\Render\FontSerializer.cpp" />
     <ClCompile Include="Core\Src\Render\IndexBuffer.cpp" />
     <ClCompile Include="Core\Src\Render\Material.cpp" />
     <ClCompile Include="Core\Src\Render\MaterialHelper.cpp" />
@@ -180,6 +190,7 @@
     <ClCompile Include="Core\Src\Render\ShaderProgram.cpp" />
     <ClCompile Include="Core\Src\Render\ShaderProgramSerializer.cpp" />
     <ClCompile Include="Core\Src\Render\ShaderSerializer.cpp" />
+    <ClCompile Include="Core\Src\Render\TextMesh.cpp" />
     <ClCompile Include="Core\Src\Render\Texture.cpp" />
     <ClCompile Include="Core\Src\Render\TextureSerializer.cpp" />
     <ClCompile Include="Core\Src\Render\VertexBuffer.cpp" />

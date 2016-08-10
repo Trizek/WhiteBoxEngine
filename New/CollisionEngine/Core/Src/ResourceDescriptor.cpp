@@ -17,11 +17,12 @@ CResourceDescriptor::CResourceDescriptor()
 	printf("Create empty descriptor \n");
 }
 
-CResourceDescriptor::CResourceDescriptor( const String& name, const String& path, const String& extension, size_t size, CResourceType* pResourceType, CResourceManager* pResourceManager )
+CResourceDescriptor::CResourceDescriptor( const String& name, const String& path, const String& extension, size_t size, bool bProcedural, CResourceType* pResourceType, CResourceManager* pResourceManager )
 	: m_name(name)
 	, m_path(path)
 	, m_extension(extension)
 	, m_size(size)
+	, m_bProcedural(bProcedural)
 	, m_pResource(NULL)
 	, m_refCount(0)
 	, m_pResourceType(pResourceType)
@@ -40,7 +41,7 @@ CResourceDescriptor::~CResourceDescriptor()
 
 void CResourceDescriptor::Acquire()
 {
-	if ( m_refCount == 0 && m_pResource == nullptr ) // resource can be not null with refcount 0 (unload then load the same frame)
+	if ( m_refCount == 0 && m_pResource == nullptr && !m_bProcedural ) // resource can be not null with refcount 0 (unload then load the same frame)
 	{
 		// async load
 		printf( "Request loading resource %s\n", m_name.c_str() );
@@ -54,8 +55,16 @@ void CResourceDescriptor::Release()
 	--m_refCount;
 	if ( m_refCount == 0 )
 	{
-		printf( "Marking %s to destroy\n", m_name.c_str() );
-		m_pResourceManager->AddUnloadResourceQuery( *this );
+		if ( m_bProcedural )
+		{
+			delete m_pResource;
+			delete this;
+		}
+		else
+		{
+			printf( "Marking %s to destroy\n", m_name.c_str() );
+			m_pResourceManager->AddUnloadResourceQuery( *this );
+		}
 	}
 }
 
@@ -82,6 +91,11 @@ const String& CResourceDescriptor::GetExtension() const
 size_t CResourceDescriptor::GetSize() const
 {
 	return m_size;
+}
+
+bool CResourceDescriptor::IsProcedural() const
+{
+	return m_bProcedural;
 }
 
 const std::vector< String >&	CResourceDescriptor::GetDependencies() const
