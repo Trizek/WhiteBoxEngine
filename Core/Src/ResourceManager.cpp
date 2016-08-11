@@ -287,6 +287,10 @@ void	CResourceManager::GetRecursiveDependencies( CResourceDescriptor* pDescripto
 	for( const String& dependencyPath : pDescriptor->GetDependencies() )
 	{
 		CResourceDescriptor* pDependency = GetResourceDescriptor( dependencyPath );
+		if ( pDependency == nullptr )
+		{
+			continue;
+		}
 		dependencies.push_back( pDependency );
 		GetRecursiveDependencies( pDependency, dependencies );
 	}

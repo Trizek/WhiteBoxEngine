@@ -23,8 +23,11 @@ void CObjExporter::Export( const String& assetFolder, const String& resourceFold
 	size_t vertexCount = 0;
 
 	char buffer[256];
-	while( ReadWord( file, buffer ) )
+	bool bConsumeWord = true;
+	while( !bConsumeWord || ReadWord( file, buffer ) )
 	{
+		bConsumeWord = true;
+
 		if ( strcmp( buffer, "#" ) == 0 || strcmp( buffer, "mtllib" ) == 0 )
 		{
 			SkipLine( file );
@@ -64,22 +67,38 @@ void CObjExporter::Export( const String& assetFolder, const String& resourceFold
 		}			
 		else if ( meshPartCount > 0 && strcmp( buffer, "f" ) == 0 )
 		{
-			for( int index = 0 ; index < 3 ; ++index )
+			std::vector< uint > indices;
+
+			bConsumeWord = false;
+ 			while( ReadWord( file, buffer ) )
 			{
-				if ( ReadWord( file, buffer ) )
+				char* pCursor = nullptr;
+				long int face = strtol( buffer, &pCursor, 10 );
+				if ( pCursor == buffer )
 				{
-					long int face = ToInt( buffer );
-					uint index;
-					if ( face < 0 )
-					{
-						index = (uint)(vertexCount + face);
-					}
-					else
-					{
-						index = (uint)(face - 1);
-					}				
-					meshHelper.GetMeshPart( meshPartCount - 1 )->AddIndex( index );
+					break;
 				}
+
+				uint index;
+				if (face < 0)
+				{
+					index = (uint)(vertexCount + face);
+				}
+				else
+				{
+					index = (uint)(face - 1);
+				}
+
+				indices.push_back( index );		
+			}
+
+			uint ii = indices.size();
+
+			for ( uint i = 2; i < indices.size(); ++i )
+			{
+				meshHelper.GetMeshPart( meshPartCount - 1 )->AddIndex( indices[ 0 ] );
+				meshHelper.GetMeshPart( meshPartCount - 1 )->AddIndex( indices[ i - 1 ] );
+				meshHelper.GetMeshPart( meshPartCount - 1 )->AddIndex( indices[ i ] );
 			}
 		}
 		else if ( meshPartCount > 0 && strcmp( buffer, "usemtl" ) == 0 )

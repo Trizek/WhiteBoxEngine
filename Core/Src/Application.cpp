@@ -25,7 +25,7 @@ CApplication::CApplication()
 CMesh* quad;
 
 CMeshPtr ezio;
-CMeshPtr meca;
+CMeshPtr meca, city;
 
 CTexturePtr ezioTexture;
 
@@ -56,6 +56,7 @@ void CApplication::Init( uint width, uint height )
 	ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
 	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
 	meca = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
+	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
 
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
@@ -223,6 +224,25 @@ void CApplication::FrameUpdate()
 		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
 	}
 
+
+	if (city)
+	{
+		Transform t;
+		t.position = Vec3(-300.0f, 20.0f, 0.0f);
+		t.rotation = Quat(Degree(45.0f), Degree(0), Degree(0.0f));
+
+
+		t.scale = Vec3(10.0f, 10.0f, 10.0f);
+		t.rotation = t.rotation * Quat::CreateRotX(Degree(-90.0f));
+
+
+		SShaderProgramParams shaderParams;
+		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
+		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
+
+		CRenderPipeline::AddMeshToRenderQueue(city.get(), m_pRenderPipeline->mainRenderQueue, t, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+
+	}
 
 
 	Transform t;
