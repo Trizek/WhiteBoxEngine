@@ -615,6 +615,7 @@ class Matrix22
 	float a, b, c, d;
 };
 
+#if 0
 
 template< class T >
 void LinearInterpolate( float t0, const T& P0, float t1, const T& P1, float t, T& interpolated )
@@ -838,5 +839,7 @@ public:
 	typedef std::vector< CKey > TKeyArray;
 	TKeyArray	m_key;	
 };
+
+#endif
 
 #endif

@@ -54,8 +54,8 @@ void CApplication::Init( uint width, uint height )
 	gVars->pResourceManager->ParseResources( "Resources" );
 
 	ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
-	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
-	meca = gVars->pResourceManager->GetResource< CMesh >("meca.msh");
+//	ezio = gVars->pResourceManager->GetResource< CMesh >("meca.msh");//"Ezio/Ezio.msh");
+//	meca = gVars->pResourceManager->GetResource< CMesh >("meca.msh");
 
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
@@ -248,12 +248,14 @@ void CApplication::FrameUpdate()
 
 		if (i < 5)
 		{
-			CRenderPipeline::AddMeshToRenderQueue( ezio.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true );
+//			CRenderPipeline::AddMeshToRenderQueue( ezio.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true );
 		}
 		else
 		{
-			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, whiteshader.get(), shaderParams, true );
-			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, detourshader.get(), SShaderProgramParams(), false );
+			//CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, whiteshader.get(), shaderParams, true );
+			
+			SShaderProgramParams params;
+			//CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, detourshader.get(), params, false );
 		}
 	}
 

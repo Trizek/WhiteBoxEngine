@@ -34,7 +34,11 @@ template<>
 CString ToString< int >(const int& val)
 {
 	char buffer[256];
+#if defined(WIN32) || defined(WIN64)
 	sprintf_s(buffer, 256, "%d", val);
+#else
+	sprintf( buffer, "%d", val );
+#endif
 	return CString(buffer);
 }
 
@@ -42,7 +46,11 @@ template<>
 CString ToString< float >(const float& val)
 {
 	char buffer[256];
+#if defined(WIN32) || defined(WIN64)
 	sprintf_s(buffer, 256, "%.2f", val);
+#else
+	sprintf( buffer, "%.2f", val );
+#endif
 	return CString(buffer);
 }
 

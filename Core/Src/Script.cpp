@@ -668,7 +668,11 @@ void CScriptStreamReader::ConsumeChar( char c )
 CScriptFileWriter::CScriptFileWriter( const char* filePath )
 {
 	m_pFile = nullptr;
+#if defined(WIN32) || defined(WIN64)
 	fopen_s( &m_pFile, filePath, "w");
+#else
+	m_pFile = fopen( filePath, "w" );
+#endif
 	m_indentation = 0;
 }
 

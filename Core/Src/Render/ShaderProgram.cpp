@@ -17,6 +17,8 @@ CShaderProgram::~CShaderProgram()
 
 bool	CShaderProgram::LinkProgram()
 {
+	Bind( true );
+
 	for( CShaderPtr& shader : m_shaders )
 	{
 		if ( shader )

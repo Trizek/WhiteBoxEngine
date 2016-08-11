@@ -2,9 +2,13 @@
 
 #include <FreeImage.h>
 
+#if defined(WIN32) || defined(WIN64)
 extern "C" {
 	#include "image_DXT.h"
 }
+#else
+#include "image_DXT.h"
+#endif
 
 WHITEBOX_BEGIN
 

@@ -3,7 +3,7 @@
 #include "System/OperatingSystem.h"
 
 
-int main(int argc, char *argv)
+int main(int argc, char **argv)
 {
 	WhiteBox::SGlobalVariables::Init();
 	WhiteBox::gVars->pOperatingSystem->Init( 1600, 800 );

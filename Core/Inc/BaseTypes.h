@@ -14,7 +14,7 @@ typedef char32_t wchar;
 #else
 
 #include <wchar.h>
-typedef wchar_t wchar;
+typedef char32_t wchar;
 
 #endif
 
@@ -36,7 +36,7 @@ class Map : public __gnu_cxx::hash_map< Key, Value >
 
 WHITEBOX_END
 
-#elif defined( _WIN64 ) || defined( _WIN32 )
+#else //eif defined(WIN32) || defined(WIN64)
 
 #include <unordered_map>
 WHITEBOX_BEGIN
@@ -52,25 +52,20 @@ WHITEBOX_END
 #endif
 
 
-/*
-#include <ext/hash_map>
-
-
-namespace __gnu_cxx
+namespace std
 {
-using namespace std;
 
-template<>
-struct hash<WhiteBox::String>
-{
-size_t operator()(const WhiteBox::String& s) const
-{
-return 0;
-}
-};
+	template<>
+	struct hash< WhiteBox::String >
+	{
+		size_t operator()( const WhiteBox::String& s ) const
+		{
+			return 0;
+		}
+	};
 }
 
-*/
+
 
 #include "SmartPointer.h"
 

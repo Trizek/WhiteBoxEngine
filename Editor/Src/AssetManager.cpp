@@ -91,7 +91,8 @@ public:
 		if ( m_serializer.BeginGroup( "Resource" ) )
 		{
 			String mutableFilePath = filePath;
-			m_serializer.Value( "path", CString( mutableFilePath.c_str() + m_resourceFolder.size() ) );
+			String completeFilePath( mutableFilePath.c_str() + m_resourceFolder.size() );
+			m_serializer.Value( "path", completeFilePath );
 			
 			TFileHandle file = gVars->pFileSystem->OpenFile( filePath.c_str(), true, false );
 			int fileSize = (int)gVars->pFileSystem->GetFileSize( file );

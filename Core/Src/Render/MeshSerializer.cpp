@@ -10,11 +10,12 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 {
 	printf("Loading... file size %zd\n", dataStream.GetSize() );
 
+
 	// Vertex count
 	size_t vertexCount = 0;
 	if ( !dataStream.Read( vertexCount ) )	return NULL;
 	printf( "Vertex count %zd\n", vertexCount );
-	
+
 	// Vertex format
 	CVertexFormat vertexFormat;
 	

@@ -548,15 +548,17 @@ bool	CRenderer::LinkProgram( void* pProgramId, String& errorMessage )
 	glLinkProgram( *static_cast<GLuint*>(pProgramId) );
 
 	GLint status;
-	glGetShaderiv( *static_cast<GLuint*>(pProgramId), GL_LINK_STATUS, &status );
+	glGetProgramiv( *static_cast<GLuint*>(pProgramId), GL_LINK_STATUS, &status );
 	if ( status == GL_FALSE )
 	{ 
 		GLint logLength;
-		glGetShaderiv( *static_cast<GLuint*>(pProgramId), GL_INFO_LOG_LENGTH, &logLength );
+		glGetProgramiv( *static_cast<GLuint*>(pProgramId), GL_INFO_LOG_LENGTH, &logLength );
 		char* logStr = new char[ logLength + 1 ];
+		logStr[ logLength ] = '\0';
 
 		glGetProgramInfoLog( *static_cast<GLuint*>(pProgramId), logLength, NULL, logStr );
 		errorMessage = logStr;
+
 		delete[] logStr;
 
 		return false;

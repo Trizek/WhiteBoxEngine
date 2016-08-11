@@ -6,23 +6,36 @@
 #include "Render/Renderer.h"
 #include "Application.h"
 
+
 WHITEBOX_BEGIN
 
 
 void CTimer::Start()
 {
+#if defined(WIN32) || defined(WIN64)
 	QueryPerformanceFrequency(&m_frequency);
 	QueryPerformanceCounter(&m_startTime);
+#endif
+	clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &m_startTime );
 }
 
 void CTimer::Stop()
 {
+#if defined(WIN32) || defined(WIN64)
 	QueryPerformanceCounter(&m_stopTime);
+#else
+	clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &m_stopTime );
+#endif
 }
 
 float	CTimer::GetDuration() const
 {
+#if defined(WIN32) || defined(WIN64)
 	return (float)(m_stopTime.QuadPart - m_startTime.QuadPart) / (float)m_frequency.QuadPart;
+#else
+	double duration = ( m_stopTime.tv_sec - m_startTime.tv_sec ) + ( m_stopTime.tv_nsec - m_startTime.tv_nsec ) / (double)1e9;
+	return (float)duration;
+#endif
 }
 
 struct SSDLData

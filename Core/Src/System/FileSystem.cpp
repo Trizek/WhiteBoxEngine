@@ -23,7 +23,13 @@ TFileHandle	CFileSystem::OpenFile( const char* path, bool bRead, bool bWrite )
 	}
 
 	FILE* pFile = nullptr;
+
+#if defined(WIN32) || defined(WIN64)
 	fopen_s( &pFile, path, mode );
+#else
+	pFile = fopen( path, mode );
+#endif
+
 	return static_cast< TFileHandle >( pFile );
 }
 
@@ -135,124 +141,7 @@ bool	CFileSystem::WriteByte( TFileHandle fileHandle, char byte )
 }
 
 
-#if 0
 
-#include <unistd.h>
-
-
-#include <errno.h> // for errno
-#include <stdio.h> // for printf
-#include <stdlib.h> // for EXIT_*
-#include <string.h> // for strerror
-#include <sys/stat.h> // for stat and mkdir
-#include <sys/types.h>
-#include <sys/dir.h>
-#include <sys/param.h>
-#include <dirent.h>
-
-
-
-
-int file_select( struct dirent* entry )
-{
-	if (	( strcmp(entry->d_name, ".") == 0) ||
-			( strcmp(entry->d_name, "..") == 0) )
-	{
-		return 0;
-	}
-	
-	return 1;
-}
-
-bool IsADir( const char* path )
-{
-	DIR* dirp = opendir( path );
-	bool bDir = dirp != NULL;
-	if ( bDir )
-	{
-		(void)closedir( dirp );
-	}
-
-	return bDir;
-}
-
-
-
-void	CFileSystem::BrowseDirectory( const String& dirPath, IFileBrowser& fileBrowser )
-{
-	struct direct **files;
-	int fileCount = scandir( dirPath.c_str(), &files, file_select, alphasort );
-	for ( int iFile = 1 ; iFile < fileCount + 1 ; ++iFile )
-	{		
-		String filePath;
-		if ( dirPath.length() > 0 && dirPath.c_str()[ dirPath.length() - 1 ] != '/' )
-		{
-			filePath = dirPath + "/" + String(files[ iFile - 1 ]->d_name);
-		}
-		else
-		{
-			filePath = dirPath + String(files[ iFile - 1 ]->d_name);
-		}
-		
-		if ( IsADir( filePath.c_str() ) )
-		{
-			BrowseDirectory( filePath, fileBrowser );
-		}
-		else
-		{
-			fileBrowser.OnBrowseFile( filePath );
-		}
-	}		 
-}
-
-void	CFileSystem::RemoveFile( const String& filePath )
-{
-	remove( filePath.c_str() );
-}
-
-void	CFileSystem::MoveFile( const String& oldPath, const String& newPath )
-{
-	rename( oldPath.c_str(), newPath.c_str() );
-}
-
-void	CFileSystem::CopyFile( const String& sourcePath, const String& destinationPath )
-{
-	// Read
-	TFileHandle fileHandle = OpenFile( sourcePath.c_str(), true, false );
-	if ( fileHandle == NULL )
-	{
-		return;
-	}
-	size_t size = GetFileSize( fileHandle );
-	char* fileData = new char[ size ];
-	Read( fileHandle, 1, size, fileData );
-	CloseFile( fileHandle );
-	
-	// Write
-	fileHandle = OpenFile( destinationPath.c_str(), false, true );
-	Write( fileHandle, 1, size, fileData );
-	CloseFile( fileHandle );
-	
-	delete[] fileData;
-}
-
-bool	CFileSystem::DoesFileExist( const String& filePath )
-{
-	return false;
-}
-
-bool	CFileSystem::DoesDirExist( const String& dirPath )
-{
-	struct stat st;
-    return ( stat( dirPath.c_str(), &st ) == 0 );
-}
-
-void	CFileSystem::MakeDir( const String& dirPath )
-{
-	mkdir( dirPath.c_str(), S_IRWXU|S_IRWXG ); 
-}
-
-#endif
 
 void	CFileSystem::CreateFileDir( const String& filePath )
 {
@@ -278,7 +167,7 @@ void	CFileSystem::CreateFileDir( const String& filePath )
 }
 
 
-
+#if defined(WIN32) || defined(WIN64)
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -412,5 +301,126 @@ void	CFileSystem::MakeDir(const String& dirPath)
 	delete[] dirPathWindows;
 }
 
+
+#else
+
+#include <unistd.h>
+
+
+#include <errno.h> // for errno
+#include <stdio.h> // for printf
+#include <stdlib.h> // for EXIT_*
+#include <string.h> // for strerror
+#include <sys/stat.h> // for stat and mkdir
+#include <sys/types.h>
+#include <sys/dir.h>
+#include <sys/param.h>
+#include <dirent.h>
+
+
+
+
+int file_select( struct dirent const* entry )
+{
+	if (	( strcmp(entry->d_name, ".") == 0) ||
+			( strcmp(entry->d_name, "..") == 0) )
+	{
+		return 0;
+	}
+	
+	return 1;
+}
+
+bool IsADir( const char* path )
+{
+	DIR* dirp = opendir( path );
+	bool bDir = dirp != NULL;
+	if ( bDir )
+	{
+		(void)closedir( dirp );
+	}
+
+	return bDir;
+}
+
+
+
+void	CFileSystem::BrowseDirectory( const String& dirPath, IFileBrowser& fileBrowser )
+{
+	struct direct **files;
+	int fileCount = scandir( dirPath.c_str(), &files, file_select, alphasort );
+	for ( int iFile = 1 ; iFile < fileCount + 1 ; ++iFile )
+	{		
+		String filePath;
+		if ( dirPath.length() > 0 && dirPath.c_str()[ dirPath.length() - 1 ] != '/' )
+		{
+			filePath = dirPath + "/" + String(files[ iFile - 1 ]->d_name);
+		}
+		else
+		{
+			filePath = dirPath + String(files[ iFile - 1 ]->d_name);
+		}
+		
+		if ( IsADir( filePath.c_str() ) )
+		{
+			BrowseDirectory( filePath, fileBrowser );
+		}
+		else
+		{
+			fileBrowser.OnBrowseFile( filePath );
+		}
+	}		 
+}
+
+void	CFileSystem::RemoveFile( const String& filePath )
+{
+	remove( filePath.c_str() );
+}
+
+void	CFileSystem::MoveFileTo( const String& oldPath, const String& newPath )
+{
+	rename( oldPath.c_str(), newPath.c_str() );
+}
+
+void	CFileSystem::CopyFileTo( const String& sourcePath, const String& destinationPath )
+{
+	// Read
+	TFileHandle fileHandle = OpenFile( sourcePath.c_str(), true, false );
+	if ( fileHandle == NULL )
+	{
+		return;
+	}
+	size_t size = GetFileSize( fileHandle );
+	char* fileData = new char[ size ];
+	Read( fileHandle, 1, size, fileData );
+	CloseFile( fileHandle );
+	
+	// Write
+	fileHandle = OpenFile( destinationPath.c_str(), false, true );
+	Write( fileHandle, 1, size, fileData );
+	CloseFile( fileHandle );
+	
+	delete[] fileData;
+}
+
+bool	CFileSystem::DoesFileExist( const String& filePath )
+{
+	return false;
+}
+
+bool	CFileSystem::DoesDirExist( const String& dirPath )
+{
+	struct stat st;
+    return ( stat( dirPath.c_str(), &st ) == 0 );
+}
+
+void	CFileSystem::MakeDir( const String& dirPath )
+{
+	mkdir( dirPath.c_str(), S_IRWXU|S_IRWXG ); 
+}
+
+
+
+#endif
 
 WHITEBOX_END
