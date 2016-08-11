@@ -6,7 +6,17 @@
 typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long int ulong;
+
+#if defined( _WIN64 ) || defined( _WIN32 )
+
 typedef char32_t wchar;
+
+#else
+
+#include <wchar.h>
+typedef wchar_t wchar;
+
+#endif
 
 #include <vector>
 

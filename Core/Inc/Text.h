@@ -34,7 +34,12 @@ public:
 		}
 
 		m_str.resize( length );
+
+#if defined( _WIN64 ) || defined( _WIN32 )
 		memcpy_s( &m_str[0], length * sizeof(wchar), unicodeText, length * sizeof(wchar) );
+#else
+		memcpy( &m_str[0], unicodeText, length * sizeof(wchar) );
+#endif
 	}
 
 	const wchar operator[]( size_t index ) const
