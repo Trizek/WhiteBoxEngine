@@ -49,12 +49,12 @@ void CApplication::Init( uint width, uint height )
 
  
  	CAssetManager assetManager;
- 	//assetManager.Export( "Assets", "Resources" );
+ 	assetManager.Export( "Assets", "Resources" );
 
 	gVars->pResourceManager->ParseResources( "Resources" );
 
 	ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
-	ezio = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
+	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
 	meca = gVars->pResourceManager->GetResource< CMesh >("meca.msh");
 
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");

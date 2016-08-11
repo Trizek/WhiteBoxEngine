@@ -23,6 +23,7 @@ CAssetManager::CAssetManager()
 	AddExporter( "jpg", new CTextureExporter() );
 	AddExporter( "tga", new CTextureExporter() );
 	AddExporter( "bmp", new CTextureExporter() );
+	AddExporter( "png", new CTextureExporter() );
 
 	AddExporter( "ps", new CCopyExporter() );
 	AddExporter( "vs", new CCopyExporter() );

@@ -1,0 +1,98 @@
+﻿  autofit.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftbase.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\base\ftrfork.c(780): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\base\ftrfork.c(781): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\base\ftrfork.c(770): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(346): note: voir la déclaration de 'strncpy'
+  ftbbox.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftbitmap.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftfstype.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftgasp.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftglyph.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftgxval.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftinit.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftlcdfil.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftmm.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftotval.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftpatent.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftpfr.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftstroke.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftsynth.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftsystem.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+..\..\..\src\base\ftsystem.c(232): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(205): note: voir la déclaration de 'fopen'
+  fttype1.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftwinfnt.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftxf86.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  Génération de code en cours...
+  Compilation en cours...
+  bdf.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\bdf\bdflib.c(1918): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(1769): note: voir la déclaration de 'sprintf'
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\bdf\bdflib.c(1930): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(1769): note: voir la déclaration de 'sprintf'
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\bdf\bdflib.c(2249): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(1769): note: voir la déclaration de 'sprintf'
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\bdf\bdflib.c(2256): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(1769): note: voir la déclaration de 'sprintf'
+  ftcache.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  cff.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+d:\github\whiteboxengine\new\collisionengine\core\libs\freetype\src\cff\cffgload.c(2683): warning C4244: '=' : conversion de 'FT_UInt' en 'FT_Byte', perte possible de données
+  type1cid.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftgzip.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  ftlzw.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  pcf.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  pfr.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  psaux.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  pshinter.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  psmodule.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  raster.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  sfnt.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  smooth.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  truetype.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  type1.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  type42.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  winfnt.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stddef.h(1): warning C4001: extension non standard "commentaire sur une seule ligne" utilisée
+  Génération de code en cours...
+  ftdebug.c
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1357,5): warning MSB8012: TargetPath(D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\builds\win32\visualc\.\..\..\..\objs\release_mt\freetype.lib) does not match the Library's OutputFile property value (D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\objs\freetype240MT.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1359,5): warning MSB8012: TargetName(freetype) does not match the Library's OutputFile property value (freetype240MT). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+  freetype.vcxproj -> D:\GitHub\WhiteBoxEngine\New\CollisionEngine\Core\Libs\FreeType\builds\win32\visualc\.\..\..\..\objs\release_mt\freetype.lib
