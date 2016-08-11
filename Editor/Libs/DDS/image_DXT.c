@@ -90,7 +90,7 @@ int
 	header.sCaps.dwCaps1 = DDSCAPS_TEXTURE;
 	/*	write it out	*/
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 	fopen_s( &fout, filename, "wb");
 #else
 	fout = fopen( filename, "wb" );

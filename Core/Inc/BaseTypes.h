@@ -36,7 +36,7 @@ class Map : public __gnu_cxx::hash_map< Key, Value >
 
 WHITEBOX_END
 
-#else //eif defined(WIN32) || defined(WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
 
 #include <unordered_map>
 WHITEBOX_BEGIN
@@ -49,8 +49,18 @@ class Map : public std::unordered_map< Key, Value >
 
 WHITEBOX_END
 
-#endif
+#else
 
+#include <unordered_map>
+WHITEBOX_BEGIN
+
+
+template< class Key, class Value >
+class Map : public std::unordered_map< Key, Value >
+{
+};
+
+WHITEBOX_END
 
 namespace std
 {
@@ -58,12 +68,14 @@ namespace std
 	template<>
 	struct hash< WhiteBox::String >
 	{
-		size_t operator()( const WhiteBox::String& s ) const
+		size_t operator()(const WhiteBox::String& s) const
 		{
 			return 0;
 		}
 	};
 }
+
+#endif
 
 
 

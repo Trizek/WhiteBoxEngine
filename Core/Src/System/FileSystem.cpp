@@ -24,7 +24,7 @@ TFileHandle	CFileSystem::OpenFile( const char* path, bool bRead, bool bWrite )
 
 	FILE* pFile = nullptr;
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 	fopen_s( &pFile, path, mode );
 #else
 	pFile = fopen( path, mode );
@@ -167,7 +167,7 @@ void	CFileSystem::CreateFileDir( const String& filePath )
 }
 
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 
 #include <windows.h>
 #include <shlwapi.h>

@@ -5,7 +5,7 @@
 
 WHITEBOX_BEGIN
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 #include <Windows.h>
 #else
 #include <time.h>
@@ -21,7 +21,7 @@ public:
 	float	GetDuration() const;
 
 private:
-#if defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 	LARGE_INTEGER	m_frequency;
 	LARGE_INTEGER	m_startTime;
 	LARGE_INTEGER	m_stopTime;
