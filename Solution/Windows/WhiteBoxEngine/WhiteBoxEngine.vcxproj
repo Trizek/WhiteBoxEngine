@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{88C3ABE5-0475-417D-A461-60A8AEA03354}</ProjectGuid>
+    <RootNamespace>WhiteBoxEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Core\Inc\Animation\Animation.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Animation\AnimationTrack.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Animation\Skeleton.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Application.h" />
+    <ClInclude Include="..\..\..\Core\Inc\BaseTypes.h" />
+    <ClInclude Include="..\..\..\Core\Inc\BehaviorComponent.h" />
+    <ClInclude Include="..\..\..\Core\Inc\BehaviorManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\DataStream.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Event.h" />
+    <ClInclude Include="..\..\..\Core\Inc\FileSystem.h" />
+    <ClInclude Include="..\..\..\Core\Inc\FontSystem.h" />
+    <ClInclude Include="..\..\..\Core\Inc\GlobalVariables.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Handle.h" />
+    <ClInclude Include="..\..\..\Core\Inc\InputManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\maths.h" />
+    <ClInclude Include="..\..\..\Core\Inc\MeshRenderComponent.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Object.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ObjectManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\PhysicsAPI.h" />
+    <ClInclude Include="..\..\..\Core\Inc\RenderAPI.h" />
+    <ClInclude Include="..\..\..\Core\Inc\RenderTypes.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Camera.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Font.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\FontSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\IndexBuffer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Material.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\MaterialHelper.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\MaterialSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Mesh.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\MeshHelper.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\MeshSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Picture.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Renderer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\RenderPipeline.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\RenderTarget.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\RenderWindow.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Shader.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\ShaderProgram.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\ShaderProgramSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\ShaderSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\TextMesh.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\Texture.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\TextureSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Render\VertexBuffer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Resource.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceDescriptor.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\resourcepointer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceSpecificManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceType.h" />
+    <ClInclude Include="..\..\..\Core\Inc\RigidBodyComponent.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Script.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ScriptResourceSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ScriptSerializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\SerializableFactory.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Serializer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\smartpointer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\System\OperatingSystem.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Temp.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Text.h" />
+    <ClInclude Include="..\..\..\Core\Inc\WhiteBoxNameSpace.h" />
+    <ClInclude Include="..\..\..\Core\Inc\whiteboxstring.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\AssetExporter.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\AssetManager.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\CopyExporter.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\FbxExporter.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\MtlExporter.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\ObjExporter.h" />
+    <ClInclude Include="..\..\..\Editor\Inc\TextureExporter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Core\Src\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Animation\AnimationTrack.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Animation\Skeleton.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Application.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Camera.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\DataStream.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\FontSystem.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\GlobalVariables.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Maths.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Font.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\FontSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\IndexBuffer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Material.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\MaterialHelper.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\MaterialSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Mesh.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\MeshHelper.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\MeshSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Picture.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Renderer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\RenderPipeline.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\RenderWindow.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Shader.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\ShaderProgram.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\ShaderProgramSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\ShaderSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\TextMesh.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\Texture.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\TextureSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Render\VertexBuffer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\ResourceDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\ResourceManager.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\ResourceSpecificManager.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Script.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\ScriptResourceSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\ScriptSerializer.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\System\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\System\OperatingSystem.cpp" />
+    <ClCompile Include="..\..\..\Editor\Libs\DDS\image_DXT.c" />
+    <ClCompile Include="..\..\..\Editor\Src\AssetExporter.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\AssetManager.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\CopyExporter.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\FbxExporter.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\main.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\MtlExporter.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\ObjExporter.cpp" />
+    <ClCompile Include="..\..\..\Editor\Src\TextureExporter.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
