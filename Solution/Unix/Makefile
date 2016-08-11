@@ -1,4 +1,4 @@
-CC = g++ -g -std=gnu++11
+CC = g++ -std=gnu++11
 INCLUDE = -I/usr/include/SDL2/ -I../../Editor/Libs/DDS/ -I../../Editor/Libs/FreeImage/Src/Source -I../../Core/Libs/FreeType/include -I../../Core/Inc/ -I../../Editor/Inc
 
 #FRAMEWORK = -framework OpenGL -framework GLUT -framework Carbon -framework SystemConfiguration
@@ -8,10 +8,10 @@ LIBS = -lm -lSDL2 -lSDL2main -lGL -lGLU -lGLEW -lfreetype -lfreeimage
 SOURCES = $(wildcard ../../Core/Src/*.cpp) $(wildcard ../../Core/Src/Render/*.cpp) $(wildcard ../../Core/Src/System/*.cpp) $(wildcard ../../Editor/Src/*.cpp) ../../Editor/Libs/DDS/image_DXT.c
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJECTS_C = $(SOURCES:.c=.o)
-
+EXE = game
 
 all: $(OBJECTS) $(OBJECTS_C)
-	$(CC) *.o $(LIBS_PATHS) $(FRAMEWORK) $(LIBS) -o test
+	$(CC) *.o $(LIBS_PATHS) $(FRAMEWORK) $(LIBS) -o $(EXE)
 
 
 %.o: %.c*
@@ -19,4 +19,4 @@ all: $(OBJECTS) $(OBJECTS_C)
 
 
 clean:
-	rm *.o test
+	rm *.o $(EXE)

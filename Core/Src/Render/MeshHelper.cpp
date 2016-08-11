@@ -47,13 +47,14 @@ void	CMeshHelper::SaveToFile( const String& filePath ) const
 	
 	// -----Shared vertices :
 	// Count
-	size_t vertexCount = m_positionArray.size();
-	gVars->pFileSystem->Write( file, 1, sizeof(size_t), &vertexCount );
+	int vertexCount = (int)m_positionArray.size();
+	gVars->pFileSystem->Write( file, sizeof(int), 1, &vertexCount );
 	
 	// Vertex Format
 	CVertexFormat vertexFormat = GetVertexFormat();
 	int vertexElemFlags = vertexFormat.GetSingleElementsFlags();
-	gVars->pFileSystem->Write( file, 1, sizeof(int), &vertexElemFlags );
+
+	gVars->pFileSystem->Write( file, sizeof(int), 1, &vertexElemFlags );
 	
 	for( size_t iElem = 0 ; iElem < CVertexFormat::eME_Count ; ++iElem )
 	{
@@ -68,14 +69,14 @@ void	CMeshHelper::SaveToFile( const String& filePath ) const
 	delete[] pVertices;
 	
 	// Parts
-	size_t partCount = m_meshParts.size();
-	gVars->pFileSystem->Write( file, 1, sizeof(size_t), &partCount );
+	int partCount = (int)m_meshParts.size();
+	gVars->pFileSystem->Write( file, sizeof(int), 1, &partCount );
 	for( size_t iPart = 0 ; iPart < m_meshParts.size() ; ++iPart )
 	{
 		std::vector< uint >& indexArray = m_meshParts[ iPart ]->GetIndexArray();
-		size_t indexCount = indexArray.size();
-		gVars->pFileSystem->Write( file, 1, sizeof(size_t), &indexCount );
-		gVars->pFileSystem->Write( file, indexCount, sizeof(uint), &indexArray[0] );
+		int indexCount = (int)indexArray.size();
+		gVars->pFileSystem->Write( file, sizeof(int), 1, &indexCount );
+		gVars->pFileSystem->Write( file, sizeof(uint), indexCount, &indexArray[0] );
 		gVars->pFileSystem->WriteString( file, m_meshParts[ iPart ]->GetMaterialName() );
 	}
 			
