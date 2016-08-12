@@ -95,11 +95,11 @@ void CApplication::Init( uint width, uint height )
 		mh.AddNormal(Vec3(0, 1, 0));
 
 		mh.GetMeshPart(0)->AddIndex(0);
-		mh.GetMeshPart(0)->AddIndex(2);
 		mh.GetMeshPart(0)->AddIndex(1);
-
-		mh.GetMeshPart(0)->AddIndex(3);
 		mh.GetMeshPart(0)->AddIndex(2);
+
+		mh.GetMeshPart(0)->AddIndex(2);
+		mh.GetMeshPart(0)->AddIndex(3);
 		mh.GetMeshPart(0)->AddIndex(0);
 
 
@@ -229,11 +229,11 @@ void CApplication::FrameUpdate()
 	{
 		Transform t;
 		t.position = Vec3(-300.0f, 20.0f, 0.0f);
-		t.rotation = Quat(Degree(45.0f), Degree(0), Degree(0.0f));
+		//t.rotation = Quat(Degree(45.0f), Degree(0), Degree(0.0f));
 
 
 		t.scale = Vec3(10.0f, 10.0f, 10.0f);
-		t.rotation = t.rotation * Quat::CreateRotX(Degree(-90.0f));
+		t.rotation = t.rotation * Quat::CreateRotX(Degree(90.0f));
 
 
 		SShaderProgramParams shaderParams;
@@ -247,12 +247,12 @@ void CApplication::FrameUpdate()
 
 	Transform t;
 	t.position = Vec3(300.0f, 20.0f, 0.0f);
-	t.rotation = Quat(Degree(45.0f), Degree(0), Degree(0.0f));
+//	t.rotation = Quat(Degree(45.0f), Degree(0), Degree(0.0f));
 
 	angle += frameTime * 30.0f;
 	
 	t.scale = Vec3(100.0f, 100.0f, 100.0f);
-	t.rotation = t.rotation * Quat::CreateRotZ(Degree(angle)) * Quat::CreateRotX(Degree(-90.0f));
+	t.rotation = t.rotation * Quat::CreateRotZ(Degree(angle)) * Quat::CreateRotX(Degree(90.0f));
 
 
 	for (int i = 0; i < 10; ++i)

@@ -31,14 +31,14 @@ void	CTextMesh::SetText( const CText& text, const CFontPtr& pFont )
 		if ( text[ i ] == '\n' )
 		{
 			advance.x = 0.0f;
-			advance.y += 64.0f;
+			advance.y -= 64.0f;
 			continue;
 		}
 		const CFont::SCharacter& chara = pFont->GetCharater( text[ i ] );
 		 
-		Vec2 start( advance.x + chara.corner.x, advance.y - chara.corner.y );
+		Vec2 start( advance.x + chara.corner.x, advance.y + chara.corner.y );
 		advance.x += chara.advance;
-		Vec2 end( start.x + chara.size.x, start.y + chara.size.y );
+		Vec2 end( start.x + chara.size.x, start.y - chara.size.y );
 		 
 		Vec2 startCoord = Vec2( chara.pos.x * uvScale.x, chara.pos.y * uvScale.y );
 		Vec2 endCoord = Vec2( startCoord.x + chara.size.x * uvScale.x, startCoord.y + chara.size.y * uvScale.y );

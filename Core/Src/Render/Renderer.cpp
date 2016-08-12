@@ -694,7 +694,7 @@ void	CRenderer::FormatTransformMatrix( const Matrix34& inMatrix, Matrix44& outMa
 
 	Matrix34 m2 = m1.GetInvertedOrtho();
 
-	Matrix34 matrix = m1 * inMatrix * m2;
+	Matrix34 matrix = m1 * inMatrix;
 
 	// Right
 	outMatrix.a11 = matrix.a11;
@@ -703,15 +703,15 @@ void	CRenderer::FormatTransformMatrix( const Matrix34& inMatrix, Matrix44& outMa
 	outMatrix.a14 = 0.0f;
 
 	// Up
-	outMatrix.a21 = matrix.a13;
-	outMatrix.a22 = matrix.a23;
-	outMatrix.a23 = matrix.a33;
+	outMatrix.a21 = matrix.a12;
+	outMatrix.a22 = matrix.a22;
+	outMatrix.a23 = matrix.a32;
 	outMatrix.a24 = 0.0f;
 
 	// Backward
-	outMatrix.a31 = -matrix.a12;
-	outMatrix.a32 = -matrix.a22;
-	outMatrix.a33 = -matrix.a32;
+	outMatrix.a31 = matrix.a13;
+	outMatrix.a32 = matrix.a23;
+	outMatrix.a33 = matrix.a33;
 	outMatrix.a34 = 0.0f;
 
 	// Position

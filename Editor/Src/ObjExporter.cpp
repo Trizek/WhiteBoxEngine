@@ -92,8 +92,6 @@ void CObjExporter::Export( const String& assetFolder, const String& resourceFold
 				indices.push_back( index );		
 			}
 
-			uint ii = indices.size();
-
 			for ( uint i = 2; i < indices.size(); ++i )
 			{
 				meshHelper.GetMeshPart( meshPartCount - 1 )->AddIndex( indices[ 0 ] );
