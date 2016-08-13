@@ -16,6 +16,8 @@ public:
 
 	void*		GetShaderId() const;
 
+	EShaderType	GetShaderType() const;
+
 private:
 	EShaderType	m_shaderType;
 	void*		m_pShaderId;

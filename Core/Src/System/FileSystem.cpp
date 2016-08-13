@@ -302,6 +302,38 @@ void	CFileSystem::MakeDir(const String& dirPath)
 }
 
 
+#elif defined(__GEAR_VR)
+
+void	CFileSystem::BrowseDirectory( const String& dirPath, IFileBrowser& fileBrowser )
+{
+}
+
+void	CFileSystem::RemoveFile( const String& filePath )
+{
+}
+
+void	CFileSystem::MoveFileTo( const String& oldPath, const String& newPath )
+{
+}
+
+void	CFileSystem::CopyFileTo( const String& sourcePath, const String& destinationPath )
+{
+}
+
+bool	CFileSystem::DoesFileExist( const String& filePath )
+{
+	return false;
+}
+
+bool	CFileSystem::DoesDirExist( const String& dirPath )
+{
+	return false;
+}
+
+void	CFileSystem::MakeDir( const String& dirPath )
+{
+}
+
 #else
 
 #include <unistd.h>

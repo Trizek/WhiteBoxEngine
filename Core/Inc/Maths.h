@@ -208,7 +208,7 @@ Vec3 operator-( const Vec3& rhs );
 struct Quat
 {
 	Quat()
-		: x(0.0f), y(0.0f), z(0.0f), w(1.0f){}
+		: w(1.0f), x(0.0f), y(0.0f), z(0.0f){}
 		
 	Quat( float _w, float _x, float _y, float _z )
 		: w(_w), x(_x), y(_y), z(_z){}
@@ -491,6 +491,8 @@ struct Matrix34
 		Vec3 res(	a11*v.x + a12*v.y + a13*v.z,
 					a21*v.x + a22*v.y + a23*v.z,
 					a31*v.x + a32*v.y + a33*v.z );
+
+		return res;
 	};	
 	
 	Vec3 GetScaledAxisX() const
@@ -594,6 +596,8 @@ class Matrix22
 		inverse.b = -coeff * b;
 		inverse.c = -coeff * c;
 		inverse.d = coeff * a;
+
+		return true;
 	}
 	
 	Matrix22 operator*( const Matrix22& mat ) const

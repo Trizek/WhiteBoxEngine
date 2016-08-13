@@ -33,7 +33,7 @@ void* CVertexBuffer::GetBufferId() const
 
 void*	CVertexBuffer::Lock( bool bRead, bool bWrite )
 {
-	return gVars->pRenderer->LockVertexBuffer( m_pBufferId, bRead, bWrite );
+	return gVars->pRenderer->LockVertexBuffer( m_pBufferId, m_vertexCount, bRead, bWrite );
 }
 
 void	CVertexBuffer::Unlock()

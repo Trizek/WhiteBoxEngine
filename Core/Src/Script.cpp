@@ -753,7 +753,7 @@ void CScriptFileWriter::WriteNode( const SScriptNodePtr& pNode )
 		NewLine();
 		NewLine();
 		SScriptNodePtr pChildNode = pNode->m_childrenNodes[ iChild ];
-		fprintf( m_pFile, pChildNode->m_name.c_str() );
+		fputs( pChildNode->m_name.c_str(), m_pFile );
 		
 		NewLine();
 		fprintf( m_pFile, "{" );

@@ -3,8 +3,14 @@
 //#include <OpenGL/gl.h> //OS x libs
 //#include <OpenGL/glu.h>
 
+#ifdef __GEAR_VR
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
+#else
 #include <GL/glew.h>
-/*#include "drawtext.h"*/
+#endif
 
 WHITEBOX_BEGIN
 
@@ -48,37 +54,37 @@ public:
 
 	int		BindUniformBlock( GLuint blockId )
 	{
-		Map< GLuint, int >::iterator it = m_uniformBlocksBoundIndices.find( blockId );
-		if ( it != m_uniformBlocksBoundIndices.end() )
-		{
-			return it->second;
-		}
-
-		int index;
-		if ( m_firstFreeUniformIndex >= 0 )
-		{
-			int index = m_firstFreeUniformIndex;
-			m_firstFreeUniformIndex = *reinterpret_cast< int* >( m_boundUniformBlocks[ m_firstFreeUniformIndex ] );
-		}
-		else
-		{
-			if ( m_boundUniformBlocks.capacity() == m_boundUniformBlocks.size() )
-			{
-				// full, just remove last block
-				index = UnbindUniformBlock( m_boundUniformBlocks.back() );
-				m_firstFreeUniformIndex = -1; // become full again
-			}
-			else
-			{
-				index = (int)m_boundUniformBlocks.size();
-				m_boundUniformBlocks.resize( (size_t)index + 1 );
-			}
-		}
-
-		m_uniformBlocksBoundIndices[ blockId ] = index;
-		m_boundUniformBlocks[ index ] = blockId;
+// 		Map< GLuint, int >::iterator it = m_uniformBlocksBoundIndices.find( blockId );
+// 		if ( it != m_uniformBlocksBoundIndices.end() )
+// 		{
+// 			return it->second;
+// 		}
+// 
+// 		int index;
+// 		if ( m_firstFreeUniformIndex >= 0 )
+// 		{
+// 			int index = m_firstFreeUniformIndex;
+// 			m_firstFreeUniformIndex = *reinterpret_cast< int* >( m_boundUniformBlocks[ m_firstFreeUniformIndex ] );
+// 		}
+// 		else
+// 		{
+// 			if ( m_boundUniformBlocks.capacity() == m_boundUniformBlocks.size() )
+// 			{
+// 				// full, just remove last block
+// 				index = UnbindUniformBlock( m_boundUniformBlocks.back() );
+// 				m_firstFreeUniformIndex = -1; // become full again
+// 			}
+// 			else
+// 			{
+// 				index = (int)m_boundUniformBlocks.size();
+// 				m_boundUniformBlocks.resize( (size_t)index + 1 );
+// 			}
+// 		}
+// 
+// 		m_uniformBlocksBoundIndices[ blockId ] = index;
+// 		m_boundUniformBlocks[ index ] = blockId;
 		
-		return index;
+		return 0;
 	}
 
 	int		UnbindUniformBlock( GLuint blockId )
@@ -125,13 +131,17 @@ void	CRenderer::StartRenderFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Enable Texture Mapping ( NEW )
+#ifndef __GEAR_VR
 	glShadeModel(GL_SMOOTH);									// Enable Smooth Shading
-	glClearDepth(1.0f);											// Depth Buffer Setup
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspectiv	
+#endif
+	glClearDepthf(1.0f);											// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);									// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);										// The Type Of Depth Testing To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspectiv	
+
 
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
 }
 
 void*	CRenderer::CreateVertexBuffer( const size_t size, void const * pData /*= NULL*/ )
@@ -226,21 +236,30 @@ void	CRenderer::UnbindVertexBuffer()
 {
 	if ( static_cast< CSpecificData* >( m_pSpecificData )->m_boundVertexBuffer )
 	{
-		glDisableClientState( GL_COLOR_ARRAY );
-		glDisableClientState( GL_NORMAL_ARRAY );
-		glDisableClientState( GL_VERTEX_ARRAY );
-		glDisableClientState( GL_TEXTURE_COORD_ARRAY );	
+// 		glDisableClientState( GL_COLOR_ARRAY );
+// 		glDisableClientState( GL_NORMAL_ARRAY );
+// 		glDisableClientState( GL_VERTEX_ARRAY );
+// 		glDisableClientState( GL_TEXTURE_COORD_ARRAY );	
 	
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
 		static_cast< CSpecificData* >( m_pSpecificData )->m_boundVertexBuffer = 0;
 	}
 }
 
-void*	CRenderer::LockVertexBuffer( void* pBufferId, bool bRead, bool bWrite )
+void*	CRenderer::LockVertexBuffer( void* pBufferId, size_t vertexCount, bool bRead, bool bWrite )
 {
-	GLenum access = (bRead && bWrite)? GL_READ_WRITE : ( (bWrite)? GL_WRITE_ONLY : GL_READ_ONLY );
 	glBindBuffer( GL_ARRAY_BUFFER, *static_cast<GLuint*>(pBufferId) );
+
+#ifndef __GEAR_VR
+	GLenum access = (bRead && bWrite)? GL_READ_WRITE : ( (bWrite)? GL_WRITE_ONLY : GL_READ_ONLY );
 	return glMapBuffer( GL_ARRAY_BUFFER, access );
+#else
+	GLbitfield access = 0;
+	if ( bRead )	access |= GL_MAP_READ_BIT;
+	if ( bWrite )	access |= GL_MAP_WRITE_BIT;
+
+	return glMapBufferRange( GL_ARRAY_BUFFER, 0, vertexCount, access );
+#endif
 }
 
 void	CRenderer::UnlockVertexBuffer()
@@ -288,10 +307,23 @@ void	CRenderer::DestroyIndexBuffer( void* pBufferId )
 	}
 }
 
-uint*	CRenderer::LockIndexBuffer( void* pBufferId, bool bRead, bool bWrite )
+uint*	CRenderer::LockIndexBuffer( void* pBufferId, size_t indexCount, bool bRead, bool bWrite )
 {
+	glBindBuffer( GL_ARRAY_BUFFER, *static_cast<GLuint*>(pBufferId) );
+
+#ifndef __GEAR_VR
 	GLenum access = (bRead && bWrite)? GL_READ_WRITE : ( (bWrite)? GL_WRITE_ONLY : GL_READ_ONLY );
 	return (uint*)glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, access );
+#else
+	GLbitfield access = 0;
+	if (bRead)	access |= GL_MAP_READ_BIT;
+	if (bWrite)	access |= GL_MAP_WRITE_BIT;
+
+	return (uint*)glMapBufferRange( GL_ARRAY_BUFFER, 0, indexCount, access );
+#endif
+
+
+
 }
 
 void	CRenderer::UnlockIndexBuffer()
@@ -329,18 +361,19 @@ void*	CRenderer::CreateTexture( uint width, uint height, uint mipMapCount, CPict
 			glFormat = GL_RGB;
 			type = GL_UNSIGNED_BYTE;
 			break;
+		case CPicture::ePF_R8G8B8A8:
+			glFormat = GL_RGBA;
+			type = GL_UNSIGNED_BYTE;
+			break;
+#ifndef __GEAR_VR
 		case CPicture::ePF_B8G8R8:
 			glFormat = GL_BGR;
 			type = GL_UNSIGNED_BYTE;
 			break;
-		case CPicture::ePF_R8G8B8A8:
-			glFormat = GL_RGBA;
-			type = GL_UNSIGNED_BYTE;
-			break;	
 		case CPicture::ePF_B8G8R8A8:
 			glFormat = GL_BGRA;
 			type = GL_UNSIGNED_BYTE;
-			break;	
+			break;
 		case CPicture::ePF_R8G8B8A8_DTX1:
 			glFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			type = GL_UNSIGNED_BYTE;
@@ -356,6 +389,7 @@ void*	CRenderer::CreateTexture( uint width, uint height, uint mipMapCount, CPict
 			type = GL_UNSIGNED_BYTE;
 			bCompressed = true;
 			break;
+#endif
 		default:
 			return NULL;			
 			break;
@@ -370,7 +404,10 @@ void*	CRenderer::CreateTexture( uint width, uint height, uint mipMapCount, CPict
 	{ 
 		mipMapCount = Max< uint >( mipMapCount, 1 );
 
-		uint blockSize = (glFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+		uint blockSize = 0;
+#ifndef __GEAR_VR	
+		(glFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+#endif
 		uint offset = 0;
 
 		for (uint level = 0; level < mipMapCount && (width || height); ++level)
@@ -692,8 +729,6 @@ void	CRenderer::FormatTransformMatrix( const Matrix34& inMatrix, Matrix44& outMa
 	m1.SetAxisY(Vec3(0.0f, 0.0f, -1.0f));
 	m1.SetAxisZ(Vec3(0.0f, 1.0f, 0.0f));
 
-	Matrix34 m2 = m1.GetInvertedOrtho();
-
 	Matrix34 matrix = m1 * inMatrix;
 
 	// Right
@@ -825,11 +860,11 @@ void	CRenderer::RenderBoundTriangles( size_t indexCount )
 void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color )
 {
 	glLineWidth( 2.5f ); 
-	glColor3f( color.r, color.g, color.b );
-	glBegin( GL_LINES );
-	glVertex3f( from.x, from.y, from.z );
-	glVertex3f( to.x, to.y, to.z );
-	glEnd();	
+// 	glColor3f( color.r, color.g, color.b );
+// 	glBegin( GL_LINES );
+// 	glVertex3f( from.x, from.y, from.z );
+// 	glVertex3f( to.x, to.y, to.z );
+// 	glEnd();	
 }
 
 // Draw

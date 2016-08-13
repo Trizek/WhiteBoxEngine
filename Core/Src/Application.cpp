@@ -3,12 +3,17 @@
 #include "Render/Renderer.h"
 #include "Render/MeshHelper.h"
 #include "ResourceManager.h"
+
+#ifndef __GEAR_VR
 #include "ObjExporter.h"
+#include "AssetManager.h"
+#endif
+
 #include "Render/Shader.h"
 #include "Render/ShaderProgram.h"
 #include "Render/Material.h"
 #include "Render/Texture.h"
-#include "AssetManager.h"
+
 #include "Render/RenderPipeline.h"
 #include "Render/Font.h"
 #include "Render/TextMesh.h"
@@ -47,9 +52,10 @@ void CApplication::Init( uint width, uint height )
 	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -20.0f, 0.0f);
 
 
- 
+#ifndef __GEAR_VR
  	CAssetManager assetManager;
  	assetManager.Export( "Assets", "Resources" );
+#endif
 
 	gVars->pResourceManager->ParseResources( "Resources" );
 

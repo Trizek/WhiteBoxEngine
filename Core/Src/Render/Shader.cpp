@@ -25,4 +25,9 @@ void*		CShader::GetShaderId() const
 }
 
 
+EShaderType	CShader::GetShaderType() const
+{
+	return m_shaderType;
+}
+
 WHITEBOX_END

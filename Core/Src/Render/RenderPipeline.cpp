@@ -4,7 +4,6 @@
 #include "GlobalVariables.h"
 #include "Render/Material.h"
 #include "Render/Mesh.h"
-#include "GL/glew.h"
 
 WHITEBOX_BEGIN
 
@@ -32,8 +31,6 @@ void	CRenderPipeline::AddMeshToRenderQueue( CMesh* pMesh, TRenderQueue& renderQu
 		transformMatrix = inverseCameraMatrix * transformMatrix;
 
 		gVars->pRenderer->FormatTransformMatrix( transformMatrix, renderUnit.transformMatrix );
-
-		int x = 2;
 	}
 }
 
@@ -77,7 +74,8 @@ void			CRenderPipeline::RenderQueue( const TRenderQueue& renderQueue, IRenderTar
 // 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 // 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 // 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
 // 
 //   				glEnable(GL_BLEND);
 // 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -111,11 +109,6 @@ void* pFontId;
 void			CRenderPipeline::Init( uint width, uint height )
 {
 	mainCamera.pRenderTarget = gVars->pRenderer->CreateRenderWindow( 0, 0, width, height );
-
-	pFontId = gVars->pRenderer->LoadFont( "font.ttf", 24 );
-	gVars->pRenderer->UseFont( pFontId, 24 );
-
-	glEnable(GL_CULL_FACE);
 }
 
 void			CRenderPipeline::Render()
@@ -126,39 +119,12 @@ void			CRenderPipeline::Render()
 	mainCamera.ComputeProjectionMatrix();
 	mainCamera.ComputeTransformMatrix();
 
-	glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
-	glLoadIdentity();
-
 	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix, m_drawCalls, m_polyCount );
 	mainRenderQueue.clear();
 
 	gVars->pRenderer->UnbindIndexBuffer();
 	gVars->pRenderer->BindProgram( nullptr );
 	gVars->pRenderer->UnbindTexture( 0 );
-
-	
-
-	// Black text
-	glColor3f(0.0f, 0.0f, 0.0f);
-
-	// Set proj matrix to screen space
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, mainCamera.pRenderTarget->GetWidth(), 0, mainCamera.pRenderTarget->GetHeight(), -1, 1);
-
-	// Reset model matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-		glPushMatrix();
-
-		glTranslatef(100.0f, 100.0f, 0.0f);
-// 		dtx_string("Francois Fournel");
-
-		glPopMatrix();
-
-
-/*		dtx_flush();*/
 
 
 }

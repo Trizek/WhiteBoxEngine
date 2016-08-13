@@ -32,7 +32,7 @@ public:
 	void	BindVertexBuffer( void* pBufferId, size_t vertexCount, const CVertexFormat& vertexFormat );
 	void	UnbindVertexBuffer();
 	
-	void*	LockVertexBuffer( void* pBufferId, bool bRead, bool bWrite );
+	void*	LockVertexBuffer( void* pBufferId, size_t vertexCount, bool bRead, bool bWrite );
 	void	UnlockVertexBuffer();
 	
 	
@@ -40,7 +40,7 @@ public:
 	void*	CreateIndexBuffer( class CVertexBuffer* pVertexBuffer, size_t indexCount, uint const * pIndices /*= NULL*/ );
 	void	DestroyIndexBuffer( void* pBufferId );
 	
-	uint*	LockIndexBuffer( void* pBufferId, bool bRead, bool bWrite );
+	uint*	LockIndexBuffer( void* pBufferId, size_t indexCount, bool bRead, bool bWrite );
 	void	UnlockIndexBuffer();
 	
 	void	BindIndexBuffer( void* pBufferId, size_t indexCount );

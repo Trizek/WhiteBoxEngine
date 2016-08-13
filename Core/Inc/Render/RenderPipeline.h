@@ -37,11 +37,6 @@ struct SRenderUnit
 	size_t					index;
 
 	ulong					key;
-
-	bool		ComputeKey()
-	{
-		key = 0;		
-	}
 };
 
 typedef  std::vector< SRenderUnit > TRenderQueue;

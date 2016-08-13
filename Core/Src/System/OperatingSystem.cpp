@@ -1,11 +1,15 @@
 #include "System/OperatingSystem.h"
 
-#include <SDL.h>
-#include <GL/glew.h>
+
+
 #include "GlobalVariables.h"
 #include "Render/Renderer.h"
 #include "Application.h"
 
+#ifndef __GEAR_VR
+#include <SDL.h>
+#include <GL/glew.h>
+#endif
 
 WHITEBOX_BEGIN
 
@@ -38,6 +42,8 @@ float	CTimer::GetDuration() const
 	return (float)duration;
 #endif
 }
+
+#ifndef __GEAR_VR
 
 struct SSDLData
 {
@@ -218,7 +224,11 @@ bool	COperatingSystem::IsPressingKey( Key key )
 
 bool	COperatingSystem::JustPressedKey(Key key) { return false; }
 
+#endif
+
 WHITEBOX_END
+
+
 
 
 /*

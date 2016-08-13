@@ -86,7 +86,6 @@ public:
 	
 	void	Build()
 	{
-		size_t offset = 0;
 		m_size = 0;
 		if ( m_singleElementsFlags & BIT(eSE_Position) )
 		{

@@ -2,6 +2,8 @@
 
 #include "System/GearVR/WhiteBoxGearLibrary.h"
 
+#include "BaseTypes.h"
+
 class MaClasse
 {
 public:
