@@ -180,6 +180,7 @@
     <ClInclude Include="..\..\..\Core\Inc\SerializableFactory.h" />
     <ClInclude Include="..\..\..\Core\Inc\Serializer.h" />
     <ClInclude Include="..\..\..\Core\Inc\smartpointer.h" />
+    <ClInclude Include="..\..\..\Core\Inc\System\GearVR\WhiteBoxGearLibrary.h" />
     <ClInclude Include="..\..\..\Core\Inc\System\OperatingSystem.h" />
     <ClInclude Include="..\..\..\Core\Inc\Temp.h" />
     <ClInclude Include="..\..\..\Core\Inc\Text.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\..\..\Core\Src\ScriptResourceSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\ScriptSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\System\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\WhiteBoxGearLibrary.cpp" />
     <ClCompile Include="..\..\..\Core\Src\System\OperatingSystem.cpp" />
     <ClCompile Include="..\..\..\Editor\Libs\DDS\image_DXT.c" />
     <ClCompile Include="..\..\..\Editor\Src\AssetExporter.cpp" />

@@ -40,6 +40,15 @@
     <Filter Include="Fichiers sources\Editor">
       <UniqueIdentifier>{784dda33-0301-46f0-828d-5c35395a4cc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core\System">
+      <UniqueIdentifier>{01422439-f1ce-4c49-9e88-b5c2725d839b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core\System\GearVR">
+      <UniqueIdentifier>{070bcbbb-e4ad-41b1-baaf-6beb22d3efd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core\System\GearVR">
+      <UniqueIdentifier>{d7cf2717-384d-4108-9f35-b156304b9d18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Inc\Application.h">
@@ -252,6 +261,9 @@
     <ClInclude Include="..\..\..\Editor\Inc\TextureExporter.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\System\GearVR\WhiteBoxGearLibrary.h">
+      <Filter>Fichiers d%27en-tête\Core\System\GearVR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Application.cpp">
@@ -394,6 +406,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Editor\Libs\DDS\image_DXT.c">
       <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\WhiteBoxGearLibrary.cpp">
+      <Filter>Fichiers sources\Core\System\GearVR</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

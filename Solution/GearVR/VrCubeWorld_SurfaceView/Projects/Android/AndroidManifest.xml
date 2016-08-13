@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		package="com.oculus.vrcubeworldsv"
+		android:versionCode="1" 
+		android:versionName="1.0" android:installLocation="internalOnly" >
+
+	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+	<!-- Tell the system this app requires OpenGL ES 3.1. -->
+	<uses-feature android:glEsVersion="0x00030001" android:required="true"/>
+	<!-- Allow reading of the appropriate lens distortion file for the device. -->
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<!-- Network access needed for OVRMonitor -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- Volume Control -->
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+	<application android:label="vrcubeworldsv">
+		<meta-data android:name="com.samsung.android.vr.application.mode" android:value="vr_only"/>
+		<!-- launchMode is set to singleTask because there should never be multiple copies of the app running -->
+		<!-- Theme.Black.NoTitleBar.Fullscreen gives solid black instead of a (bad stereoscopic) gradient on app transition -->
+		<activity
+				android:name="com.oculus.gles3jni.GLES3JNIActivity"
+				android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+				android:launchMode="singleTask"
+				android:screenOrientation="landscape" 
+				android:excludeFromRecents="false"
+				android:configChanges="orientation|screenSize|keyboard|keyboardHidden">			<!-- This filter lets the apk show up as a launchable icon. -->
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+	</application>
+</manifest>
