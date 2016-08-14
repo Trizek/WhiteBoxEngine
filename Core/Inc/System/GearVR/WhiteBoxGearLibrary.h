@@ -9,5 +9,6 @@
 GEAR_EXTERN_C int GetVal();
 
 GEAR_EXTERN_C void WBGL_Init();
+GEAR_EXTERN_C void WBGL_Update();
 
 #endif

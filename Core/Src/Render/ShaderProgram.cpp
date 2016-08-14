@@ -17,6 +17,13 @@ CShaderProgram::~CShaderProgram()
 
 bool	CShaderProgram::LinkProgram()
 {
+	String errorMessage;
+	return LinkProgram( errorMessage );
+}
+
+
+bool	CShaderProgram::LinkProgram( String& errorMessage )
+{
 	Bind( true );
 
 	for( CShaderPtr& shader : m_shaders )
@@ -32,7 +39,6 @@ bool	CShaderProgram::LinkProgram()
 		gVars->pRenderer->BindAttribute( m_pProgramId, m_attributes[ i ], i );
 	}
 
-	String errorMessage;
 	bool bSuccess = gVars->pRenderer->LinkProgram( m_pProgramId, errorMessage );
 	if ( !bSuccess )
 	{

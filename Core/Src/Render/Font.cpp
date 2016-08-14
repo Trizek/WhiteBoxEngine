@@ -1,3 +1,5 @@
+#ifndef __GEAR_VR
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -119,3 +121,5 @@ CMaterialPtr					CFont::GetMaterial() const
 }
 
 WHITEBOX_END
+
+#endif

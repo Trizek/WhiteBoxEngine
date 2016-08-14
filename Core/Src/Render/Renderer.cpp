@@ -433,7 +433,7 @@ void*	CRenderer::CreateShader( char const* code, EShaderType shaderType )
 #ifndef __GEAR_VR
 	static char const* shaderHeader = "#version 400\n #define __GEAR_VR 0\n";
 #else
-	static char const* shaderHeader = "#version 300 es\n #define __GEAR_VR 1\n"
+	static char const* shaderHeaderVS = "#version 300 es\n #define __GEAR_VR 1\n"
 		"#ifndef DISABLE_MULTIVIEW\n"
 		"	#define DISABLE_MULTIVIEW 0\n"
 		"#endif\n"
@@ -446,6 +446,10 @@ void*	CRenderer::CreateShader( char const* code, EShaderType shaderType )
 		"	uniform lowp int ViewID;\n"
 		"	#define VIEW_ID ViewID\n"
 		"#endif\n";
+
+	static char const* shaderHeaderPS = "#version 300 es\n #define __GEAR_VR 1\n";
+	char const* shaderHeader = ( shaderType == EShaderType::VS )? shaderHeaderVS : shaderHeaderPS;
+
 #endif
 	sources[ sourcesCount++ ] = shaderHeader;
 	sources[ sourcesCount++ ] = code;

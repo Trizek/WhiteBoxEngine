@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 
+#ifndef __GEAR_VR
 
 WHITEBOX_BEGIN
 
@@ -30,3 +31,6 @@ FT_Library&	CFontSystem::GetLibrary()
 }
 
 WHITEBOX_END
+
+
+#endif

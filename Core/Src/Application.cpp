@@ -22,7 +22,6 @@ WHITEBOX_BEGIN
 
 bool click = false;
 
-
 CApplication::CApplication()
 	: m_pRenderPipeline(nullptr){}
 

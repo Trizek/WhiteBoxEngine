@@ -21,6 +21,7 @@ public:
 	void*	GetProgramId() const;
 
 	bool	LinkProgram();
+	bool	LinkProgram( String& errorMessage );
 	void	Bind( bool bBind ) const;
 
 private:
