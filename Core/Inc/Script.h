@@ -37,7 +37,7 @@ struct SScriptNode : public CSmartPointerData
 
 	std::vector< CSmartPointer< SScriptNode > > m_childrenNodes;
 	
-	typedef typename Map< String, SAttribute > TAttributeMap;
+	typedef Map< String, SAttribute > TAttributeMap;
 	TAttributeMap m_attributes;
 };
 

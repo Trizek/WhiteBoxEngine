@@ -5,8 +5,11 @@
 
 #include "Array.h"
 #include <memory>
+
+#if defined(_WIN32) || defined(_WIN64)
 #include <intrin.h>
-#pragma intrinsic(_BitScanReverse)
+#pragma intrinsic(_BitScanForward)
+#endif
 
 WHITEBOX_BEGIN
 
@@ -23,9 +26,9 @@ public:
 
 	void	SetSize(size_t size)
 	{
-		size = (1 << (size_t)ceil(log2(size)));
+		//size = (1 << (size_t)ceil(log2(size)));
 
-		size_t wordArraySize = (size_t)ceilf((float)size / (float)BitArray::WordSize);
+		size_t wordArraySize = (size_t)/*ceilf*/((float)size / (float)BitArray::WordSize);
 		m_WordArray.SetSize(wordArraySize);
 		memset(&m_WordArray[0], 0, sizeof(Word) * wordArraySize);
 	}
@@ -68,7 +71,16 @@ public:
 		}
 
 		unsigned long bitIndex = 0;
-		return (_BitScanForward(&bitIndex, m_WordArray[wordIndex] >> bitPosition)) ? (int)(wordIndex * WordSize + (size_t)bitIndex + bitPosition) : -1;
+		return ( ScanBitForward( &bitIndex, m_WordArray[wordIndex] >> bitPosition ) ) ? (int)(wordIndex * WordSize + (size_t)bitIndex + bitPosition) : -1;
+	}
+
+	static int ScanBitForward( unsigned long* pBitIndex, size_t word )
+	{
+#if defined(_WIN32) || defined(_WIN64)
+		return (int)_BitScanForward( pBitIndex, word );
+#else
+		return 0;
+#endif
 	}
 
 	void Print()

@@ -3,3 +3,6 @@
 # Application.mk.
 ROOT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))../../../../../..
 include $(ROOT_DIR)/Application.mk
+
+APP_STL := gnustl_static
+LOCAL_ALLOW_UNDEFINED_SYMBOLS := true

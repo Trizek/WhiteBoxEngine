@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\..\..\Core\Src\Render\TextureSerializer.cpp" />
     <ClCompile Include="..\..\..\..\Core\Src\Render\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\..\Core\Src\Render\Renderer.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Types\WhiteBoxString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WhiteBoxGearLib.h" />

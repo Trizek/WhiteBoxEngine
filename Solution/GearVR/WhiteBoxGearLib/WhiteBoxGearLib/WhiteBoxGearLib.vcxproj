@@ -192,6 +192,7 @@
     <ClCompile Include="..\..\..\..\Core\Src\System\FileSystem.cpp" />
     <ClCompile Include="..\..\..\..\Core\Src\System\GearVR\WhiteBoxGearLibrary.cpp" />
     <ClCompile Include="..\..\..\..\Core\Src\System\OperatingSystem.cpp" />
+    <ClCompile Include="..\..\..\..\Core\Src\Types\WhiteBoxString.cpp" />
     <ClCompile Include="WhiteBoxGearLib.cpp" />
   </ItemGroup>
   <ItemGroup>

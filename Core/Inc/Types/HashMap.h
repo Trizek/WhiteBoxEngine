@@ -46,12 +46,12 @@ template<class Key, class Value, class HashFunction = DefaultHashFunction<Key>>
 class HashMap
 {
 public:
-	typedef typename HashMap< Key, Value > HashMapType;
-	typedef typename Value*	FindRes;
+	typedef HashMap< Key, Value > HashMapType;
+	typedef Value*	FindRes;
 
 	HashMap(size_t size = 512)
 	{
-		size = (1 << (size_t)ceil(log2(size)));
+		//size = (1 << (size_t)ceil(log2(size)));
 
 		m_Pairs.SetSize(size);
 		m_HashIndices.SetSize(size);
@@ -221,17 +221,13 @@ public:
 		}
 	}
 
-	template< bool bConst >
+	template< bool bConst, class SparseArrayIterator >
 	class IteratorGeneric
 	{
 	public:
-		typename typedef Reference< HashMapType, bConst >::Ref					HashMapRef;
-		typename typedef Reference< MapElement, bConst >::Ref					MapElementRef;
-		typename typedef SparseArray< MapElement >								SparseArrayType;
- 		typename typedef SparseArrayIterator< MapElement, bConst >::BaseType	SparseArrayIteratorRef;
-		typename typedef Reference< Value, bConst >::Ref						ValueRef;
+		typedef typename Reference< Value, bConst >::Ref						ValueRef;
 
- 		IteratorGeneric( SparseArrayIteratorRef iterator ) : m_Iterator( iterator )
+ 		IteratorGeneric( SparseArrayIterator iterator ) : m_Iterator( iterator )
 		{}
  
  		bool	IsValid() const
@@ -255,12 +251,12 @@ public:
  		}
  
  	private:
- 		typename SparseArrayIteratorRef	m_Iterator;
+ 		SparseArrayIterator	m_Iterator;
 	};
 
 
-	typedef IteratorGeneric< true > ConstIterator;
-	typedef IteratorGeneric< false > Iterator;
+	typedef IteratorGeneric< true, typename SparseArray<MapElement>::ConstIterator > ConstIterator;
+	typedef IteratorGeneric< false, typename SparseArray<MapElement>::Iterator > Iterator;
 
 
 	Iterator	GetIterator()

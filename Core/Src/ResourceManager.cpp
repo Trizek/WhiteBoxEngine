@@ -28,7 +28,7 @@ CResourceManager::CResourceManager()
 
 	AddResourceType< CShaderProgram, CShaderProgramSerializer >( "program" );
 
-	AddResourceType< CFont, CFontSerializer >( "ttf" );
+/*	AddResourceType< CFont, CFontSerializer >( "ttf" );*/
 }
 
 void CResourceManager::AddResourceType( const String& name, const String& extension, IResourceSerializer* pSerializer )

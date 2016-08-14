@@ -28,9 +28,24 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 #include <GLES3/gl3.h>
 #include <GLES3/gl3ext.h>
 
+
+
+#include "Android/JniUtils.h"
+
+
+
 #define __GEAR_VR
 
 #include "WhiteBoxGearLibrary.h"
+
+extern "C"
+{
+#include "VrApi.h"
+#include "VrApi_Helpers.h"
+
+#include "SystemActivities.h"
+}
+
 
 #if !defined( EGL_OPENGL_ES3_BIT_KHR )
 #define EGL_OPENGL_ES3_BIT_KHR		0x0040
@@ -64,10 +79,7 @@ PFNEGLSIGNALSYNCKHRPROC			eglSignalSyncKHR;
 PFNEGLGETSYNCATTRIBKHRPROC		eglGetSyncAttribKHR;
 #endif
 
-#include "VrApi.h"
-#include "VrApi_Helpers.h"
 
-#include "SystemActivities.h"
 
 #define DEBUG 1
 #define LOG_TAG "VrCubeWorld"
@@ -78,6 +90,8 @@ PFNEGLGETSYNCATTRIBKHRPROC		eglGetSyncAttribKHR;
 #else
 #define ALOGV(...)
 #endif
+
+
 
 static const int CPU_LEVEL			= 2;
 static const int GPU_LEVEL			= 3;
@@ -101,6 +115,9 @@ typedef struct
 } OpenGLExtensions_t;
 
 OpenGLExtensions_t glExtensions;
+
+
+// ok
 
 static void EglInitExtensions()
 {
@@ -223,6 +240,8 @@ static void ovrEgl_Clear( ovrEgl * egl )
 	egl->MainSurface = EGL_NO_SURFACE;
 	egl->Context = EGL_NO_CONTEXT;
 }
+
+//ok
 
 static void ovrEgl_CreateContext( ovrEgl * egl, const ovrEgl * shareEgl )
 {
@@ -371,6 +390,9 @@ static void ovrEgl_DestroyContext( ovrEgl * egl )
 		egl->Display = 0;
 	}
 }
+// ok
+
+
 
 #if EXPLICIT_EGL_OBJECTS == 0
 
@@ -449,25 +471,32 @@ typedef struct
 	ovrVertexAttribPointer	VertexAttribs[MAX_VERTEX_ATTRIB_POINTERS];
 } ovrGeometry;
 
-typedef struct
+
+enum vertexAttribLoc
 {
-	enum
-	{
-		VERTEX_ATTRIBUTE_LOCATION_POSITION,
-		VERTEX_ATTRIBUTE_LOCATION_COLOR,
-		VERTEX_ATTRIBUTE_LOCATION_UV,
-		VERTEX_ATTRIBUTE_LOCATION_TRANSFORM
-	}				location;
+	VERTEX_ATTRIBUTE_LOCATION_POSITION,
+	VERTEX_ATTRIBUTE_LOCATION_COLOR,
+	VERTEX_ATTRIBUTE_LOCATION_UV,
+	VERTEX_ATTRIBUTE_LOCATION_TRANSFORM
+};
+
+struct ovrVertexAttribute
+{
+
+	
+	vertexAttribLoc location;
 	const char *	name;
-} ovrVertexAttribute;
+};
 
 static ovrVertexAttribute ProgramVertexAttributes[] =
 {
-	{ VERTEX_ATTRIBUTE_LOCATION_POSITION,	"vertexPosition" },
+	{VERTEX_ATTRIBUTE_LOCATION_POSITION,	"vertexPosition" },
 	{ VERTEX_ATTRIBUTE_LOCATION_COLOR,		"vertexColor" },
 	{ VERTEX_ATTRIBUTE_LOCATION_UV,			"vertexUv" },
 	{ VERTEX_ATTRIBUTE_LOCATION_TRANSFORM,	"vertexTransform" }
 };
+
+
 
 static void ovrGeometry_Clear( ovrGeometry * geometry )
 {
@@ -495,8 +524,8 @@ static void ovrGeometry_CreateCube( ovrGeometry * geometry )
 	{
 		// positions
 		{
-			{ -127, +127, -127, +127 }, { +127, +127, -127, +127 }, { +127, +127, +127, +127 }, { -127, +127, +127, +127 },	// top
-			{ -127, -127, -127, +127 }, { -127, -127, +127, +127 }, { +127, -127, +127, +127 }, { +127, -127, -127, +127 }	// bottom
+			{ (char)-127, (char)+127, (char)-127, (char)+127 }, { (char)+127, (char)+127, (char)-127, (char)+127 }, { (char)+127, (char)+127, (char)+127, (char)+127 }, { (char)-127, (char)+127, (char)+127, (char)+127 },	// top
+			{ (char)-127, (char)-127, (char)-127, (char)+127 }, { (char)-127, (char)-127, (char)+127, (char)+127 }, { (char)+127, (char)-127, (char)+127, (char)+127 }, { (char)+127, (char)-127, (char)-127, (char)+127 }	// bottom
 		},
 		// colors
 		{
@@ -551,6 +580,9 @@ static void ovrGeometry_Destroy( ovrGeometry * geometry )
 	ovrGeometry_Clear( geometry );
 }
 
+// ok
+
+
 static void ovrGeometry_CreateVAO( ovrGeometry * geometry )
 {
 	GL( glGenVertexArrays( 1, &geometry->VertexArrayObject ) );
@@ -601,23 +633,27 @@ typedef struct
 	GLint	Textures[MAX_PROGRAM_TEXTURES];			// Texture%i
 } ovrProgram;
 
-typedef struct
+
+enum uniformType
 {
-	enum
-	{
-		UNIFORM_MODEL_MATRIX,
-		UNIFORM_VIEW_ID,
-		UNIFORM_SCENE_MATRICES,
-	}				index;
-	enum
-	{
-		UNIFORM_TYPE_VECTOR4,
-		UNIFORM_TYPE_MATRIX4X4,
-		UNIFORM_TYPE_INT,
-		UNIFORM_TYPE_BUFFER,
-	}				type;
+	UNIFORM_MODEL_MATRIX,
+	UNIFORM_VIEW_ID,
+	UNIFORM_SCENE_MATRICES,
+};
+enum uniformDataType
+{
+	UNIFORM_TYPE_VECTOR4,
+	UNIFORM_TYPE_MATRIX4X4,
+	UNIFORM_TYPE_INT,
+	UNIFORM_TYPE_BUFFER,
+};
+
+struct ovrUniform
+{
+	uniformType	index;
+	uniformDataType type;
 	const char *	name;
-} ovrUniform;
+};
 
 static ovrUniform ProgramUniforms[] =
 {
@@ -625,6 +661,7 @@ static ovrUniform ProgramUniforms[] =
 	{ UNIFORM_VIEW_ID,				UNIFORM_TYPE_INT,       "ViewID"		},
 	{ UNIFORM_SCENE_MATRICES,		UNIFORM_TYPE_BUFFER,	"SceneMatrices" },
 };
+// ok
 
 static const char * FindShaderVersionEnd( const char * src )
 {
@@ -968,6 +1005,8 @@ ovrFence
 
 ================================================================================================================================
 */
+
+// ok
 
 typedef struct
 {
@@ -1542,6 +1581,9 @@ static ovrFrameParms ovrRenderer_RenderFrame( ovrRenderer * renderer, const ovrJ
 	return parms;
 }
 
+
+// ok
+
 /*
 ================================================================================
 
@@ -1683,7 +1725,8 @@ void * RenderThreadFunction( void * parm )
 	ovrRenderer_Destroy( &renderer );
 	ovrEgl_DestroyContext( &egl );
 
-	(*java.Vm)->DetachCurrentThread( java.Vm );
+	
+	ovr_DetachCurrentThread( java.Vm );
 }
 
 static void ovrRenderThread_Clear( ovrRenderThread * renderThread )
@@ -1799,13 +1842,16 @@ ovrApp
 ================================================================================
 */
 
-typedef enum
+// ok
+
+enum ovrBackButtonState
 {
 	BACK_BUTTON_STATE_NONE,
-	BACK_BUTTON_STATE_PENDING_DOUBLE_TAP,
-	BACK_BUTTON_STATE_PENDING_SHORT_PRESS,
-	BACK_BUTTON_STATE_SKIP_UP
-} ovrBackButtonState;
+		BACK_BUTTON_STATE_PENDING_DOUBLE_TAP,
+		BACK_BUTTON_STATE_PENDING_SHORT_PRESS,
+		BACK_BUTTON_STATE_SKIP_UP
+};
+
 
 typedef struct
 {
@@ -2053,12 +2099,14 @@ ovrMessageQueue
 ================================================================================
 */
 
-typedef enum
+// ok
+enum ovrMQWait
 {
 	MQ_WAIT_NONE,		// don't wait
 	MQ_WAIT_RECEIVED,	// wait until the consumer thread has received the message
 	MQ_WAIT_PROCESSED	// wait until the consumer thread has processed the message
-} ovrMQWait;
+};
+
 
 #define MAX_MESSAGE_PARMS	8
 #define MAX_MESSAGES		1024
@@ -2073,7 +2121,7 @@ typedef struct
 static void ovrMessage_Init( ovrMessage * message, const int id, const int wait )
 {
 	message->Id = id;
-	message->Wait = wait;
+	message->Wait = (ovrMQWait)wait;
 	memset( message->Parms, 0, sizeof( message->Parms ) );
 }
 
@@ -2231,7 +2279,10 @@ ovrAppThread
 ================================================================================
 */
 
-enum
+// ok
+
+
+enum MessageAndroid
 {
 	MESSAGE_ON_CREATE,
 	MESSAGE_ON_START,
@@ -2254,13 +2305,22 @@ typedef struct
 	ANativeWindow * NativeWindow;
 } ovrAppThread;
 
+
+extern "C" void attachCurThread(ovrJava java);
+
+
+
 void * AppThreadFunction( void * parm )
 {
 	ovrAppThread * appThread = (ovrAppThread *)parm;
 
 	ovrJava java;
 	java.Vm = appThread->JavaVm;
-	(*java.Vm)->AttachCurrentThread( java.Vm, &java.Env, NULL );
+/*	(*java.Vm)->AttachCurrentThread( java.Vm, &java.Env, NULL );*/
+
+
+	ovr_AttachCurrentThread( java.Vm, &java.Env, nullptr);
+
 	java.ActivityObject = appThread->ActivityObject;
 
 	// Note that AttachCurrentThread will reset the thread name.
@@ -2416,32 +2476,45 @@ void * AppThreadFunction( void * parm )
 
 	SystemActivities_Shutdown( &java );
 
-	(*java.Vm)->DetachCurrentThread( java.Vm );
+	ovr_DetachCurrentThread(java.Vm);
 
 	return NULL;
 }
 
-static void ovrAppThread_Create( ovrAppThread * appThread, JNIEnv * env, jobject activityObject )
-{
-	(*env)->GetJavaVM( env, &appThread->JavaVm );
-	appThread->ActivityObject = (*env)->NewGlobalRef( env, activityObject );
-	appThread->Thread = 0;
-	appThread->NativeWindow = NULL;
-	ovrMessageQueue_Create( &appThread->MessageQueue );
 
-	const int createErr = pthread_create( &appThread->Thread, NULL, AppThreadFunction, appThread );
-	if ( createErr != 0 )
+
+extern "C"
+{
+	JNIEXPORT void ovrAppThread_Create(ovrAppThread * appThread, JNIEnv * env, jobject activityObject)
 	{
-		ALOGE( "pthread_create returned %i", createErr );
+		//  GetJavaVM(env, &(appThread->JavaVm) );
+
+		env->GetJavaVM( &appThread->JavaVm);
+		appThread->ActivityObject = env->NewGlobalRef(activityObject);
+		appThread->Thread = 0;
+		appThread->NativeWindow = NULL;
+		ovrMessageQueue_Create(&appThread->MessageQueue);
+
+		const int createErr = pthread_create(&appThread->Thread, NULL, AppThreadFunction, appThread);
+		if (createErr != 0)
+		{
+			ALOGE("pthread_create returned %i", createErr);
+		}
 	}
 }
 
 static void ovrAppThread_Destroy( ovrAppThread * appThread, JNIEnv * env )
 {
 	pthread_join( appThread->Thread, NULL );
-	(*env)->DeleteGlobalRef( env, appThread->ActivityObject );
+	
+	
+	
+	env->DeleteGlobalRef( appThread->ActivityObject );
+	
 	ovrMessageQueue_Destroy( &appThread->MessageQueue );
 }
+
+
 
 /*
 ================================================================================
@@ -2451,68 +2524,71 @@ Activity lifecycle
 ================================================================================
 */
 
+extern "C"
+{
+
 JNIEXPORT jlong JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onCreate( JNIEnv * env, jobject obj, jobject activity )
 {
-	ALOGV( "    GLES3JNILib::onCreate()" );
-
-	ovrAppThread * appThread = (ovrAppThread *) malloc( sizeof( ovrAppThread ) );
-	ovrAppThread_Create( appThread, env, activity );
-
-	ovrMessageQueue_Enable( &appThread->MessageQueue, true );
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_CREATE, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onCreate()" );
+ 
+ 	ovrAppThread * appThread = (ovrAppThread *) malloc( sizeof( ovrAppThread ) );
+ 	ovrAppThread_Create( appThread, env, activity );
+ 
+ 	ovrMessageQueue_Enable( &appThread->MessageQueue, true );
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_CREATE, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 
 	return (jlong)((size_t)appThread);
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onStart( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onStart()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_START, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onStart()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_START, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onResume( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onResume()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_RESUME, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onResume()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_RESUME, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onPause( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onPause()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_PAUSE, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onPause()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_PAUSE, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onStop( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onStop()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_STOP, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onStop()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_STOP, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onDestroy( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onDestroy()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_DESTROY, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
-	ovrMessageQueue_Enable( &appThread->MessageQueue, false );
-
-	ovrAppThread_Destroy( appThread, env );
-	free( appThread );
+ 	ALOGV( "    GLES3JNILib::onDestroy()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_DESTROY, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ovrMessageQueue_Enable( &appThread->MessageQueue, false );
+ 
+ 	ovrAppThread_Destroy( appThread, env );
+ 	free( appThread );
 }
 
 /*
@@ -2525,79 +2601,79 @@ Surface lifecycle
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onSurfaceCreated( JNIEnv * env, jobject obj, jlong handle, jobject surface )
 {
-	ALOGV( "    GLES3JNILib::onSurfaceCreated()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-
-	ANativeWindow * newNativeWindow = ANativeWindow_fromSurface( env, surface );
-	if ( ANativeWindow_getWidth( newNativeWindow ) < ANativeWindow_getHeight( newNativeWindow ) )
-	{
-		// An app that is relaunched after pressing the home button gets an initial surface with
-		// the wrong orientation even though android:screenOrientation="landscape" is set in the
-		// manifest. The choreographer callback will also never be called for this surface because
-		// the surface is immediately replaced with a new surface with the correct orientation.
-		ALOGE( "        Surface not in landscape mode!" );
-	}
-
-	ALOGV( "        NativeWindow = ANativeWindow_fromSurface( env, surface )" );
-	appThread->NativeWindow = newNativeWindow;
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_SURFACE_CREATED, MQ_WAIT_PROCESSED );
-	ovrMessage_SetPointerParm( &message, 0, appThread->NativeWindow );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "    GLES3JNILib::onSurfaceCreated()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 
+ 	ANativeWindow * newNativeWindow = ANativeWindow_fromSurface( env, surface );
+ 	if ( ANativeWindow_getWidth( newNativeWindow ) < ANativeWindow_getHeight( newNativeWindow ) )
+ 	{
+ 		// An app that is relaunched after pressing the home button gets an initial surface with
+ 		// the wrong orientation even though android:screenOrientation="landscape" is set in the
+ 		// manifest. The choreographer callback will also never be called for this surface because
+ 		// the surface is immediately replaced with a new surface with the correct orientation.
+ 		ALOGE( "        Surface not in landscape mode!" );
+ 	}
+ 
+ 	ALOGV( "        NativeWindow = ANativeWindow_fromSurface( env, surface )" );
+ 	appThread->NativeWindow = newNativeWindow;
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_SURFACE_CREATED, MQ_WAIT_PROCESSED );
+ 	ovrMessage_SetPointerParm( &message, 0, appThread->NativeWindow );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onSurfaceChanged( JNIEnv * env, jobject obj, jlong handle, jobject surface )
 {
-	ALOGV( "    GLES3JNILib::onSurfaceChanged()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-
-	ANativeWindow * newNativeWindow = ANativeWindow_fromSurface( env, surface );
-	if ( ANativeWindow_getWidth( newNativeWindow ) < ANativeWindow_getHeight( newNativeWindow ) )
-	{
-		// An app that is relaunched after pressing the home button gets an initial surface with
-		// the wrong orientation even though android:screenOrientation="landscape" is set in the
-		// manifest. The choreographer callback will also never be called for this surface because
-		// the surface is immediately replaced with a new surface with the correct orientation.
-		ALOGE( "        Surface not in landscape mode!" );
-	}
-
-	if ( newNativeWindow != appThread->NativeWindow )
-	{
-		if ( appThread->NativeWindow != NULL )
-		{
-			ovrMessage message;
-			ovrMessage_Init( &message, MESSAGE_ON_SURFACE_DESTROYED, MQ_WAIT_PROCESSED );
-			ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
-			ALOGV( "        ANativeWindow_release( NativeWindow )" );
-			ANativeWindow_release( appThread->NativeWindow );
-			appThread->NativeWindow = NULL;
-		}
-		if ( newNativeWindow != NULL )
-		{
-			ALOGV( "        NativeWindow = ANativeWindow_fromSurface( env, surface )" );
-			appThread->NativeWindow = newNativeWindow;
-			ovrMessage message;
-			ovrMessage_Init( &message, MESSAGE_ON_SURFACE_CREATED, MQ_WAIT_PROCESSED );
-			ovrMessage_SetPointerParm( &message, 0, appThread->NativeWindow );
-			ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
-		}
-	}
-	else if ( newNativeWindow != NULL )
-	{
-		ANativeWindow_release( newNativeWindow );
-	}
+ 	ALOGV( "    GLES3JNILib::onSurfaceChanged()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 
+ 	ANativeWindow * newNativeWindow = ANativeWindow_fromSurface( env, surface );
+ 	if ( ANativeWindow_getWidth( newNativeWindow ) < ANativeWindow_getHeight( newNativeWindow ) )
+ 	{
+ 		// An app that is relaunched after pressing the home button gets an initial surface with
+ 		// the wrong orientation even though android:screenOrientation="landscape" is set in the
+ 		// manifest. The choreographer callback will also never be called for this surface because
+ 		// the surface is immediately replaced with a new surface with the correct orientation.
+ 		ALOGE( "        Surface not in landscape mode!" );
+ 	}
+ 
+ 	if ( newNativeWindow != appThread->NativeWindow )
+ 	{
+ 		if ( appThread->NativeWindow != NULL )
+ 		{
+ 			ovrMessage message;
+ 			ovrMessage_Init( &message, MESSAGE_ON_SURFACE_DESTROYED, MQ_WAIT_PROCESSED );
+ 			ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 			ALOGV( "        ANativeWindow_release( NativeWindow )" );
+ 			ANativeWindow_release( appThread->NativeWindow );
+ 			appThread->NativeWindow = NULL;
+ 		}
+ 		if ( newNativeWindow != NULL )
+ 		{
+ 			ALOGV( "        NativeWindow = ANativeWindow_fromSurface( env, surface )" );
+ 			appThread->NativeWindow = newNativeWindow;
+ 			ovrMessage message;
+ 			ovrMessage_Init( &message, MESSAGE_ON_SURFACE_CREATED, MQ_WAIT_PROCESSED );
+ 			ovrMessage_SetPointerParm( &message, 0, appThread->NativeWindow );
+ 			ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 		}
+ 	}
+ 	else if ( newNativeWindow != NULL )
+ 	{
+ 		ANativeWindow_release( newNativeWindow );
+ 	}
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onSurfaceDestroyed( JNIEnv * env, jobject obj, jlong handle )
 {
-	ALOGV( "    GLES3JNILib::onSurfaceDestroyed()" );
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_SURFACE_DESTROYED, MQ_WAIT_PROCESSED );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
-	ALOGV( "        ANativeWindow_release( NativeWindow )" );
-	ANativeWindow_release( appThread->NativeWindow );
-	appThread->NativeWindow = NULL;
+ 	ALOGV( "    GLES3JNILib::onSurfaceDestroyed()" );
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_SURFACE_DESTROYED, MQ_WAIT_PROCESSED );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	ALOGV( "        ANativeWindow_release( NativeWindow )" );
+ 	ANativeWindow_release( appThread->NativeWindow );
+ 	appThread->NativeWindow = NULL;
 }
 
 /*
@@ -2610,29 +2686,33 @@ Input
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onKeyEvent( JNIEnv * env, jobject obj, jlong handle, int keyCode, int action )
 {
-	if ( action == AKEY_EVENT_ACTION_UP )
-	{
-		ALOGV( "    GLES3JNILib::onKeyEvent( %d, %d )", keyCode, action );
-	}
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_KEY_EVENT, MQ_WAIT_NONE );
-	ovrMessage_SetIntegerParm( &message, 0, keyCode );
-	ovrMessage_SetIntegerParm( &message, 1, action );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	if ( action == AKEY_EVENT_ACTION_UP )
+ 	{
+ 		ALOGV( "    GLES3JNILib::onKeyEvent( %d, %d )", keyCode, action );
+ 	}
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_KEY_EVENT, MQ_WAIT_NONE );
+ 	ovrMessage_SetIntegerParm( &message, 0, keyCode );
+ 	ovrMessage_SetIntegerParm( &message, 1, action );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
 }
 
 JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onTouchEvent( JNIEnv * env, jobject obj, jlong handle, int action, float x, float y )
 {
-	if ( action == AMOTION_EVENT_ACTION_UP )
-	{
-		ALOGV( "    GLES3JNILib::onTouchEvent( %d, %1.0f, %1.0f )", action, x, y );
-	}
-	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
-	ovrMessage message;
-	ovrMessage_Init( &message, MESSAGE_ON_TOUCH_EVENT, MQ_WAIT_NONE );
-	ovrMessage_SetIntegerParm( &message, 0, action );
-	ovrMessage_SetFloatParm( &message, 1, x );
-	ovrMessage_SetFloatParm( &message, 2, y );
-	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+ 	if ( action == AMOTION_EVENT_ACTION_UP )
+ 	{
+ 		ALOGV( "    GLES3JNILib::onTouchEvent( %d, %1.0f, %1.0f )", action, x, y );
+ 	}
+ 	ovrAppThread * appThread = (ovrAppThread *)((size_t)handle);
+ 	ovrMessage message;
+ 	ovrMessage_Init( &message, MESSAGE_ON_TOUCH_EVENT, MQ_WAIT_NONE );
+ 	ovrMessage_SetIntegerParm( &message, 0, action );
+ 	ovrMessage_SetFloatParm( &message, 1, x );
+ 	ovrMessage_SetFloatParm( &message, 2, y );
+ 	ovrMessageQueue_PostMessage( &appThread->MessageQueue, &message );
+
+	ovrMatrix4f_TanAngleMatrixFromUnitSquare(NULL);
+}
+
 }

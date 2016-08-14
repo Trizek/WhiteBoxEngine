@@ -7,8 +7,8 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE			:= vrcubeworld
-LOCAL_CFLAGS			:= -std=c99 -Werror
-LOCAL_SRC_FILES			:= ../../../Src/VrCubeWorld_SurfaceView.c
+LOCAL_CFLAGS			:= -std=c++11 -Werror
+LOCAL_SRC_FILES			:= ../../../Src/VrCubeWorld_SurfaceView.cpp
 LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL		# include default libraries
 
 LOCAL_STATIC_LIBRARIES	:= systemutils libovrkernel WhiteBoxGearLib

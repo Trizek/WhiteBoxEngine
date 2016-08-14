@@ -56,8 +56,9 @@ public:
 	class IteratorGeneric
 	{
 	public:
-		typename typedef Reference< SparseArray<T>, bConst >::Ref	SparseArrayRef;
-		typename typedef Reference< T, bConst >::Ref				ElementRef;
+		typedef SparseArray<T>								SparseArrayType;
+		typedef typename Reference< SparseArrayType, bConst >::Ref	SparseArrayRef;
+		typedef typename Reference< T, bConst >::Ref				ElementRef;
 
 		IteratorGeneric( SparseArrayRef sparseArray ) : m_Index(-1), m_Array(sparseArray)
 		{
@@ -146,13 +147,6 @@ private:
 
 	int					m_FrontFreeBockIndex;
 	int					m_BackFreeBlockIndex;
-};
-
-template< class T, bool bConst >
-class SparseArrayIterator : public SparseArray< T >::IteratorGeneric< bConst >
-{
-public:
-	typename typedef SparseArray< T >::IteratorGeneric< bConst > BaseType;
 };
 
 WHITEBOX_END
