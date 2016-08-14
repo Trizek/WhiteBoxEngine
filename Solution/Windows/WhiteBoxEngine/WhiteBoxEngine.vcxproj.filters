@@ -49,6 +49,12 @@
     <Filter Include="Fichiers sources\Core\System\GearVR">
       <UniqueIdentifier>{d7cf2717-384d-4108-9f35-b156304b9d18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core\Types">
+      <UniqueIdentifier>{3da5b2af-bb32-4141-92ae-4be3d2237441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core\Types">
+      <UniqueIdentifier>{a845c56b-2e5f-49cf-8588-74d911d72d3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Inc\Application.h">
@@ -264,6 +270,18 @@
     <ClInclude Include="..\..\..\Core\Inc\System\GearVR\WhiteBoxGearLibrary.h">
       <Filter>Fichiers d%27en-tête\Core\System\GearVR</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Types\Array.h">
+      <Filter>Fichiers d%27en-tête\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Types\BitArray.h">
+      <Filter>Fichiers d%27en-tête\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Types\HashMap.h">
+      <Filter>Fichiers d%27en-tête\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Types\SparseArray.h">
+      <Filter>Fichiers d%27en-tête\Core\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Application.cpp">
@@ -409,6 +427,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\System\GearVR\WhiteBoxGearLibrary.cpp">
       <Filter>Fichiers sources\Core\System\GearVR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\Types\WhiteBoxString.cpp">
+      <Filter>Fichiers sources\Core\Types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

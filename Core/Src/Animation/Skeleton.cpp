@@ -28,10 +28,10 @@ int	CBone::GetParentIndex() const
 void CSkeleton::AddBone( const String& boneName, const String& parentName, const Transform& localTransform )
 {
 	int parentIndex = -1;
-	TBoneNameToIndexMap::iterator parentIt = m_boneNameToIndex.find( parentName );
-	if ( parentIt != m_boneNameToIndex.end() )
+	TBoneNameToIndexMap::FindRes parentIt = m_boneNameToIndex.FindElement( parentName );
+	if ( parentIt != nullptr )
 	{
-		parentIndex = (int)parentIt->second;
+		parentIndex = (int)*parentIt;
 	}
 	
 	int boneIndex = (int)m_bones.size();

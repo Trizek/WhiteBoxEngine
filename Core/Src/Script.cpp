@@ -683,67 +683,69 @@ CScriptFileWriter::~CScriptFileWriter()
 	
 void CScriptFileWriter::WriteNode( const SScriptNodePtr& pNode )
 {
-	// Write attributes
-	for( SScriptNode::TAttributeMap::const_iterator attIt = pNode->m_attributes.begin() ; attIt != pNode->m_attributes.end() ; ++attIt )
-	{
-		NewLine();
-	
-		const SScriptNode::SAttribute& attribute = attIt->second;
-		switch( attribute.m_type )
-		{
-			case SScriptNode::SAttribute::eT_Int:
-			{
-				fprintf( m_pFile, "%s = %d", attIt->first.c_str(), attribute.m_int );
-			}
-			break;
-			
-			case SScriptNode::SAttribute::eT_Float:
-			{
-				fprintf( m_pFile, "%s = %.5f", attIt->first.c_str(), attribute.m_float );
-			}
-			break;
-			
-			case SScriptNode::SAttribute::eT_String:
-			{
-				fprintf( m_pFile, "%s = \"%s\"", attIt->first.c_str(), attribute.m_string.c_str() );
-			}
-			break;			
-			
-			case SScriptNode::SAttribute::eT_Vector:
-			{
-				fprintf( m_pFile, "%s = ", attIt->first.c_str() );
-				if ( attribute.m_vector.w == 0.0f )
-				{
-					if ( attribute.m_vector.z == 0.0f )
-					{
-						if ( attribute.m_vector.y == 0.0f )
-						{
-							if ( attribute.m_vector.x == 0.0f )
-							{
-								fprintf( m_pFile, "()" );
-							}
-							else
-							{
-								fprintf( m_pFile, "(%.5f)", attribute.m_vector.x );
-							}
-						}
-						else
-						{
-							fprintf( m_pFile, "(%.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y );
-						}
-					}
-					else
-					{
-						fprintf( m_pFile, "(%.5f, %.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y, attribute.m_vector.z );
-					}
-				}
-				else
-				{
-					fprintf( m_pFile, "(%.5f, %.5f, %.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y, attribute.m_vector.z, attribute.m_vector.w );
-				}
-			}
-			break;																
-		}
+ 	// Write attributes
+
+
+ 	for( SScriptNode::TAttributeMap::ConstIterator attIt = pNode->m_attributes.GetConstIterator() ; attIt.IsValid() ; attIt.MoveNext() )
+ 	{
+ 		NewLine();
+ 	
+ 		const SScriptNode::SAttribute& attribute = attIt.GetValue();
+ 		switch( attribute.m_type )
+ 		{
+ 			case SScriptNode::SAttribute::eT_Int:
+ 			{
+ 				fprintf( m_pFile, "%s = %d", attIt.GetKey().c_str(), attribute.m_int );
+ 			}
+ 			break;
+ 			
+ 			case SScriptNode::SAttribute::eT_Float:
+ 			{
+ 				fprintf( m_pFile, "%s = %.5f", attIt.GetKey().c_str(), attribute.m_float );
+ 			}
+ 			break;
+ 			
+ 			case SScriptNode::SAttribute::eT_String:
+ 			{
+ 				fprintf( m_pFile, "%s = \"%s\"", attIt.GetKey().c_str(), attribute.m_string.c_str() );
+ 			}
+ 			break;			
+ 			
+ 			case SScriptNode::SAttribute::eT_Vector:
+ 			{
+ 				fprintf( m_pFile, "%s = ", attIt.GetKey().c_str() );
+ 				if ( attribute.m_vector.w == 0.0f )
+ 				{
+ 					if ( attribute.m_vector.z == 0.0f )
+ 					{
+ 						if ( attribute.m_vector.y == 0.0f )
+ 						{
+ 							if ( attribute.m_vector.x == 0.0f )
+ 							{
+ 								fprintf( m_pFile, "()" );
+ 							}
+ 							else
+ 							{
+ 								fprintf( m_pFile, "(%.5f)", attribute.m_vector.x );
+ 							}
+ 						}
+ 						else
+ 						{
+ 							fprintf( m_pFile, "(%.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y );
+ 						}
+ 					}
+ 					else
+ 					{
+ 						fprintf( m_pFile, "(%.5f, %.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y, attribute.m_vector.z );
+ 					}
+ 				}
+ 				else
+ 				{
+ 					fprintf( m_pFile, "(%.5f, %.5f, %.5f, %.5f)", attribute.m_vector.x, attribute.m_vector.y, attribute.m_vector.z, attribute.m_vector.w );
+ 				}
+ 			}
+ 			break;																
+ 		}
 	}
 	
 	

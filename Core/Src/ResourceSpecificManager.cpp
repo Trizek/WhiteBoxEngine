@@ -12,13 +12,13 @@ CResourceDescriptor* CResourceSpecificManager::AddResource( const String& name, 
 
 CResourceDescriptor* CResourceSpecificManager::GetResourceDescriptor( const String& path )
 {
-	TResourceDescriptorMap::iterator itResDesc = m_resources.find( path );
-	if ( itResDesc == m_resources.end() )
+	TResourceDescriptorMap::FindRes itResDesc = m_resources.FindElement( path );
+	if ( itResDesc == nullptr )
 	{
 		return nullptr;
 	}
 	
-	CResourceDescriptor* pDescriptor = itResDesc->second;
+	CResourceDescriptor* pDescriptor = *itResDesc;
 	return pDescriptor;
 }
 

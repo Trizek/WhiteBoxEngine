@@ -1241,6 +1241,10 @@ static void ovrScene_Create( ovrScene * scene, bool useMultiview )
 		scene->CubeRotations[insert] = (int)( ovrScene_RandomFloat( scene ) * ( NUM_ROTATIONS - 0.1f ) );
 	}
 
+	scene->CubePositions[0].x = 10000.0f;
+	scene->CubePositions[0].y = -180.0f;
+	scene->CubePositions[0].z = 0.0f;
+
 	scene->CreatedScene = true;
 
 #if !MULTI_THREADED
@@ -1381,33 +1385,37 @@ static ovrFrameParms ovrRenderer_RenderFrame( ovrRenderer * renderer, const ovrJ
 								scene->Rotations[i].z * simulation->CurrentRotation.z );
 	}
 
+	rotationMatrices[0] = ovrMatrix4f_CreateRotation(0, 0, 0);
+
 	// Update the instance transform attributes.
 	GL( glBindBuffer( GL_ARRAY_BUFFER, scene->InstanceTransformBuffer ) );
 	GL( ovrMatrix4f * cubeTransforms = (ovrMatrix4f *) glMapBufferRange( GL_ARRAY_BUFFER, 0,
 				NUM_INSTANCES * sizeof( ovrMatrix4f ), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT ) );
 	for ( int i = 0; i < GetVal(); i++ )
 	{
-		const int index = scene->CubeRotations[i];
+		const int index = (i == 0)? 0 : scene->CubeRotations[i];
+
+		float scale = (index == 0)? 4.0f : 0.1f;
 
 		// Write in order in case the mapped buffer lives on write-combined memory.
-		cubeTransforms[i].M[0][0] = rotationMatrices[index].M[0][0];
-		cubeTransforms[i].M[0][1] = rotationMatrices[index].M[0][1];
-		cubeTransforms[i].M[0][2] = rotationMatrices[index].M[0][2];
-		cubeTransforms[i].M[0][3] = rotationMatrices[index].M[0][3];
+		cubeTransforms[i].M[0][0] = rotationMatrices[index].M[0][0] * scale;
+		cubeTransforms[i].M[0][1] = rotationMatrices[index].M[0][1] * scale;
+		cubeTransforms[i].M[0][2] = rotationMatrices[index].M[0][2] * scale;
+		cubeTransforms[i].M[0][3] = rotationMatrices[index].M[0][3] * scale;
 
-		cubeTransforms[i].M[1][0] = rotationMatrices[index].M[1][0];
-		cubeTransforms[i].M[1][1] = rotationMatrices[index].M[1][1];
-		cubeTransforms[i].M[1][2] = rotationMatrices[index].M[1][2];
-		cubeTransforms[i].M[1][3] = rotationMatrices[index].M[1][3];
+		cubeTransforms[i].M[1][0] = rotationMatrices[index].M[1][0] * scale;
+		cubeTransforms[i].M[1][1] = rotationMatrices[index].M[1][1] * scale;
+		cubeTransforms[i].M[1][2] = rotationMatrices[index].M[1][2] * scale;
+		cubeTransforms[i].M[1][3] = rotationMatrices[index].M[1][3] * scale;
 
-		cubeTransforms[i].M[2][0] = rotationMatrices[index].M[2][0];
-		cubeTransforms[i].M[2][1] = rotationMatrices[index].M[2][1];
-		cubeTransforms[i].M[2][2] = rotationMatrices[index].M[2][2];
-		cubeTransforms[i].M[2][3] = rotationMatrices[index].M[2][3];
+		cubeTransforms[i].M[2][0] = rotationMatrices[index].M[2][0] * scale;
+		cubeTransforms[i].M[2][1] = rotationMatrices[index].M[2][1] * scale;
+		cubeTransforms[i].M[2][2] = rotationMatrices[index].M[2][2] * scale;
+		cubeTransforms[i].M[2][3] = rotationMatrices[index].M[2][3] * scale;
 
-		cubeTransforms[i].M[3][0] = scene->CubePositions[i].x;
-		cubeTransforms[i].M[3][1] = scene->CubePositions[i].y;
-		cubeTransforms[i].M[3][2] = scene->CubePositions[i].z;
+		cubeTransforms[i].M[3][0] = -80.0f;// 0;// scene->CubePositions[i].x;
+		cubeTransforms[i].M[3][1] = 0.0f;// scene->CubePositions[i].y;
+		cubeTransforms[i].M[3][2] = -150.0f; //scene->CubePositions[i].z;
 		cubeTransforms[i].M[3][3] = 1.0f;
 	}
 	GL( glUnmapBuffer( GL_ARRAY_BUFFER ) );
@@ -2295,6 +2303,8 @@ void * AppThreadFunction( void * parm )
 #else
 	ovrRenderer_Create( &appState.Renderer, &java, appState.UseMultiview );
 #endif
+
+	WBGL_Init();
 
 	for ( bool destroyed = false; destroyed == false; )
 	{

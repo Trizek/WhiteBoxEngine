@@ -43,22 +43,35 @@ float	CTimer::GetDuration() const
 #endif
 }
 
-#ifndef __GEAR_VR
+#ifdef __GEAR_VR
+
+COperatingSystem::COperatingSystem(){}
+COperatingSystem::~COperatingSystem(){}
+
+void	COperatingSystem::Init(uint width, uint height){}
+void	COperatingSystem::Reshape(uint width, uint height){}
+
+Vec2	COperatingSystem::GetMousePos() { return Vec2(); }
+bool	COperatingSystem::GetMouseButton(int button) { return false; }
+bool	COperatingSystem::IsPressingKey(Key key) { return false; }
+bool	COperatingSystem::JustPressedKey(Key key) { return false; }
+
+#else
 
 struct SSDLData
 {
 	SSDLData()
 	{
-		m_sdlKeyMap[SDL_SCANCODE_F1] = Key::F1;
-		m_sdlKeyMap[SDL_SCANCODE_F2] = Key::F2;
-		m_sdlKeyMap[SDL_SCANCODE_F3] = Key::F3;
-		m_sdlKeyMap[SDL_SCANCODE_F4] = Key::F4;
-		m_sdlKeyMap[SDL_SCANCODE_F5] = Key::F5;
+		m_sdlKeyMap[ SDL_SCANCODE_F1] = Key::F1;
+		m_sdlKeyMap[ SDL_SCANCODE_F2] = Key::F2;
+		m_sdlKeyMap[ SDL_SCANCODE_F3] = Key::F3;
+		m_sdlKeyMap[ SDL_SCANCODE_F4] = Key::F4;
+		m_sdlKeyMap[ SDL_SCANCODE_F5] = Key::F5;
 
-		m_sdlKeyMap[SDL_SCANCODE_W] = Key::Z;
-		m_sdlKeyMap[SDL_SCANCODE_A] = Key::Q;
-		m_sdlKeyMap[SDL_SCANCODE_S] = Key::S;
-		m_sdlKeyMap[SDL_SCANCODE_D] = Key::D;
+		m_sdlKeyMap[ SDL_SCANCODE_W] = Key::Z;
+		m_sdlKeyMap[ SDL_SCANCODE_A] = Key::Q;
+		m_sdlKeyMap[ SDL_SCANCODE_S] = Key::S;
+		m_sdlKeyMap[ SDL_SCANCODE_D] = Key::D;
 
 		ResetKeys();
 	}
@@ -72,7 +85,7 @@ struct SSDLData
 		}
 	}
 
-	std::unordered_map<unsigned int, Key>	m_sdlKeyMap;
+	Map< unsigned int, Key >				m_sdlKeyMap;
 	bool									m_pressedKeys[(size_t)Key::Count];
 	bool									m_justPressedKeys[(size_t)Key::Count];
 };
@@ -112,21 +125,21 @@ bool ProcessEvents( COperatingSystem& os, SSDLData* pSDLData )
 				return false;
 			}
 
-			auto itSdlKey = pSDLData->m_sdlKeyMap.find(event.key.keysym.scancode);
-			if (itSdlKey != pSDLData->m_sdlKeyMap.end())
+			auto itSdlKey = pSDLData->m_sdlKeyMap.FindElement( event.key.keysym.scancode );
+			if ( itSdlKey != nullptr )
 			{
-				pSDLData->m_justPressedKeys[(size_t)itSdlKey->second] = !pSDLData->m_pressedKeys[(size_t)itSdlKey->second];
-				pSDLData->m_pressedKeys[(size_t)itSdlKey->second] = true;
+				pSDLData->m_justPressedKeys[(size_t)*itSdlKey] = !pSDLData->m_pressedKeys[(size_t)*itSdlKey];
+				pSDLData->m_pressedKeys[(size_t)*itSdlKey] = true;
 			}
 		}
 		break;
 
 		case SDL_KEYUP:
 		{
-			auto itSdlKey = pSDLData->m_sdlKeyMap.find(event.key.keysym.scancode);
-			if (itSdlKey != pSDLData->m_sdlKeyMap.end())
+			auto itSdlKey = pSDLData->m_sdlKeyMap.FindElement( event.key.keysym.scancode );
+			if ( itSdlKey != nullptr )
 			{
-				pSDLData->m_pressedKeys[(size_t)itSdlKey->second] = false;
+				pSDLData->m_pressedKeys[ (size_t)*itSdlKey ] = false;
 			}
 		}
 		break;

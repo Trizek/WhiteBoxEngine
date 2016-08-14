@@ -82,10 +82,10 @@ void CScriptNodeReader::Value( const String& name, int& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_Int )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Int )
 	{
-		val = attIt->second.m_int;
+		val = (*attIt).m_int;
 	}
 }
 
@@ -97,10 +97,10 @@ void CScriptNodeReader::Value( const String& name, float& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_Float )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Float )
 	{
-		val = attIt->second.m_float;
+		val = (*attIt).m_float;
 	}
 }
 
@@ -112,10 +112,10 @@ void CScriptNodeReader::Value( const String& name, String& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_String )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_String )
 	{
-		val = attIt->second.m_string;
+		val = (*attIt).m_string;
 	}
 }
 
@@ -127,12 +127,13 @@ void CScriptNodeReader::Value( const String& name, Vec2& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_Vector )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Vector )
 	{
-		val.x = attIt->second.m_vector.x;
-		val.y = attIt->second.m_vector.y;
-	}	
+		val.x = (*attIt).m_vector.x;
+		val.y = (*attIt).m_vector.y;
+	}
+
 }
 
 void CScriptNodeReader::Value( const String& name, Vec3& val )
@@ -143,13 +144,13 @@ void CScriptNodeReader::Value( const String& name, Vec3& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_Vector )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Vector )
 	{
-		val.x = attIt->second.m_vector.x;
-		val.y = attIt->second.m_vector.y;
-		val.z = attIt->second.m_vector.z;
-	}	
+		val.x = (*attIt).m_vector.x;
+		val.y = (*attIt).m_vector.y;
+		val.z = (*attIt).m_vector.z;
+	}
 }
 
 void CScriptNodeReader::Value( const String& name, Vec4& val )
@@ -160,11 +161,11 @@ void CScriptNodeReader::Value( const String& name, Vec4& val )
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
-	SScriptNode::TAttributeMap::iterator attIt = pNode->m_attributes.find( name );
-	if ( attIt != pNode->m_attributes.end() && attIt->second.m_type == SScriptNode::SAttribute::eT_Vector )
+	SScriptNode::TAttributeMap::FindRes attIt = pNode->m_attributes.FindElement( name );
+	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Vector )
 	{
-		val = attIt->second.m_vector;
-	}	
+		val = (*attIt).m_vector;
+	}
 }
 
 

@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: color.ps
 ////////////////////////////////////////////////////////////////////////////////
-#version 400
 
 
 /////////////////////
@@ -21,13 +20,17 @@ uniform sampler2D 	shaderTexture;
 uniform vec3 		lightDirection;
 
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Pixel Shader
 ////////////////////////////////////////////////////////////////////////////////
 void main(void)
 {
-	vec4 texturColor = vec4(1.0, 1.0, 1.0, 1.0);
+#if WB_COL == 1
+	vec4 texturColor = vec4(0.0, 0.0, 1.0, 1.0);
+#else
+	vec4 texturColor = vec4(1.0, 0.0, 0.0, 1.0);
+#endif	
+
 	vec3 lightDir = -lightDirection;
 	float intensity = clamp(dot(normalize(outNormal), lightDir), 0.0f, 1.0f);
 	intensity = clamp(intensity + 0.4f, 0.0f, 1.0f);

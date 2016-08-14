@@ -147,12 +147,12 @@ CResourceDescriptor* CResourceManager::AddResource( const String& path, size_t s
 	}
 	
 	String extension = path.substr( pointIndex + 1 );
-	TResourceTypeMap::iterator resTypeIt = m_resourceTypesByExtension.find( extension );
-	if ( resTypeIt == m_resourceTypesByExtension.end() )
+	TResourceTypeMap::FindRes resTypeIt = m_resourceTypesByExtension.FindElement( extension );
+	if ( resTypeIt == nullptr )
 	{
 		return nullptr;
 	}
-	CResourceType* pResourceType = resTypeIt->second;
+	CResourceType* pResourceType = *resTypeIt;
 	
 	size_t nameStartIndex = pointIndex-1;
 	while( nameStartIndex > 0 && (path.c_str()[ nameStartIndex-1 ] != '/') )
@@ -256,13 +256,13 @@ void CResourceManager::ComputeResourceDependencies( const String& path, std::vec
 
 CResourceDescriptor*	CResourceManager::GetResourceDescriptor( const String& path )
 {
-	TResourceTypeMap::iterator itResType = m_resourceTypesByExtension.find( path.get_path_extension() );
-	if (itResType == m_resourceTypesByExtension.end())
+	TResourceTypeMap::FindRes itResType = m_resourceTypesByExtension.FindElement( path.get_path_extension() );
+	if ( itResType == nullptr )
 	{
 		return nullptr;
 	}
 
-	CResourceType* pResourceType = itResType->second;
+	CResourceType* pResourceType = *itResType;
 	CResourceDescriptor* pDescriptor = pResourceType->GetResourceSpecificManager()->GetResourceDescriptor( path );
 	if (pDescriptor == NULL)
 	{

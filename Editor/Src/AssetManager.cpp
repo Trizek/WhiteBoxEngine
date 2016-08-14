@@ -1,16 +1,19 @@
 #include "AssetManager.h"
 
+ 
 #include "FileSystem.h"
 #include "ScriptSerializer.h"
-
+ 
 /*#include "FbxExporter.h"*/
 #include "ObjExporter.h"
 #include "MtlExporter.h"
 #include "CopyExporter.h"
 #include "ResourceManager.h"
 #include "TextureExporter.h"
+#include "AssetExporter.h"
 
 WHITEBOX_BEGIN
+
 
 CAssetManager::CAssetManager()
 {
@@ -40,13 +43,8 @@ void	CAssetManager::AddExporter( const String& extension, IAssetExporter* pExpor
 
 IAssetExporter*	CAssetManager::GetExporter( const String& extension )
 {
-	TAssetExporterMap::iterator itExporter = m_assetExporters.find( extension );
-	if ( itExporter == m_assetExporters.end() )
-	{
-		return NULL;
-	}
-	
-	return itExporter->second;
+	IAssetExporter** pValue = m_assetExporters.FindElement( extension );
+	return ( pValue )? *pValue : nullptr;
 }
 
 class CAssetBrowser : public IFileBrowser 
@@ -154,4 +152,6 @@ void	CAssetManager::Export( const String& assetFolder, const String& resourceFol
 	GenerateResourceListFile( resourceFolderFormat );
 }
 
+
 WHITEBOX_END
+

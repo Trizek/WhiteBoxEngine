@@ -20,63 +20,9 @@ typedef char32_t wchar;
 
 #include <vector>
 
+#include "Types/HashMap.h"
 #include "WhiteBoxString.h"
 #include "Text.h"
-
-
-#ifdef __APPLE__
-
-#include <ext/hash_map>
-WHITEBOX_BEGIN
-
-template< class Key, class Value >
-class Map : public __gnu_cxx::hash_map< Key, Value >
-{
-};
-
-WHITEBOX_END
-
-#elif defined(_WIN32) || defined(_WIN64)
-
-#include <unordered_map>
-WHITEBOX_BEGIN
-
-
-template< class Key, class Value >
-class Map : public std::unordered_map< Key, Value >
-{
-};
-
-WHITEBOX_END
-
-#else
-
-#include <unordered_map>
-WHITEBOX_BEGIN
-
-
-template< class Key, class Value >
-class Map : public std::unordered_map< Key, Value >
-{
-};
-
-WHITEBOX_END
-
-namespace std
-{
-
-	template<>
-	struct hash< WhiteBox::String >
-	{
-		size_t operator()(const WhiteBox::String& s) const
-		{
-			return 0;
-		}
-	};
-}
-
-#endif
-
 
 
 #include "SmartPointer.h"

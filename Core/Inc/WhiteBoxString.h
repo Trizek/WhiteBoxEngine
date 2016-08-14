@@ -5,8 +5,7 @@
 #include <string.h>
 
 #include "WhiteBoxNameSpace.h"
-
-
+#include "Types/HashMap.h"
 
 WHITEBOX_BEGIN
 
@@ -381,30 +380,24 @@ private:
 		m_pRefCount = new int(1);
 	}
 		
-	void	ComputeHash()
-	{
-		if ( m_str == NULL )
-		{
-			m_hash = 0;
-			return;
-		}
-
-		size_t _Val = 2166136261U;
-		size_t _First = 0;
-		size_t _Last = m_length;
-		size_t _Stride = 1 + _Last / 10;
-
-		for(; _First < _Last; _First += _Stride)
-			_Val = 16777619U * _Val ^ (size_t)m_str[_First];
-			
-		m_hash = _Val;
-	}
+	void ComputeHash();
 	
 	char*	m_str;
 	size_t	m_length;
 	int*	m_pRefCount;
-	size_t	m_hash;
+	int		m_hash;
 };
+
+template<>
+class DefaultHashFunction< CString >
+{
+public:
+	static int ComputeHash( const CString& str )
+	{
+		return str.getHash();
+	}
+};
+
 
 typedef CString String;
 

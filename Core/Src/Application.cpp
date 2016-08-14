@@ -36,8 +36,8 @@ CTexturePtr ezioTexture;
 
 CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
 
-CFontPtr font;
-CTextMesh textMesh, textMesh2;
+//CFontPtr font;
+//CTextMesh textMesh, textMesh2;
 
 
 void CApplication::Init( uint width, uint height )
@@ -66,7 +66,7 @@ void CApplication::Init( uint width, uint height )
 
 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
-	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
+	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("vr.program"); // white.program");
 
 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
@@ -114,7 +114,7 @@ void CApplication::Init( uint width, uint height )
 
 		quad->GetPart(0)->SetMaterial( pMat );
 
-		font = gVars->pResourceManager->GetResource< CFont >( "font.ttf" );
+		//font = gVars->pResourceManager->GetResource< CFont >( "font.ttf" );
 
 
 
@@ -144,13 +144,13 @@ void CApplication::FrameUpdate()
 	float frameTime = m_frameTimer.GetDuration();
 	m_frameTimer.Start();
 
-	float fps = 1.0f / frameTime;
+	float fps = 1.0f / frameTime; (void)fps;
 
-	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
-	textMesh.SetText(text, font);
-
-	CText txt2( U"François Fournel était\ndans la place" );
-	textMesh2.SetText(txt2, font);
+// 	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
+// 	textMesh.SetText(text, font);
+// 
+// 	CText txt2( U"François Fournel était\ndans la place" );
+// 	textMesh2.SetText(txt2, font);
 
 
 	bool bClick = gVars->pOperatingSystem->GetMouseButton(0);
@@ -295,8 +295,8 @@ void CApplication::FrameUpdate()
 		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
 
 		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
-		CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, textTransf, m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
-		CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh2.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
+	//	CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, textTransf, m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
+	//	CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh2.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
 
 	}
 

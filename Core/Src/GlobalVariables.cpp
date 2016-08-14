@@ -26,35 +26,5 @@ void SGlobalVariables::Init()
 };
 
 
-template< class T >
-CString ToString(const T& val)
-{
-	return CString("{not supported type}");
-}
-
-template<>
-CString ToString< int >(const int& val)
-{
-	char buffer[256];
-#if defined(_WIN32) || defined(_WIN64)
-	sprintf_s(buffer, 256, "%d", val);
-#else
-	sprintf( buffer, "%d", val );
-#endif
-	return CString(buffer);
-}
-
-template<>
-CString ToString< float >(const float& val)
-{
-	char buffer[256];
-#if defined(_WIN32) || defined(_WIN64)
-	sprintf_s(buffer, 256, "%.2f", val);
-#else
-	sprintf( buffer, "%.2f", val );
-#endif
-	return CString(buffer);
-}
-
 WHITEBOX_END
 

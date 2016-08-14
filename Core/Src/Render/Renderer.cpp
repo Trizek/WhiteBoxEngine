@@ -42,75 +42,20 @@ public:
 	CSpecificData()
 		: m_boundVertexBuffer(0)
 		, m_boundIndexBuffer(nullptr)
-		, m_firstFreeUniformIndex(-1)
 	{
 		for( size_t iTex = 0 ; iTex < CRenderer::MAX_TEXTURES_COUNT ; ++iTex )
 		{
 			m_boundTextures[ iTex ] = 0;
 		}
-
-		m_boundUniformBlocks.reserve(80);
 	}
 
-	int		BindUniformBlock( GLuint blockId )
-	{
-// 		Map< GLuint, int >::iterator it = m_uniformBlocksBoundIndices.find( blockId );
-// 		if ( it != m_uniformBlocksBoundIndices.end() )
-// 		{
-// 			return it->second;
-// 		}
-// 
-// 		int index;
-// 		if ( m_firstFreeUniformIndex >= 0 )
-// 		{
-// 			int index = m_firstFreeUniformIndex;
-// 			m_firstFreeUniformIndex = *reinterpret_cast< int* >( m_boundUniformBlocks[ m_firstFreeUniformIndex ] );
-// 		}
-// 		else
-// 		{
-// 			if ( m_boundUniformBlocks.capacity() == m_boundUniformBlocks.size() )
-// 			{
-// 				// full, just remove last block
-// 				index = UnbindUniformBlock( m_boundUniformBlocks.back() );
-// 				m_firstFreeUniformIndex = -1; // become full again
-// 			}
-// 			else
-// 			{
-// 				index = (int)m_boundUniformBlocks.size();
-// 				m_boundUniformBlocks.resize( (size_t)index + 1 );
-// 			}
-// 		}
-// 
-// 		m_uniformBlocksBoundIndices[ blockId ] = index;
-// 		m_boundUniformBlocks[ index ] = blockId;
-		
-		return 0;
-	}
 
-	int		UnbindUniformBlock( GLuint blockId )
-	{
-		Map< GLuint, int >::iterator it = m_uniformBlocksBoundIndices.find( blockId );
-		if ( it != m_uniformBlocksBoundIndices.end() )
-		{
-			int index = it->second;
-			m_boundUniformBlocks[ index ] = *reinterpret_cast< GLuint* >( &m_firstFreeUniformIndex );
-			m_firstFreeUniformIndex = index;
-
-			m_uniformBlocksBoundIndices.erase( it );
-
-			return index;
-		}
-
-		return -1;
-	}
 
 	GLuint	m_boundVertexBuffer;
 	SIndexBufferId*	m_boundIndexBuffer;
 	GLuint	m_boundTextures[ CRenderer::MAX_TEXTURES_COUNT ];
 	
-	int						m_firstFreeUniformIndex;
-	std::vector< GLuint >	m_boundUniformBlocks;
-	Map< GLuint, int >		m_uniformBlocksBoundIndices;
+
 };
 
 
@@ -406,7 +351,7 @@ void*	CRenderer::CreateTexture( uint width, uint height, uint mipMapCount, CPict
 
 		uint blockSize = 0;
 #ifndef __GEAR_VR	
-		(glFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+		blockSize = (glFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
 #endif
 		uint offset = 0;
 
@@ -482,6 +427,30 @@ void	CRenderer::UnbindTexture( size_t layer )
 
 void*	CRenderer::CreateShader( char const* code, EShaderType shaderType )
 {
+	char const*	sources[ 8 ];
+	size_t		sourcesCount = 0;
+
+#ifndef __GEAR_VR
+	static char const* shaderHeader = "#version 400\n #define __GEAR_VR 0\n";
+#else
+	static char const* shaderHeader = "#version 300 es\n #define __GEAR_VR 1\n"
+		"#ifndef DISABLE_MULTIVIEW\n"
+		"	#define DISABLE_MULTIVIEW 0\n"
+		"#endif\n"
+		"#define NUM_VIEWS 2\n"
+		"#if defined( GL_OVR_multiview2 ) && ! DISABLE_MULTIVIEW\n"
+		"	#extension GL_OVR_multiview2 : enable\n"
+		"	layout(num_views=NUM_VIEWS) in;\n"
+		"	#define VIEW_ID gl_ViewID_OVR\n"
+		"#else\n"
+		"	uniform lowp int ViewID;\n"
+		"	#define VIEW_ID ViewID\n"
+		"#endif\n";
+#endif
+	sources[ sourcesCount++ ] = shaderHeader;
+	sources[ sourcesCount++ ] = code;
+
+
 	GLuint* pShaderId = new GLuint();
 
 	GLenum glShaderType = 0;
@@ -498,7 +467,7 @@ void*	CRenderer::CreateShader( char const* code, EShaderType shaderType )
 		return nullptr;
 	}
 
-	glShaderSource( *pShaderId, 1, (const GLchar**)&code, NULL );
+	glShaderSource( *pShaderId, sourcesCount, (const GLchar**)sources, NULL );
 
 	return pShaderId;
 }

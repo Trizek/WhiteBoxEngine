@@ -8,6 +8,8 @@
 #include "Render/RenderPipeline.h"
 #include "Render/Material.h"
 
+#ifndef __GEAR_VR
+
 WHITEBOX_BEGIN
 
 
@@ -104,3 +106,5 @@ const CMeshPtr&	CTextMesh::GetMesh() const
 }
 
 WHITEBOX_END
+
+#endif

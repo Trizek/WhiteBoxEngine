@@ -46,7 +46,9 @@ public:
 	bool	JustPressedKey(Key key);
 
 private:
+#ifndef __GEAR_VR
 	void*	m_pSpecificData;
+#endif
 };
 
 WHITEBOX_END
