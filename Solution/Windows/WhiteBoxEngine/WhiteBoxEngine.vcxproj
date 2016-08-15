@@ -236,6 +236,8 @@
     <ClCompile Include="..\..\..\Core\Src\ScriptResourceSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\ScriptSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\System\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\GearVR_AndroidApp.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\GearVR_OperatingSystem.cpp" />
     <ClCompile Include="..\..\..\Core\Src\System\GearVR\WhiteBoxGearLibrary.cpp" />
     <ClCompile Include="..\..\..\Core\Src\System\OperatingSystem.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Types\WhiteBoxString.cpp" />

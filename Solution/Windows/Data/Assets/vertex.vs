@@ -17,8 +17,15 @@ smooth out vec3 outNormal;
 ///////////////////////
 // UNIFORM VARIABLES //
 ///////////////////////
+//uniform mat4 modelViewMatrix;
+//uniform mat4 projectionMatrix;
+
+uniform SceneMatrices
+{
+	uniform mat4 projectionMatrix;
+} sm;
+
 uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vertex Shader
@@ -27,7 +34,7 @@ void main(void)
 {
 	// Calculate the position of the vertex against the world, view, and projection matrices.
 	gl_Position = modelViewMatrix * vec4(inputPosition, 1.0f);
-	gl_Position = projectionMatrix * gl_Position;
+	gl_Position = sm.projectionMatrix * gl_Position;
 
 
 	// Store the input color for the pixel shader to use.
@@ -35,5 +42,4 @@ void main(void)
 	texCoord = uv0;
 	outNormal = mat3(modelViewMatrix) * normal;
 	outNormal = normalize(outNormal);
-	
 }

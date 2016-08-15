@@ -13,7 +13,7 @@ void CCamera::ComputeProjectionMatrix()
 	gVars->pRenderer->ComputeProjectionMatrix( 10.0f, 10000.0f, h, w, projectionMatrix );
 }
 
-void CCamera::ComputeTransformMatrix()
+void CCamera::ComputeInverseTransformMatrix()
 {
 	Transform inverseTransform = transform.GetInverse();
 	inverseTransformMatrix.FromTransform( inverseTransform );

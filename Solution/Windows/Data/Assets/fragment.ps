@@ -16,10 +16,12 @@ smooth in vec3 outNormal;
 //////////////////////
 out vec4 outputColor;
 
+uniform Lighting
+{
+	uniform vec3 		lightDirection;
+} li;
+
 uniform sampler2D 	shaderTexture;
-uniform vec3 		lightDirection;
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Pixel Shader
@@ -27,7 +29,7 @@ uniform vec3 		lightDirection;
 void main(void)
 {
 	vec4 texturColor = texture(shaderTexture, texCoord);
-	vec3 lightDir = -lightDirection;
+	vec3 lightDir = -li.lightDirection;
 	float intensity = clamp(dot(normalize(outNormal), lightDir), 0.0f, 1.0f);
 	intensity = clamp(intensity + 0.4f, 0.0f, 1.0f);
 

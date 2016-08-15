@@ -95,12 +95,22 @@ public:
 		return element->value;
 	}
 
+	const Value& operator[]( const Key& key ) const
+	{
+		return *FindElement( key );
+	}
+
 	Value*	FindElement( const Key& key )
 	{
 		MapElement* element = FindMapElement( key );
 		return ( element == nullptr )? nullptr : &(element->value);
 	}
-	
+
+	const Value* FindElement( const Key& key ) const
+	{
+		return const_cast< HashMapType& >( *this ).FindElement( key );
+	}
+
 	MapElement*	AddPair( const Key& key, const Value& value )
 	{
 		int hash = ComputeHash(key);
@@ -271,14 +281,14 @@ public:
 
 
 private:
-	MapElement*	FindMapElement(const Key& key)
+	MapElement*	FindMapElement( const Key& key )
 	{
-		int hash = ComputeHash(key);
-		int index = m_HashIndices[hash];
+		int hash = ComputeHash( key );
+		int index = m_HashIndices[ hash ];
 
 		while (index >= 0)
 		{
-			MapElement& pair = m_Pairs[index];
+			MapElement& pair = m_Pairs[ index ];
 			if (pair.key == key)
 			{
 				return &pair;

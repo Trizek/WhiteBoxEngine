@@ -39,16 +39,15 @@ CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
 //CTextMesh textMesh, textMesh2;
 
 
+
+
 void CApplication::Init( uint width, uint height )
 {
 	m_pRenderPipeline = new CRenderPipeline();
 	m_pRenderPipeline->Init( width, height );
 
 
-
-	m_frameTimer.Start();
-
-	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -20.0f, 0.0f);
+	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -50.0f, 0.0f);
 
 
 #ifndef __GEAR_VR
@@ -78,10 +77,10 @@ void CApplication::Init( uint width, uint height )
 
 		CMeshHelper mh;
 
-		mh.AddPosition(Vec3(-100.0f, 0.0f, 0.0f));
-		mh.AddPosition(Vec3(-80.0f, 0.0f, 0.0f));
-		mh.AddPosition(Vec3(-80.0f, 0.0f, 20.0f));
-		mh.AddPosition(Vec3(-100.0f, 0.0f, 20.0f));
+		mh.AddPosition(Vec3(0.0f, 0.0f, 0.0f));
+		mh.AddPosition(Vec3(20.0f, 0.0f, 0.0f));
+		mh.AddPosition(Vec3(20.0f, 0.0f, 20.0f));
+		mh.AddPosition(Vec3(0.0f, 0.0f, 20.0f));
 		mh.AddMeshPart();
 
 		// 	mh.AddColor(Vec3(1, 0, 0));
@@ -139,10 +138,7 @@ float angle = 0;
 
 void CApplication::FrameUpdate()
 {
-	m_frameTimer.Stop();
-	float frameTime = m_frameTimer.GetDuration();
-	m_frameTimer.Start();
-
+	float frameTime = gVars->pOperatingSystem->Tick();
 	float fps = 1.0f / frameTime; (void)fps;
 
 // 	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
@@ -204,6 +200,12 @@ void CApplication::FrameUpdate()
 
 
 
+#ifdef __GEAR_VR
+	return;
+#endif
+
+
+
 
 	Transform textTransf;
 	
@@ -212,8 +214,6 @@ void CApplication::FrameUpdate()
 	//textTransf.rotation = Quat();
 
 
-	m_pRenderPipeline->mainCamera.ComputeProjectionMatrix();
-	m_pRenderPipeline->mainCamera.ComputeTransformMatrix();
 
 
 	Vec3 lightDirection = m_pRenderPipeline->mainCamera.transform.TransformVector(Vec3(1.0f, 1.0f, 0.0f));
@@ -222,11 +222,11 @@ void CApplication::FrameUpdate()
 	lightDirection.Normalize();
 
 	{
-		SShaderProgramParams shaderParams;
+		SShaderProgramParams2 shaderParams;
 		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
 		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
 
-		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+		//CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
 	}
 
 
@@ -241,11 +241,11 @@ void CApplication::FrameUpdate()
 		t.rotation = t.rotation * Quat::CreateRotX(Degree(90.0f));
 
 
-		SShaderProgramParams shaderParams;
+		SShaderProgramParams2 shaderParams;
 		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
 		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
 
-		CRenderPipeline::AddMeshToRenderQueue(city.get(), m_pRenderPipeline->mainRenderQueue, t, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+	//	CRenderPipeline::AddMeshToRenderQueue(city.get(), m_pRenderPipeline->mainRenderQueue, t, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
 
 	}
 
@@ -266,21 +266,36 @@ void CApplication::FrameUpdate()
 		t2.position.x += 200.0f * i;
 		t2.scale = t2.scale * ((float)i / 5.0f);
 
-		SShaderProgramParams shaderParams;
+		SShaderProgramParams2 shaderParams;
 		shaderParams.intParams.push_back( TIntParam( "shaderTexture", 0 ) );
 		shaderParams.vec3Params.push_back( TVec3Param( "lightDirection", lightDirection ) );
 
 
 		if (i < 5)
 		{
-			CRenderPipeline::AddMeshToRenderQueue( ezio.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true );
+			for (size_t j = 0; j < ezio->GetPartCount(); ++j)
+			{
+				CShaderUniformsValues& uniforms = CRenderPipeline::AddRenderProxyToQueue(ezio.get(), j, m_pRenderPipeline->proxies, t2, shader.get(), true);
+			//	uniforms.SetUniformValue<int>(shader.get(), "shaderTexture", 0);
+				//uniforms.SetUniformValue<Vec3>(shader.get(), "lightDirection", lightDirection);
+			}
+
+
+			//CRenderPipeline::AddMeshToRenderQueue( ezio.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true );
 		}
 		else
 		{
-			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, whiteshader.get(), shaderParams, true );
+			for (size_t j = 0; j < meca->GetPartCount(); ++j)
+			{
+				CShaderUniformsValues& uniforms = CRenderPipeline::AddRenderProxyToQueue(meca.get(), j, m_pRenderPipeline->proxies, t2, shader.get(), true);
+				//uniforms.SetUniformValue<int>(shader.get(), "shaderTexture", 0);
+				//uniforms.SetUniformValue<Vec3>(shader.get(), "lightDirection", lightDirection);
+			}
+
+			//CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, whiteshader.get(), shaderParams, true );
 			
-			SShaderProgramParams params;
-			CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, detourshader.get(), params, false );
+			SShaderProgramParams2 params;
+			//CRenderPipeline::AddMeshToRenderQueue( meca.get(), m_pRenderPipeline->mainRenderQueue, t2, m_pRenderPipeline->mainCamera.inverseTransformMatrix, detourshader.get(), params, false );
 		}
 	}
 
@@ -289,12 +304,18 @@ void CApplication::FrameUpdate()
 	lightDirection.Normalize();
 
 	{
-		SShaderProgramParams shaderParams;
-		shaderParams.intParams.push_back(TIntParam("shaderTexture", 0));
-		shaderParams.vec3Params.push_back(TVec3Param("lightDirection", lightDirection));
 
-		CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
-	//	CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, textTransf, m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
+		static float a = 0.0f;
+		a = a + 30.0f * frameTime;
+		Transform tt;
+		tt.rotation = Quat::CreateRotZ( Degree(0.0f) );
+
+		CRenderPipeline::AddRenderProxyToQueue(quad, 0, m_pRenderPipeline->proxies, tt, shader.get(), true);
+
+
+		//CRenderPipeline::AddMeshToRenderQueue(quad, m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, shader.get(), shaderParams, true);
+
+		//	CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, textTransf, m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
 	//	CRenderPipeline::AddMeshToRenderQueue(const_cast<CMesh*>(textMesh2.GetMesh().get()), m_pRenderPipeline->mainRenderQueue, Transform(), m_pRenderPipeline->mainCamera.inverseTransformMatrix, textProgram.get(), shaderParams, true);
 
 	}

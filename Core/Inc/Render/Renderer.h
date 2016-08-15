@@ -67,14 +67,25 @@ public:
 	void	DestroyProgram( void* pProgramId );
 	void	BindProgram( void* pProgramId );
 
+	// Uniforms
+	int		GetUniformLocation( void* pProgramId, const String& name );
+
+	void	SetUniformInt( void* pProgramId, int location, int number );
+	void	SetUniformVec3( void* pProgramId, int location, const Vec3& vec );
+	void	SetUniformMatrix44( void* pProgramId, int location, const Matrix44& matrix );
+
 	void	SetUniformInt( void* pProgramId, const String& name, int number );
 	void	SetUniformVec3( void* pProgramId, const String& name, const Vec3& vec );
 	void	SetUniformMatrix44( void* pProgramId, const String& name, const Matrix44& matrix );
 
-	void*	CreateUniformBuffer( size_t size, void* pData );
-	void*	LockUniformBuffer( void* pBufferId );
-	void	UnlockUniformBuffer( void* pBufferId );
-	void	UseUniformBuffer( void* pBufferId );
+	// return the binding index
+	int		BindUniformBlockToIndex( void* pProgramId, const String& name );
+	void	BindUniformBuffer( void* pBufferId, int bindingIndex );
+	void*	CreateUniformBuffer( size_t size );
+	void	DestroyUniformBuffer( void* pBufferId );
+	void*	LockUniformBuffer( void* pBufferId, size_t offset, size_t size );
+	void	UnlockUniformBuffer();
+
 	
 	// Matrix
 	void	ComputeProjectionMatrix( float near, float far, float w, float h, Matrix44& projMatrix );

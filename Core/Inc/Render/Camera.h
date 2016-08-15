@@ -9,7 +9,7 @@ class CCamera
 {
 public:
 	void				ComputeProjectionMatrix();
-	void				ComputeTransformMatrix();
+	void				ComputeInverseTransformMatrix();
 
 	Transform			transform;
 

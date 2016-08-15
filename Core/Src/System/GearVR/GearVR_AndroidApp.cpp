@@ -38,6 +38,9 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 
 #include "System/GearVR/WhiteBoxGearLibrary.h"
 
+#include "Application.h"
+#include "GlobalVariables.h"
+
 extern "C"
 {
 #include "VrApi.h"
@@ -46,6 +49,8 @@ extern "C"
 #include "SystemActivities.h"
 }
 
+
+using namespace WhiteBox;
 
 #if !defined( EGL_OPENGL_ES3_BIT_KHR )
 #define EGL_OPENGL_ES3_BIT_KHR		0x0040
@@ -1539,7 +1544,8 @@ static ovrFrameParms ovrRenderer_RenderFrame( ovrRenderer * renderer, const ovrJ
 		GL( glBindVertexArray( 0 ) );
 		GL( glUseProgram( 0 ) );
 
-		WBGL_Update();
+		
+		gVars->pApplication->FrameUpdate();
 
 		// Explicitly clear the border texels to black because OpenGL-ES does not support GL_CLAMP_TO_BORDER.
 		{
@@ -2351,7 +2357,7 @@ void * AppThreadFunction( void * parm )
 	appState.UseMultiview &= ( glExtensions.multi_view &&
 							vrapi_GetSystemPropertyInt( &appState.Java, VRAPI_SYS_PROP_MULTIVIEW_AVAILABLE ) );
 
-	ALOGV( "AppState UseMultiview : %d", appState.UseMultiview );
+	ALOGE( "AppState UseMultiview : %d", appState.UseMultiview );
 
 	ovrPerformanceParms perfParms = vrapi_DefaultPerformanceParms();
 	perfParms.CpuLevel = CPU_LEVEL;

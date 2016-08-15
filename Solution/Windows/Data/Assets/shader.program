@@ -11,8 +11,6 @@ Program
 	}
 
 
-
-
 	Attribute
 	{
 		name = "inputPosition"
@@ -28,4 +26,23 @@ Program
 		name = "uv0"
 	}
 
+	Uniform
+	{
+		name = "SceneMatrices"
+		type = "Buffer"
+		size = 64
+	}
+
+	Uniform
+	{
+		name = "Lighting"
+		type = "Buffer"
+		size = 24
+	}
+
+	Uniform
+	{
+		name = "modelViewMatrix"
+		type = "Matrix4x4"
+	}
 }

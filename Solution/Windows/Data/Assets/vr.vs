@@ -21,9 +21,10 @@ in vec2 uv0;
 		uniform mat4 ViewMatrix[ NUM_VIEWS ];
 		uniform mat4 ProjectionMatrix;
 	} sm;
+	uniform mat4 modelMatrix;
 #else
-	uniform mat4 modelViewMatrix;
 	uniform mat4 projectionMatrix;
+	uniform mat4 modelViewMatrix;
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +38,4 @@ void main(void)
 	gl_Position = modelViewMatrix * vec4(inputPosition, 1.0f);
 	gl_Position = projectionMatrix * gl_Position;	
 #endif
-
-
 }

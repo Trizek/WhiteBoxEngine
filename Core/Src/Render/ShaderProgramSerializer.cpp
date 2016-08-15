@@ -33,6 +33,38 @@ IResource*	CShaderProgramSerializer::Load( ISerializer& serializer, const CResou
 			serializer.EndGroup();
 		}
 
+		// Uniform
+		while ( serializer.BeginGroup("Uniform") )
+		{
+			int	size = 0;
+
+			String uniformName;
+			serializer.Value( "name", uniformName );
+
+			String uniformTypeStr;
+			serializer.Value( "type", uniformTypeStr );
+
+			EUniformType uniformType = EUniformType::Int;
+			if ( uniformTypeStr == "Vector3" )
+			{
+				uniformType = EUniformType::Vector3;
+			}
+			else if ( uniformTypeStr == "Matrix4x4" )
+			{ 
+				uniformType = EUniformType::Matrix4x4;
+			}
+			else if ( uniformTypeStr == "Buffer" )
+			{
+				uniformType = EUniformType::Buffer;
+				
+				serializer.Value( "size", size );
+			}
+
+			pShaderProgram->AddUniformInfo( uniformName, uniformType, size );
+
+			serializer.EndGroup();
+		}
+
 		serializer.EndGroup();
 	}
 

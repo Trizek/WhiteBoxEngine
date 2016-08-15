@@ -3,9 +3,19 @@
 #include "GlobalVariables.h"
 
 
+size_t	s_uniformSize[] =
+{
+	sizeof(int),
+	sizeof(WhiteBox::Vec3),
+	sizeof(WhiteBox::Matrix44),
+	sizeof(void*), // hold the pointer for the uniform buffer
+};
+
 WHITEBOX_BEGIN
 
 CShaderProgram::CShaderProgram()
+	: m_uniformCount(0)
+	, m_uniformsSize(0)
 {
 	m_pProgramId = gVars->pRenderer->CreateProgram();
 }
@@ -38,11 +48,27 @@ bool	CShaderProgram::LinkProgram( String& errorMessage )
 	{
 		gVars->pRenderer->BindAttribute( m_pProgramId, m_attributes[ i ], i );
 	}
-
+	
 	bool bSuccess = gVars->pRenderer->LinkProgram( m_pProgramId, errorMessage );
 	if ( !bSuccess )
 	{
 		printf( "Program link error : %s\n", errorMessage.c_str() );
+		return bSuccess;
+	}
+
+	for ( auto it = m_uniformIndices.GetConstIterator(); it.IsValid(); it.MoveNext() )
+	{
+		SUniformInfo& uniformInfo = m_uniformInfos[ it.GetValue() ];
+		if ( uniformInfo.type == EUniformType::Buffer )
+		{
+			uniformInfo.binding = gVars->pRenderer->BindUniformBlockToIndex( m_pProgramId, it.GetKey() );
+			uniformInfo.location = uniformInfo.binding;
+		}
+		else
+		{
+			uniformInfo.location = gVars->pRenderer->GetUniformLocation( m_pProgramId, it.GetKey() );
+			uniformInfo.binding = uniformInfo.location;
+		}
 	}
 
 	return bSuccess;
@@ -61,6 +87,39 @@ void	CShaderProgram::AddShader( CShaderPtr shader )
 void	CShaderProgram::AddAttribute( const String& attribute )
 {
 	m_attributes.push_back( attribute );
+}
+
+void	CShaderProgram::AddUniformInfo( const String& name, EUniformType type, size_t size )
+{
+	m_uniformIndices[ name ] = m_uniformCount;
+	SUniformInfo& uniformInfo = m_uniformInfos[ m_uniformCount++ ];
+	uniformInfo.type = type;
+	uniformInfo.offset = m_uniformsSize;
+	uniformInfo.size = ( type == EUniformType::Buffer )? size : 0;
+	m_uniformsSize += s_uniformSize[ (size_t)type ];
+}
+
+size_t	CShaderProgram::GetUniformCount() const
+{
+	return m_uniformCount;
+}
+
+const SUniformInfo&		CShaderProgram::GetUniformInfo( size_t index ) const
+{
+	return m_uniformInfos[ index ];
+}
+
+
+const SUniformInfo*		CShaderProgram::GetUniformInfo( const String& name ) const
+{
+	const int* findRes = m_uniformIndices.FindElement( name );
+	return ( findRes == nullptr )? nullptr : &m_uniformInfos[ *findRes ];
+}
+
+int						CShaderProgram::GetUniformLocation( const String& name ) const
+{
+	const SUniformInfo*	pUniformInfo = GetUniformInfo( name );
+	return ( pUniformInfo == nullptr )? -1 : pUniformInfo->location;
 }
 
 void*	CShaderProgram::GetProgramId() const

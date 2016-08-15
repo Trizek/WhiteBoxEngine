@@ -45,9 +45,13 @@ public:
 	bool	IsPressingKey(Key key);
 	bool	JustPressedKey(Key key);
 
+	// return frame time since last tick
+	float	Tick();
+
 private:
 #ifndef __GEAR_VR
 	void*	m_pSpecificData;
+	CTimer	m_frameTimer;
 #endif
 };
 

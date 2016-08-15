@@ -431,5 +431,11 @@
     <ClCompile Include="..\..\..\Core\Src\Types\WhiteBoxString.cpp">
       <Filter>Fichiers sources\Core\Types</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\GearVR_AndroidApp.cpp">
+      <Filter>Fichiers sources\Core\System\GearVR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\System\GearVR\GearVR_OperatingSystem.cpp">
+      <Filter>Fichiers sources\Core\System\GearVR</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

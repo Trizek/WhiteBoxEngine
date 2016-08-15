@@ -43,6 +43,8 @@ public:
 		: m_boundVertexBuffer(0)
 		, m_boundIndexBuffer(nullptr)
 	{
+		m_uniformBindingsCount = 0;
+
 		for( size_t iTex = 0 ; iTex < CRenderer::MAX_TEXTURES_COUNT ; ++iTex )
 		{
 			m_boundTextures[ iTex ] = 0;
@@ -51,11 +53,13 @@ public:
 
 
 
+
 	GLuint	m_boundVertexBuffer;
 	SIndexBufferId*	m_boundIndexBuffer;
 	GLuint	m_boundTextures[ CRenderer::MAX_TEXTURES_COUNT ];
 	
-
+	int					m_uniformBindingsCount;
+	Map< String, int >	m_uniformBlockBindingIndices;
 };
 
 
@@ -598,6 +602,37 @@ void	CRenderer::BindProgram( void* pProgramId )
 	}
 }
 
+
+int	CRenderer::GetUniformLocation( void* pProgramId, const String& name )
+{
+		return glGetUniformLocation( *static_cast<GLuint*>(pProgramId), name.c_str() );
+}
+
+void	CRenderer::SetUniformInt( void* pProgramId, int location, int number )
+{
+	if ( pProgramId != nullptr )
+	{
+		glUniform1i( location, number );
+	}
+}
+
+void	CRenderer::SetUniformVec3( void* pProgramId, int location, const Vec3& vec )
+{
+	if ( pProgramId != nullptr )
+	{
+		glUniform3fv( location, 1, &vec.x );
+	}
+}
+
+void	CRenderer::SetUniformMatrix44( void* pProgramId, int location, const Matrix44& matrix )
+{
+	if ( pProgramId != nullptr )
+	{
+		glUniformMatrix4fv( location, 1, false, &matrix.a11 );
+	}
+}
+
+
 void	CRenderer::SetUniformInt( void* pProgramId, const String& name, int number )
 {
 	if ( pProgramId != nullptr )
@@ -625,26 +660,77 @@ void	CRenderer::SetUniformMatrix44( void* pProgramId, const String& name, const 
 	}
 }
 
-
-void*	CRenderer::CreateUniformBuffer( size_t size, void* pData )
+int		CRenderer::BindUniformBlockToIndex( void* pProgramId, const String& name )
 {
-	return nullptr;
+	CSpecificData* pData = static_cast< CSpecificData* >( m_pSpecificData );
+
+	int bindingIndex;
+
+	int* it = pData->m_uniformBlockBindingIndices.FindElement( name );
+	if ( it != nullptr )
+	{
+		bindingIndex = *it;
+	}
+	else
+	{
+		bindingIndex = pData->m_uniformBindingsCount++;
+		pData->m_uniformBlockBindingIndices[ name ] = bindingIndex;
+	}
+
+	int blockIndex = glGetUniformBlockIndex( *static_cast<GLuint*>(pProgramId), name.c_str() );
+	glUniformBlockBinding( *static_cast<GLuint*>(pProgramId), blockIndex, bindingIndex );
+
+	return bindingIndex;
 }
 
-void*	CRenderer::LockUniformBuffer( void* pBufferId )
+void	CRenderer::BindUniformBuffer( void* pBufferId, int bindingIndex )
 {
-	return nullptr;
+	glBindBufferBase( GL_UNIFORM_BUFFER, bindingIndex, *static_cast<GLuint*>(pBufferId) );
 }
 
-void	CRenderer::UnlockUniformBuffer( void* pBufferId )
+void*	CRenderer::CreateUniformBuffer( size_t size )
 {
+	GLuint* pBufferId = new GLuint(0);
 
+	// Create buffer
+	glGenBuffers( 1, pBufferId );
+	
+	// if pData is NULL, only allocate memory (for future write)
+	glBindBuffer( GL_UNIFORM_BUFFER, *pBufferId );
+	glBufferData( GL_UNIFORM_BUFFER, (GLsizeiptr)size, nullptr, GL_DYNAMIC_DRAW );
+	glBindBuffer( GL_UNIFORM_BUFFER, 0 );
+	
+	return pBufferId;
+}
+void	CRenderer::DestroyUniformBuffer( void* pBufferId )
+{
+	if ( pBufferId != NULL )
+	{
+		glDeleteBuffers( 1, (GLuint*)pBufferId );
+	
+		delete (GLuint*)pBufferId;
+	}
 }
 
-void	CRenderer::UseUniformBuffer( void* pBufferId )
+void*	CRenderer::LockUniformBuffer( void* pBufferId, size_t offset, size_t size )
 {
+	glBindBuffer( GL_UNIFORM_BUFFER, *static_cast<GLuint*>(pBufferId) );
 
+// #ifndef __GEAR_VR
+// 	return glMapBuffer( GL_UNIFORM_BUFFER, GL_WRITE_ONLY );
+// #else
+// 	
+// #endif
+	return glMapBufferRange( GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT );
 }
+
+void	CRenderer::UnlockUniformBuffer()
+{
+	glUnmapBuffer( GL_UNIFORM_BUFFER );
+	glBindBuffer( GL_UNIFORM_BUFFER, 0 );
+}
+
+
 
 
 void	CRenderer::ComputeProjectionMatrix( float near, float far, float w, float h, Matrix44& projMatrix )

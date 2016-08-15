@@ -18,8 +18,6 @@ public:
 
 private:
 	class CRenderPipeline*	m_pRenderPipeline;
-
-	CTimer	m_frameTimer;
 };
 
 WHITEBOX_END

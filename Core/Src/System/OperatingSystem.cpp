@@ -43,20 +43,8 @@ float	CTimer::GetDuration() const
 #endif
 }
 
-#ifdef __GEAR_VR
 
-COperatingSystem::COperatingSystem(){}
-COperatingSystem::~COperatingSystem(){}
-
-void	COperatingSystem::Init(uint width, uint height){}
-void	COperatingSystem::Reshape(uint width, uint height){}
-
-Vec2	COperatingSystem::GetMousePos() { return Vec2(); }
-bool	COperatingSystem::GetMouseButton(int button) { return false; }
-bool	COperatingSystem::IsPressingKey(Key key) { return false; }
-bool	COperatingSystem::JustPressedKey(Key key) { return false; }
-
-#else
+#ifndef __GEAR_VR
 
 struct SSDLData
 {
@@ -188,7 +176,9 @@ void	COperatingSystem::Init(uint width, uint height)
 		return;
 	}
 
-	gVars->pApplication->Init( width, height );	
+	gVars->pApplication->Init( width, height );
+
+	m_frameTimer.Start();
 
 	while (ProcessEvents(*this, static_cast<SSDLData*>(m_pSpecificData)))
 	{
@@ -236,6 +226,16 @@ bool	COperatingSystem::IsPressingKey( Key key )
 }
 
 bool	COperatingSystem::JustPressedKey(Key key) { return false; }
+
+
+float	COperatingSystem::Tick()
+{
+	m_frameTimer.Stop();
+	float frameTime = m_frameTimer.GetDuration();
+	m_frameTimer.Start();
+
+	return frameTime;
+}
 
 #endif
 
