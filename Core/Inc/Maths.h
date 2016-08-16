@@ -555,10 +555,64 @@ struct Matrix44
 		a14=0.0f; a24=0.0f, a34=0.0f; a44 = 1.0f;
 	}
 
+	Matrix44(const Matrix34& m)
+	{
+		a11 = m.a11;
+		a12 = m.a21;
+		a13 = m.a31;
+		a14 = 0.0f;
+
+		// Up
+		a21 = m.a12;
+		a22 = m.a22;
+		a23 = m.a32;
+		a24 = 0.0f;
+
+		// Backward
+		a31 = m.a13;
+		a32 = m.a23;
+		a33 = m.a33;
+		a34 = 0.0f;
+
+		// Position
+		a41 = m.a14;
+		a42 = m.a24;
+		a43 = m.a34;
+		a44 = 1.0f;
+	}
+
 	float a11, a12, a13, a14; // Col 1
 	float a21, a22, a23, a24; // Col 2
 	float a31, a32, a33, a34; // Col 3
 	float a41, a42, a43, a44; // Col 4
+
+	Matrix44 operator*( const Matrix44& rhs ) const
+	{
+		Matrix44 res;
+		// V1
+		res.a11 = a11*rhs.a11 + a12*rhs.a21 + a13*rhs.a31 + a14*rhs.a41;
+		res.a21 = a21*rhs.a11 + a22*rhs.a21 + a23*rhs.a31 + a24*rhs.a41;
+		res.a31 = a31*rhs.a11 + a32*rhs.a21 + a33*rhs.a31 + a34*rhs.a41;
+		res.a41 = a41*rhs.a11 + a42*rhs.a21 + a43*rhs.a31 + a44*rhs.a41;
+
+		res.a12 = a11*rhs.a12 + a12*rhs.a22 + a13*rhs.a32 + a14*rhs.a42;
+		res.a22 = a21*rhs.a12 + a22*rhs.a22 + a23*rhs.a32 + a24*rhs.a42;
+		res.a32 = a31*rhs.a12 + a32*rhs.a22 + a33*rhs.a32 + a34*rhs.a42;
+		res.a42 = a41*rhs.a12 + a42*rhs.a22 + a43*rhs.a32 + a44*rhs.a42;
+
+		res.a13 = a11*rhs.a13 + a12*rhs.a23 + a13*rhs.a33 + a14*rhs.a43;
+		res.a23 = a21*rhs.a13 + a22*rhs.a23 + a23*rhs.a33 + a24*rhs.a43;
+		res.a33 = a31*rhs.a13 + a32*rhs.a23 + a33*rhs.a33 + a34*rhs.a43;
+		res.a43 = a41*rhs.a13 + a42*rhs.a23 + a43*rhs.a33 + a44*rhs.a43;
+
+		res.a14 = a11*rhs.a14 + a12*rhs.a24 + a13*rhs.a34 + a14*rhs.a44;
+		res.a24 = a21*rhs.a14 + a22*rhs.a24 + a23*rhs.a34 + a24*rhs.a44;
+		res.a34 = a31*rhs.a14 + a32*rhs.a24 + a33*rhs.a34 + a34*rhs.a44;
+		res.a44 = a41*rhs.a14 + a42*rhs.a24 + a43*rhs.a34 + a44*rhs.a44;
+
+
+		return res;
+	}
 };
 
 struct Color

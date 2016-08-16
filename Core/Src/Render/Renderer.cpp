@@ -697,7 +697,7 @@ void*	CRenderer::CreateUniformBuffer( size_t size )
 	
 	// if pData is NULL, only allocate memory (for future write)
 	glBindBuffer( GL_UNIFORM_BUFFER, *pBufferId );
-	glBufferData( GL_UNIFORM_BUFFER, (GLsizeiptr)size, nullptr, GL_DYNAMIC_DRAW );
+	glBufferData( GL_UNIFORM_BUFFER, (GLsizeiptr)size, nullptr, GL_STATIC_DRAW );
 	glBindBuffer( GL_UNIFORM_BUFFER, 0 );
 	
 	return pBufferId;
@@ -784,9 +784,9 @@ void	CRenderer::ComputeProjectionMatrix( float near, float far, float w, float h
 void	CRenderer::FormatTransformMatrix( const Matrix34& inMatrix, Matrix44& outMatrix )
 {
 	Matrix34 m1;
-	m1.SetAxisX(Vec3(1.0f, 0.0f, 0.0f));
-	m1.SetAxisY(Vec3(0.0f, 0.0f, -1.0f));
-	m1.SetAxisZ(Vec3(0.0f, 1.0f, 0.0f));
+ 	m1.SetAxisX(Vec3(1.0f, 0.0f, 0.0f));
+ 	m1.SetAxisY(Vec3(0.0f, 0.0f, -1.0f));
+ 	m1.SetAxisZ(Vec3(0.0f, 1.0f, 0.0f));
 
 	Matrix34 matrix = m1 * inMatrix;
 
@@ -913,7 +913,6 @@ void	CRenderer::RenderBoundTriangles( size_t indexCount )
 {
 	glDrawElements( GL_TRIANGLES, (GLsizei)indexCount, GL_UNSIGNED_INT, (void*)0 );
 	//glEnd();
-	//glFlush();
 }
 
 void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color )

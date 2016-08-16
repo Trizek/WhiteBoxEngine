@@ -14,16 +14,18 @@ class CRenderer;
 class COperatingSystem;
 class CApplication;
 class CResourceManager;
+class CLogSystem;
 struct SGlobalVariables
 {
 	static void Init();
 
-	CFileSystem* pFileSystem;
-	CFontSystem*	pFontSystem;
-	CRenderer*	pRenderer;
+	CFileSystem*		pFileSystem;
+	CLogSystem*			pLogSystem;
+	CFontSystem*		pFontSystem;
+	CRenderer*			pRenderer;
 	COperatingSystem*	pOperatingSystem;
-	CApplication*	pApplication;
-	CResourceManager* pResourceManager;
+	CApplication*		pApplication;
+	CResourceManager*	pResourceManager;
 };
 
 extern SGlobalVariables* gVars;

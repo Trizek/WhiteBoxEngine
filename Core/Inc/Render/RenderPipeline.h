@@ -154,7 +154,7 @@ public:
 
 	TRenderProxies			proxies;
 
-private:
+//private:
 	size_t					m_drawCalls;
 	size_t					m_polyCount;
 

@@ -176,7 +176,7 @@ void	COperatingSystem::Init(uint width, uint height)
 		return;
 	}
 
-	gVars->pApplication->Init( width, height );
+	gVars->pApplication->InitApplication( width, height );
 
 	m_frameTimer.Start();
 

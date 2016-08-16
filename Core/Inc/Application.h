@@ -11,12 +11,11 @@ class CApplication
 public:
 	CApplication();
 
-	void	Init( uint width, uint height );
+	void	InitApplication( uint width, uint height );
 	void	Resize( uint width, uint height );
 
 	void	FrameUpdate();
 
-private:
 	class CRenderPipeline*	m_pRenderPipeline;
 };
 

@@ -136,6 +136,7 @@
     <ClInclude Include="..\..\..\Core\Inc\GlobalVariables.h" />
     <ClInclude Include="..\..\..\Core\Inc\Handle.h" />
     <ClInclude Include="..\..\..\Core\Inc\InputManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\LogSystem\LogSystem.h" />
     <ClInclude Include="..\..\..\Core\Inc\maths.h" />
     <ClInclude Include="..\..\..\Core\Inc\MeshRenderComponent.h" />
     <ClInclude Include="..\..\..\Core\Inc\Object.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="..\..\..\Core\Src\DataStream.cpp" />
     <ClCompile Include="..\..\..\Core\Src\FontSystem.cpp" />
     <ClCompile Include="..\..\..\Core\Src\GlobalVariables.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\LogSystem\LogSystem.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Maths.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Render\Font.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Render\FontSerializer.cpp" />

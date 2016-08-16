@@ -4,8 +4,17 @@
 #include "GlobalVariables.h"
 #include "Render/Material.h"
 #include "Render/Mesh.h"
+#include "System/OperatingSystem.h"
 
 WHITEBOX_BEGIN
+
+#ifdef __GEAR_VR
+struct SceneMatrices
+{
+	Matrix44	eyeViewMatrices[2];
+	Matrix44	projectionMatrix;
+};
+#endif
 
 SRenderUnit&	CRenderPipeline::AddRenderUnit( TRenderQueue2& renderQueue )
 {
@@ -44,68 +53,7 @@ void			CRenderPipeline::SortRenderQueue( TRenderQueue2& renderQueue )
 
 void			CRenderPipeline::RenderQueue( const TRenderQueue2& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount )
 {
-	drawCalls = renderQueue.size();
-	polyCount = 0;
 
-
-	const SRenderUnit* pLastRenderUnit = nullptr;
-	for (size_t i = 0; i < renderQueue.size(); ++i)
-	{
-		const SRenderUnit& renderUnit = renderQueue[ renderQueue[ i ].index ];
-
-		gVars->pRenderer->BindIndexBuffer( renderUnit.pIndexBuffer->GetBufferId(), renderUnit.pIndexBuffer->GetIndexCount() );
-
-		renderUnit.pShaderProgram->Bind(true);
-
-		gVars->pRenderer->SetUniformMatrix44( renderUnit.pShaderProgram->GetProgramId(), "projectionMatrix", projectionMatrix );
-		gVars->pRenderer->SetUniformMatrix44( renderUnit.pShaderProgram->GetProgramId(), "modelViewMatrix", renderUnit.transformMatrix );
-
-		gVars->pRenderer->CullFace( renderUnit.bCullBackFace );
-
-		if ( renderUnit.pMaterial != nullptr )
-		{
-			for (size_t iTex = 0; iTex < CMaterial::MAX_TEXTURE_LAYER; ++iTex)
-			{
-				CTexturePtr pTexture = renderUnit.pMaterial->m_textureLayers[iTex].m_pTexture;
-				if (!pTexture)
-				{
-					break;
-				}
-
-				gVars->pRenderer->BindTexture(pTexture->GetTextureId(), iTex);
-
-// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-// 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-// 
-//   				glEnable(GL_BLEND);
-// 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-			}
-		}
-
-		for( const TIntParam& intParam : renderUnit.shaderParams.intParams )
-		{
-			gVars->pRenderer->SetUniformInt( renderUnit.pShaderProgram->GetProgramId(), intParam.first, intParam.second );
-		}
-		for( const TVec3Param& vec3Param : renderUnit.shaderParams.vec3Params )
-		{
-			gVars->pRenderer->SetUniformVec3( renderUnit.pShaderProgram->GetProgramId(), vec3Param.first, vec3Param.second );
-		}
-		for( const TMatrix44Param& matrix44Param : renderUnit.shaderParams.matrix44Params )
-		{
-			gVars->pRenderer->SetUniformMatrix44( renderUnit.pShaderProgram->GetProgramId(), matrix44Param.first, matrix44Param.second );
-		}
-
-		gVars->pRenderer->RenderBoundTriangles( renderUnit.pIndexBuffer->GetIndexCount() );
-
-		pLastRenderUnit = &renderUnit;
-
-		polyCount += renderUnit.pIndexBuffer->GetIndexCount();
-	}
 }
 
 
@@ -130,23 +78,40 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 {
 	drawCalls = renderProxies.size();
 	polyCount = 0;
-	
 
+	Matrix44	invCamMatrixFormated;
+	
+#ifdef __GEAR_VR
+ 	SceneMatrices* matrices = (SceneMatrices*)gVars->pRenderer->LockUniformBuffer(m_sceneMatUniformBufferId, 0, sizeof(SceneMatrices) );
+ 	
+	matrices->projectionMatrix = projectionMatrix;
+	matrices->eyeViewMatrices[ 0 ] = gVars->pOperatingSystem->GetInverseEyeMatrices()[ 0 ];
+	matrices->eyeViewMatrices[ 1 ] = gVars->pOperatingSystem->GetInverseEyeMatrices()[ 1 ];
+
+	Matrix44 formatInCamMatrix;
+	gVars->pRenderer->FormatTransformMatrix(invCamMatrix, formatInCamMatrix);
+	matrices->eyeViewMatrices[0] = formatInCamMatrix * matrices->eyeViewMatrices[0];
+	matrices->eyeViewMatrices[1] = formatInCamMatrix * matrices->eyeViewMatrices[1];
+
+ 	gVars->pRenderer->UnlockUniformBuffer();
+#else
 	Matrix44* matrices = (Matrix44*)gVars->pRenderer->LockUniformBuffer( m_sceneMatUniformBufferId, 0, sizeof(Matrix44) );
 	matrices[0] = projectionMatrix;
 	gVars->pRenderer->UnlockUniformBuffer();
+#endif
 
 	Vec3 lightDir(1.0f, 0.0f, 0.0f);
 
 
-	Vec3* pLightDir = (Vec3*)gVars->pRenderer->LockUniformBuffer( m_lightUniformBufferId, 0, sizeof(Vec3) );
-	*pLightDir = lightDir;
-	gVars->pRenderer->UnlockUniformBuffer();
+	//Vec3* pLightDir = (Vec3*)gVars->pRenderer->LockUniformBuffer( m_lightUniformBufferId, 0, sizeof(Vec3) );
+	//*pLightDir = lightDir;
+	//gVars->pRenderer->UnlockUniformBuffer();
 
 	SRenderProxy* pLastRenderProxy = nullptr;
 	for ( size_t i = 0; i < renderProxies.size(); ++i )
 	{
 		SRenderProxy& renderProxy = renderProxies[ i ];
+
 
 		gVars->pRenderer->BindIndexBuffer( renderProxy.pIndexBuffer->GetBufferId(), renderProxy.pIndexBuffer->GetIndexCount() );
 
@@ -154,13 +119,22 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 
 		// Uniforms
  		Matrix44 transformMatrix;
- 		gVars->pRenderer->FormatTransformMatrix( invCamMatrix * renderProxy.transformMatrix, transformMatrix);
- 		renderProxy.uniformValues.SetUniformValue< Matrix44 >( renderProxy.pShaderProgram, "modelViewMatrix", transformMatrix );
-	
-		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
-		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);
-		
-		renderProxy.uniformValues.ApplyValues( renderProxy.pShaderProgram );
+#ifndef __GEAR_VR
+		gVars->pRenderer->FormatTransformMatrix(invCamMatrix * renderProxy.transformMatrix, transformMatrix);
+
+		renderProxy.uniformValues.SetUniformValue< Matrix44 >( renderProxy.pShaderProgram, "modelViewMatrix", transformMatrix );
+#else
+		gVars->pRenderer->FormatTransformMatrix(renderProxy.transformMatrix, transformMatrix);
+
+		Matrix44 r;
+		renderProxy.uniformValues.SetUniformValue< Matrix44 >(renderProxy.pShaderProgram, "modelMatrix", renderProxy.transformMatrix);
+#endif
+ 		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
+/* 		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);*/
+
+		/*gVars->pRenderer->BindUniformBuffer(m_sceneMatUniformBufferId, 0);*/
+ 		
+ 		renderProxy.uniformValues.ApplyValues( renderProxy.pShaderProgram );
 
 		gVars->pRenderer->CullFace( renderProxy.bCullBackFace );
 
@@ -204,28 +178,40 @@ void			CRenderPipeline::Init( uint width, uint height )
 	mainCamera.pRenderTarget = gVars->pRenderer->CreateRenderWindow( 0, 0, width, height );
 
 
-	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Matrix44) * 2 );
+#ifdef __GEAR_VR
+	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(SceneMatrices) );
 	m_lightUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Vec3)  );
+#else
+	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Matrix44) );
+	m_lightUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Vec3)  );
+#endif
 }
 
 void			CRenderPipeline::Render()
 {
-	gVars->pRenderer->StartRenderFrame();
+
+
+
+
+#ifndef __GEAR_VR
+ gVars->pRenderer->StartRenderFrame();
 	gVars->pRenderer->BindRenderWindow( static_cast<CRenderWindow*>( mainCamera.pRenderTarget.get() ) );
 
-	mainCamera.ComputeProjectionMatrix();
+ 	mainCamera.ComputeProjectionMatrix();
+#endif
+	
 	mainCamera.ComputeInverseTransformMatrix();
 
- 	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix, m_drawCalls, m_polyCount );
- 	mainRenderQueue.clear();
+//  	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix, m_drawCalls, m_polyCount );
+//  	mainRenderQueue.clear();
 
 	RenderQueue(proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
-	proxies.clear();
+ 	proxies.clear();
 
 
-	gVars->pRenderer->UnbindIndexBuffer();
-	gVars->pRenderer->BindProgram( nullptr );
-	gVars->pRenderer->UnbindTexture( 0 );
+ 	gVars->pRenderer->UnbindIndexBuffer();
+ 	gVars->pRenderer->BindProgram( nullptr );
+ 	gVars->pRenderer->UnbindTexture( 0 );
 
 
 }

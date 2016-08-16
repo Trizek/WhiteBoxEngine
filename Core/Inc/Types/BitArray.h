@@ -79,6 +79,15 @@ public:
 #if defined(_WIN32) || defined(_WIN64)
 		return (int)_BitScanForward( pBitIndex, word );
 #else
+		for ( long bit = 0; bit < sizeof(word) * 8; ++bit )
+		{
+			if ( word & (1 << bit) > 0 )
+			{
+				*pBitIndex = bit;
+				return 1;
+			}
+		}
+
 		return 0;
 #endif
 	}

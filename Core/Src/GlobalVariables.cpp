@@ -6,6 +6,7 @@
 #include "System/OperatingSystem.h"
 #include "ResourceManager.h"
 #include "Application.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -16,6 +17,7 @@ void SGlobalVariables::Init()
 	gVars = new SGlobalVariables();
 
 	gVars->pFileSystem = new CFileSystem();
+	gVars->pLogSystem = new CLogSystem();
 #ifndef __GEAR_VR
 	gVars->pFontSystem = new CFontSystem();
 #endif

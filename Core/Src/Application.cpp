@@ -27,7 +27,6 @@ CApplication::CApplication()
 
 
 CMesh* quad;
-
 CMeshPtr ezio;
 CMeshPtr meca, city;
 
@@ -39,15 +38,16 @@ CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
 //CTextMesh textMesh, textMesh2;
 
 
+CMeshPtr q;
+CShaderProgramPtr pProg;
 
-
-void CApplication::Init( uint width, uint height )
+void CApplication::InitApplication( uint width, uint height )
 {
 	m_pRenderPipeline = new CRenderPipeline();
 	m_pRenderPipeline->Init( width, height );
 
 
-	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -50.0f, 0.0f);
+	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, 0.0f, 0.0f);
 
 
 #ifndef __GEAR_VR
@@ -68,6 +68,106 @@ void CApplication::Init( uint width, uint height )
 
 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
+	{
+		CMeshHelper m;
+
+		m.AddPosition(Vec3(-100.0f, 0, -100.0f));
+		m.AddPosition(Vec3(100.0f, 0, -100.0f));
+		m.AddPosition(Vec3(100.0f, 0, 100.0f));
+		m.AddPosition(Vec3(-100.0f, 0, 100.0f));
+	
+		m.AddUV0(Vec2(0, 0));
+		m.AddUV0(Vec2(1, 0));
+		m.AddUV0(Vec2(1, 1));
+		m.AddUV0(Vec2(0, 1));
+
+		m.AddNormal(Vec3(0, 1, 0));
+		m.AddNormal(Vec3(0, 1, 0));
+		m.AddNormal(Vec3(0, 1, 0));
+		m.AddNormal(Vec3(0, 1, 0));
+
+		m.AddMeshPart();
+		m.GetMeshPart(0)->AddIndex(0);
+		m.GetMeshPart(0)->AddIndex(1);
+		m.GetMeshPart(0)->AddIndex(2);
+
+		m.GetMeshPart(0)->AddIndex(2);
+		m.GetMeshPart(0)->AddIndex(3);
+		m.GetMeshPart(0)->AddIndex(0);
+
+		m.GetMeshPart(0)->AddIndex(0);
+		m.GetMeshPart(0)->AddIndex(2);
+		m.GetMeshPart(0)->AddIndex(1);
+
+		m.GetMeshPart(0)->AddIndex(3);
+		m.GetMeshPart(0)->AddIndex(2);
+		m.GetMeshPart(0)->AddIndex(0);
+		
+		q = m.ConvertToMesh();
+
+
+		char const ps[] = "\nin lowp vec4 fragmentColor;\n"
+			"\nout lowp vec4 outputColor;"
+			"\nvoid main(void)"
+			"\n{"
+			"\noutputColor = vec4(0.0, 1.0, 0.0, 1.0);"
+			"\n}";
+
+		char const vs[] = "in vec3 inputPosition;"
+			"\n#if __GEAR_VR"
+			"\nuniform SceneMatrices"
+			"\n{"
+			"\nuniform mat4 ViewMatrix[NUM_VIEWS];"
+			"\nuniform mat4 ProjectionMatrix;"
+			"\n} sm;"
+			"\nuniform mat4 modelMatrix;"
+			"\n#else"
+			"\nuniform mat4 modelViewMatrix;"
+			"\nuniform SceneMatrices"
+			"\n{"
+			"\nuniform mat4 projectionMatrix;"
+			"\n} sm;"
+			"\n#endif"
+			"\nout vec4 fragmentColor;\n"
+			"\nvoid main(void)"
+			"\n{"
+			"\n#if __GEAR_VR"
+			"\ngl_Position = sm.ProjectionMatrix * (sm.ViewMatrix[VIEW_ID] * (modelMatrix * (vec4(inputPosition, 1.0))));"
+			"\n#else"
+			"\ngl_Position = modelViewMatrix * vec4(inputPosition, 1.0f);"
+			"\ngl_Position = sm.projectionMatrix * gl_Position;"
+			"\nfragmentColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);"
+			"\n#endif"
+			"\n}";
+
+		String err;
+
+		void* psId = gVars->pRenderer->CreateShader(ps, EShaderType::PS);
+		void* vsId = gVars->pRenderer->CreateShader(vs, EShaderType::VS);
+
+
+
+		pProg = new CShaderProgram();
+		pProg->AddShader(new CShader(EShaderType::PS, psId));
+		pProg->AddShader(new CShader(EShaderType::VS, vsId));
+
+		pProg->AddAttribute("position");
+
+		pProg->AddUniformInfo("SceneMatrices", EUniformType::Buffer, sizeof(Matrix44) * 3);
+#ifndef __GEAR_VR
+		pProg->AddUniformInfo("modelViewMatrix", EUniformType::Matrix4x4, 0);
+#else
+		pProg->AddUniformInfo("modelMatrix", EUniformType::Matrix4x4, 0);
+#endif
+
+		gVars->pRenderer->CompileShader(psId, err);
+		gVars->pRenderer->CompileShader(vsId, err);
+		pProg->LinkProgram(err);
+
+
+	}
+
+
 
 
 
@@ -77,10 +177,10 @@ void CApplication::Init( uint width, uint height )
 
 		CMeshHelper mh;
 
-		mh.AddPosition(Vec3(0.0f, 0.0f, 0.0f));
-		mh.AddPosition(Vec3(20.0f, 0.0f, 0.0f));
-		mh.AddPosition(Vec3(20.0f, 0.0f, 20.0f));
-		mh.AddPosition(Vec3(0.0f, 0.0f, 20.0f));
+		mh.AddPosition(Vec3(0.0f, 500.0f, 0.0f));
+		mh.AddPosition(Vec3(20.0f, 500.0f, 0.0f));
+		mh.AddPosition(Vec3(20.0f, 500.0f, 20.0f));
+		mh.AddPosition(Vec3(0.0f, 500.0f, 20.0f));
 		mh.AddMeshPart();
 
 		// 	mh.AddColor(Vec3(1, 0, 0));
@@ -198,11 +298,30 @@ void CApplication::FrameUpdate()
 		m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 500.0f * frameTime;
 	}
 
+	m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 10.0f * frameTime;
+
+
+
+	static float aaa = 0;
+	aaa += 200.0f * frameTime;
+	Transform ttt;
+	ttt.rotation = Quat::CreateRotZ(Degree(aaa));
+	ttt.position.x = 100.0f;
+
+ 	if (pProg)
+ 		CRenderPipeline::AddRenderProxyToQueue(q.get(), 0, m_pRenderPipeline->proxies, ttt, pProg.get(), true);
+
+
+	m_pRenderPipeline->Render();
+
+
 
 
 #ifdef __GEAR_VR
 	return;
 #endif
+
+	return;
 
 
 

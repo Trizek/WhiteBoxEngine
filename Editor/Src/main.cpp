@@ -1,12 +1,19 @@
 
 #include "GlobalVariables.h"
 #include "System/OperatingSystem.h"
+#include "LogSystem/LogSystem.h"
 
+using namespace WhiteBox;
 
 int main(int argc, char **argv)
 {
+
+
 	WhiteBox::SGlobalVariables::Init();
 	WhiteBox::gVars->pOperatingSystem->Init( 1600, 800 );
+
+
+	
 }
 
 #if 0

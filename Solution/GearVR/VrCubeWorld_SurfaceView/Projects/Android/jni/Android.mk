@@ -7,11 +7,12 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE			:= vrcubeworld
-LOCAL_CFLAGS			:= -std=c++11 -Werror -D __GEAR_VR
+LOCAL_CFLAGS			:= -std=c++14  -D __GEAR_VR
 LOCAL_SRC_FILES			:=  $(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Render/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/System/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/System/GearVR/*.cpp)) \
+	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/LogSystem/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Types/*.cpp)) \
 #../../../../../../../../Src/*.cp
 LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL		# include default libraries

@@ -55,6 +55,12 @@
     <Filter Include="Fichiers sources\Core\Types">
       <UniqueIdentifier>{a845c56b-2e5f-49cf-8588-74d911d72d3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Core\LogSystem">
+      <UniqueIdentifier>{68c5c7cf-5a60-47f5-ae19-f74c223dccf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core\LogSystem">
+      <UniqueIdentifier>{8fa3d67e-39d7-4a6b-b4f0-878385bf1253}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Inc\Application.h">
@@ -282,6 +288,9 @@
     <ClInclude Include="..\..\..\Core\Inc\Types\SparseArray.h">
       <Filter>Fichiers d%27en-tête\Core\Types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\LogSystem\LogSystem.h">
+      <Filter>Fichiers d%27en-tête\Core\LogSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Application.cpp">
@@ -436,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\System\GearVR\GearVR_OperatingSystem.cpp">
       <Filter>Fichiers sources\Core\System\GearVR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\LogSystem\LogSystem.cpp">
+      <Filter>Fichiers sources\Core\LogSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

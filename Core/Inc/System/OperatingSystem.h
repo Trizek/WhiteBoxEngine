@@ -52,6 +52,13 @@ private:
 #ifndef __GEAR_VR
 	void*	m_pSpecificData;
 	CTimer	m_frameTimer;
+#else
+public:
+	Matrix44*	GetInverseEyeMatrices();
+
+
+private:
+	Matrix44	m_inverseEyeTransforms[ 2 ];
 #endif
 };
 
