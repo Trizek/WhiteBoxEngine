@@ -43,11 +43,18 @@ CShaderProgramPtr pProg;
 
 void CApplication::InitApplication( uint width, uint height )
 {
+
+	CDataStream stream;
+	gVars->pOperatingSystem->GetDataStream("toto.txt", stream);
+
+
+
+
 	m_pRenderPipeline = new CRenderPipeline();
 	m_pRenderPipeline->Init( width, height );
 
 
-	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, 0.0f, 0.0f);
+	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -20.0f, 0.0f);
 
 
 #ifndef __GEAR_VR
@@ -57,16 +64,16 @@ void CApplication::InitApplication( uint width, uint height )
 
 	gVars->pResourceManager->ParseResources( "Resources" );
 
-	ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
-	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
+	//ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
+	//ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
 	meca = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
-	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
-
-	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
-	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
-	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("vr.program"); // white.program");
-
-	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
+//	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
+// 
+// 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
+// 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
+// 	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("vr.program"); // white.program");
+// 
+// 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
 	{
 		CMeshHelper m;
@@ -152,6 +159,7 @@ void CApplication::InitApplication( uint width, uint height )
 		pProg->AddShader(new CShader(EShaderType::VS, vsId));
 
 		pProg->AddAttribute("position");
+		pProg->AddAttribute("normal");
 
 		pProg->AddUniformInfo("SceneMatrices", EUniformType::Buffer, sizeof(Matrix44) * 3);
 #ifndef __GEAR_VR
@@ -298,18 +306,24 @@ void CApplication::FrameUpdate()
 		m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 500.0f * frameTime;
 	}
 
-	m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 10.0f * frameTime;
+	//m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 4.0f * frameTime;
 
 
 
 	static float aaa = 0;
 	aaa += 200.0f * frameTime;
 	Transform ttt;
-	ttt.rotation = Quat::CreateRotZ(Degree(aaa));
-	ttt.position.x = 100.0f;
+	ttt.rotation = Quat::CreateRotZ(Degree(aaa)) * Quat::CreateRotX(Degree(90.0f));
+	ttt.position.z = -5.0f; // 100.0f;
+	ttt.position.y = -5.0f;
+	ttt.scale = 5.0f;
 
- 	if (pProg)
- 		CRenderPipeline::AddRenderProxyToQueue(q.get(), 0, m_pRenderPipeline->proxies, ttt, pProg.get(), true);
+	if (pProg)
+	{
+
+		for (size_t i = 0; i< meca->GetPartCount();++i)
+		CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, pProg.get(), true);
+	}
 
 
 	m_pRenderPipeline->Render();

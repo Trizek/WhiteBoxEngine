@@ -185,7 +185,7 @@ void	CFileSystem::BrowseDirectory( const String& dirPath, IFileBrowser& fileBrow
 
 	if ( (hFind = FindFirstFile(windowsDirPathW, &fdFile)) == INVALID_HANDLE_VALUE )
 	{
-		printf( "Path not found: [%s]\n", dirPath.c_str() );
+		WbLog( "Default",  "Path not found: [%s]\n", dirPath.c_str() );
 		return;
 	}
 
@@ -340,7 +340,7 @@ void	CFileSystem::MakeDir( const String& dirPath )
 
 
 #include <errno.h> // for errno
-#include <stdio.h> // for printf
+#include <stdio.h> // for WbLog( "Default",
 #include <stdlib.h> // for EXIT_*
 #include <string.h> // for strerror
 #include <sys/stat.h> // for stat and mkdir

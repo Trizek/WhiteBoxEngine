@@ -5,6 +5,12 @@
 
 WHITEBOX_BEGIN
 
+CDataStream::CDataStream()
+	: m_pData(nullptr)
+	, m_size(0)
+	, m_cursor(0) {}
+
+
 CDataStream::CDataStream( void* pData, size_t size )
 	: m_pData(pData)
 	, m_size(size)
@@ -109,22 +115,6 @@ void	CDataStream::Destroy()
 	m_pData = NULL;
 	m_size = 0;
 	m_cursor = 0;
-}
-
-CDataStream	CDataStream::GetStreamFromFile( const String& path, size_t size )
-{
-	TFileHandle file = gVars->pFileSystem->OpenFile( path.c_str(), true, false );
-	if ( size == 0 )
-	{
-		size = gVars->pFileSystem->GetFileSize( file );
-		gVars->pFileSystem->SetCursor( file, 0 );
-	}
-	char* pData = new char[ size + 1 ];
-	pData[ size ] = '\0'; 
-	gVars->pFileSystem->Read( file, 1, size, pData );
-	gVars->pFileSystem->CloseFile( file );
-	
-	return CDataStream( pData, size );
 }
 	
 WHITEBOX_END

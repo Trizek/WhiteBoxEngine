@@ -1,6 +1,7 @@
 #include "Render/ShaderSerializer.h"
 #include "Render/Shader.h"
 #include "GlobalVariables.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -21,7 +22,7 @@ IResource*	CShaderSerializer::Load( CDataStream& dataStream, const CResourceDesc
 	String errorMessage;
 	if ( !gVars->pRenderer->CompileShader( pShaderId, errorMessage ) )
 	{ 
-		printf("Shader compilation %s failed :\n%s\n", descriptor.GetPath().c_str(), errorMessage.c_str());
+		WbLog( "Default", "Shader compilation %s failed :\n%s\n", descriptor.GetPath().c_str(), errorMessage.c_str());
 		return nullptr;
 	}
 

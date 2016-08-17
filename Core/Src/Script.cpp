@@ -108,7 +108,7 @@ SScriptNodePtr CScriptStreamReader::Parse( CDataStream& dataStream )
 void CScriptStreamReader::ConsumeIdentifier()
 {
 	m_stringBuffer[m_stringBufferLength] = '\0';
-	// printf("TokenIdentifier(%s)\n", m_stringBuffer);	
+	// WbLog( "Default", "TokenIdentifier(%s)\n", m_stringBuffer);	
 	String identifier( m_stringBuffer );
 
  	if ( m_anaSynState == eASS_Node )
@@ -126,7 +126,7 @@ void CScriptStreamReader::ConsumeIdentifier()
 
 void CScriptStreamReader::ConsumeInt()
 {
-	//printf("TokenInt(%d)\n", m_intBuffer);
+	//WbLog( "Default", "TokenInt(%d)\n", m_intBuffer);
 	
 	if ( m_anaSynState == eASS_AttributeVal )
 	{
@@ -160,7 +160,7 @@ void CScriptStreamReader::ConsumeInt()
 
 void CScriptStreamReader::ConsumeFloat()
 {
-	// printf("TokenFloat(%.5f)\n", m_floatBuffer);
+	// WbLog( "Default", "TokenFloat(%.5f)\n", m_floatBuffer);
 
 	if ( m_anaSynState == eASS_AttributeVal )
 	{
@@ -196,7 +196,7 @@ void CScriptStreamReader::ConsumeFloat()
 void CScriptStreamReader::ConsumeString()
 {
 	m_stringBuffer[m_stringBufferLength] = '\0';
-	// printf("TokenString(%s)\n", m_stringBuffer);
+	// WbLog( "Default", "TokenString(%s)\n", m_stringBuffer);
 
 	if ( m_anaSynState == eASS_AttributeVal )
 	{
@@ -226,7 +226,7 @@ void CScriptStreamReader::ConsumeString()
 
 void CScriptStreamReader::ConsumeOpenBracket()
 {
-	// printf("TokenOpenBracket\n");
+	// WbLog( "Default", "TokenOpenBracket\n");
 
 	if ( m_anaSynState == eASS_NodeOrAttributeName )
 	{
@@ -254,7 +254,7 @@ void CScriptStreamReader::ConsumeOpenBracket()
 
 void CScriptStreamReader::ConsumeCloseBracket()
 {
-	// printf("TokenCloseBracket\n");
+	// WbLog( "Default", "TokenCloseBracket\n");
 
 	if ( m_anaSynState == eASS_Node )
 	{
@@ -324,7 +324,7 @@ void CScriptStreamReader::ConsumeClosePar()
 
 void CScriptStreamReader::ConsumeEqual()
 {
-	// printf("TokenEqualBracket\n");
+	// WbLog( "Default", "TokenEqualBracket\n");
 
 	if ( m_anaSynState == eASS_NodeOrAttributeName )
 	{

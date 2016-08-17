@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include "GlobalVariables.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -14,7 +15,7 @@ CResourceDescriptor::CResourceDescriptor()
 	, m_pResourceType(NULL)
 	, m_pResourceManager(NULL)
 {
-	printf("Create empty descriptor \n");
+	WbLog( "Default", "Create empty descriptor \n");
 }
 
 CResourceDescriptor::CResourceDescriptor( const String& name, const String& path, const String& extension, size_t size, bool bProcedural, CResourceType* pResourceType, CResourceManager* pResourceManager )
@@ -28,15 +29,15 @@ CResourceDescriptor::CResourceDescriptor( const String& name, const String& path
 	, m_pResourceType(pResourceType)
 	, m_pResourceManager(pResourceManager)
 {
-	printf("Create descriptor %s\n", name.c_str());
+	WbLog( "Default", "Create descriptor %s\n", name.c_str());
 }
 
 CResourceDescriptor::~CResourceDescriptor()
 {
 	if ( m_name.empty())
-	printf("Destroying empty descriptor\n");
+	WbLog( "Default", "Destroying empty descriptor\n");
 	else
-	printf("Desotrying descriptor %s\n", m_name.c_str());
+	WbLog( "Default", "Desotrying descriptor %s\n", m_name.c_str());
 }
 
 void CResourceDescriptor::Acquire()
@@ -44,7 +45,7 @@ void CResourceDescriptor::Acquire()
 	if ( m_refCount == 0 && m_pResource == nullptr && !m_bProcedural ) // resource can be not null with refcount 0 (unload then load the same frame)
 	{
 		// async load
-		printf( "Request loading resource %s\n", m_name.c_str() );
+		WbLog( "Default",  "Request loading resource %s\n", m_name.c_str() );
 		m_pResourceManager->AddLoadResourceQuery( *this );
 	}
 	m_refCount++;
@@ -62,7 +63,7 @@ void CResourceDescriptor::Release()
 		}
 		else
 		{
-			printf( "Marking %s to destroy\n", m_name.c_str() );
+			WbLog( "Default",  "Marking %s to destroy\n", m_name.c_str() );
 			m_pResourceManager->AddUnloadResourceQuery( *this );
 		}
 	}
@@ -72,7 +73,7 @@ void CResourceDescriptor::DestroyIfNoRef()
 {
 	if ( m_pResource != nullptr && m_refCount == 0 )
 	{
-		printf( "Destroy resource %s\n", m_name.c_str());
+		WbLog( "Default",  "Destroy resource %s\n", m_name.c_str());
 		delete m_pResource;
 		m_pResource = nullptr;
 	}

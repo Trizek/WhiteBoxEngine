@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.content.Context;
 import android.media.AudioManager;
+import android.content.res.AssetManager;
 
 public class GLES3JNIActivity extends Activity implements SurfaceHolder.Callback
 {
@@ -51,7 +52,9 @@ public class GLES3JNIActivity extends Activity implements SurfaceHolder.Callback
 		params.screenBrightness = 1.0f;
 		getWindow().setAttributes( params );
 
-		mNativeHandle = GLES3JNILib.onCreate( this );
+		assetManager = getAssets();
+
+		mNativeHandle = GLES3JNILib.onCreate( this, assetManager );
 	}
 
 	@Override protected void onStart()
@@ -169,4 +172,6 @@ public class GLES3JNIActivity extends Activity implements SurfaceHolder.Callback
 		}
 		return true;
 	}
+	
+	private AssetManager assetManager;
 }

@@ -112,7 +112,7 @@ public:
 		Vec3 pos = GetOwner()->GetLocalPosition();
 		pos.z += m_speed * frameTime;
 		
-		printf(" Caca  \n\n");
+		WbLog( "Default", " Caca  \n\n");
 		
 		GetOwner()->SetLocalPosition(pos);
 	}

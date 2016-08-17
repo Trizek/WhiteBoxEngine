@@ -9,14 +9,14 @@ template<class T>
 class PrintType
 {
 public:
-	static void Print(const T& val) { printf("undef"); };
+	static void Print(const T& val) { WbLog( "Default", "undef"); };
 };
 
 template<>
 class PrintType<int>
 {
 public:
-	static void Print(const int& val) { printf("%d", val); };
+	static void Print(const int& val) { WbLog( "Default", "%d", val); };
 };
 
 
@@ -189,16 +189,16 @@ public:
 				continue;
 			}
 
-			printf("Hash %d: ", iBucket);
+			WbLog( "Default", "Hash %d: ", iBucket);
 			for (; index >= 0; index = m_Pairs[index].nextElementId)
 			{
-				printf("[");
+				WbLog( "Default", "[");
 				PrintType<Key>::Print(m_Pairs[index].key);
-				printf(",");
+				WbLog( "Default", ",");
 				PrintType<Value>::Print(m_Pairs[index].value);
-				printf("]");
+				WbLog( "Default", "]");
 			}
-			printf("\n");
+			WbLog( "Default", "\n");
 		}
 	}
 

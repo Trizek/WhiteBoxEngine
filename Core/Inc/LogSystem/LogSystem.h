@@ -1,8 +1,9 @@
 #ifndef __LOGSYSTEM_H__
 #define __LOGSYSTEM_H__
 
+#include "WhiteBoxNameSpace.h"
 
-#include "BaseTypes.h"
+#include <vector>
 
 extern "C" void WbLog( const char* channel, const char* format, ... );
 
@@ -11,7 +12,7 @@ WHITEBOX_BEGIN
 class ILogger
 {
 public:
-	virtual void	Log( const String& message ) = 0;
+	virtual void	Log( const char* message ) = 0;
 
 	virtual ~ILogger(){}
 };

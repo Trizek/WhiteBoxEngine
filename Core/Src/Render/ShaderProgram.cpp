@@ -1,6 +1,7 @@
 #include "Render/ShaderProgram.h"
 #include "Render/Renderer.h"
 #include "GlobalVariables.h"
+#include "LogSystem/LogSystem.h"
 
 
 size_t	s_uniformSize[] =
@@ -52,7 +53,7 @@ bool	CShaderProgram::LinkProgram( String& errorMessage )
 	bool bSuccess = gVars->pRenderer->LinkProgram( m_pProgramId, errorMessage );
 	if ( !bSuccess )
 	{
-		printf( "Program link error : %s\n", errorMessage.c_str() );
+		WbLog( "Default",  "Program link error : %s\n", errorMessage.c_str() );
 		return bSuccess;
 	}
 

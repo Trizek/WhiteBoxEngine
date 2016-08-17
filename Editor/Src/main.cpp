@@ -94,12 +94,12 @@ void display(void) {
 	Quat q2;
 	Quat::DecodeQuat( s0, s1, s2, q2 );
 	
-	printf( "(%.5f, %.5f,%.5f,%.5f)\n", q2.w, q2.x, q2.y, q2.z );
+	WbLog( "Default",  "(%.5f, %.5f,%.5f,%.5f)\n", q2.w, q2.x, q2.y, q2.z );
 	
 	short val = Quat::EncodeComponent( component );
 	float comp2 = Quat::DecodeComponent( val );
 	
-	printf("Quantizing: %.5f -> %d -> %.5f\n", component, val, comp2);
+	WbLog( "Default", "Quantizing: %.5f -> %d -> %.5f\n", component, val, comp2);
 
     //clear white, draw with black
     glClearColor(0, 0, 0, 0);
@@ -217,7 +217,7 @@ if (true)
 	skel.ConvertFromBindToLocalSpace( pose );
 	skel.ComputeGlobalPose( pose, pose );
 	
-	printf( "Skel\n" );
+	WbLog( "Default",  "Skel\n" );
 	for( size_t i=0 ; i < count ; ++i )
 	{
 		CBone& bone = skel.GetBones()[ i ];
@@ -229,7 +229,7 @@ if (true)
 			
 		}
 		
-		printf( "Bone %s, father:%d, Pos(%.2f,%.2f,%.2f)\n", bone.GetName().c_str(), bone.GetParentIndex(), pose.m_boneTransforms[ i ].position.x, pose.m_boneTransforms[ i ].position.y, pose.m_boneTransforms[ i ].position.z );
+		WbLog( "Default",  "Bone %s, father:%d, Pos(%.2f,%.2f,%.2f)\n", bone.GetName().c_str(), bone.GetParentIndex(), pose.m_boneTransforms[ i ].position.x, pose.m_boneTransforms[ i ].position.y, pose.m_boneTransforms[ i ].position.z );
 	}
 	
 	CPose skinPose;
@@ -257,8 +257,8 @@ if (true)
 		
 	}
 	
-	printf( "   %.2f\n", points[ 0].y );
-	printf( "   %.2f\n", points2[ 0].x ); 
+	WbLog( "Default",  "   %.2f\n", points[ 0].y );
+	WbLog( "Default",  "   %.2f\n", points2[ 0].x ); 
    
 }
 
@@ -428,7 +428,7 @@ for( size_t i=0 ; i < vert ; ++i )
 		
 //	WhiteBox::gVars->pResourceManager->LoadQueriedResources();
 	
-	//printf( "Material shininess %.5f, emissive (%.5f,%.5f,%.5f,%.5f)\n", pMat->m_shininess, pMat->m_emissiveColor.x, pMat->m_emissiveColor.y, pMat->m_emissiveColor.z, pMat->m_emissiveColor.w );
+	//WbLog( "Default",  "Material shininess %.5f, emissive (%.5f,%.5f,%.5f,%.5f)\n", pMat->m_shininess, pMat->m_emissiveColor.x, pMat->m_emissiveColor.y, pMat->m_emissiveColor.z, pMat->m_emissiveColor.w );
 	
 
 //glGenTextures(1, &textureID);

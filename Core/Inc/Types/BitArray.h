@@ -10,6 +10,7 @@
 #include <intrin.h>
 #pragma intrinsic(_BitScanForward)
 #endif
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -94,16 +95,16 @@ public:
 
 	void Print()
 	{
-		printf("[");
+		WbLog( "Default", "[");
 		for (size_t i = 0; i < m_WordArray.GetSize(); ++i)
 		{
 			for (size_t j = 0; j < WordSize; ++j)
 			{
 				int bit = (int)((m_WordArray[i] & (1 << j)) > 0);
-				printf("%d", bit);
+				WbLog( "Default", "%d", bit);
 			}
 		}
-		printf("]\n");
+		WbLog( "Default", "]\n");
 	}
 
 private:

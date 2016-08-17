@@ -58,7 +58,7 @@ void CPicture::Load( const char* extension, CDataStream& dataStream )
 {	
 	if ( strcmp( extension, "dds" ) != 0 )
 	{
-		printf( "Error loading texture, only DDS is supported\n" );
+		WbLog( "Default",  "Error loading texture, only DDS is supported\n" );
 	}
 
 	char const* header = (char const*)dataStream.GetCursorData() + 4;
@@ -103,7 +103,7 @@ void CPicture::Load( const char* extension, CDataStream& dataStream )
 //  	}	
 //  	else
 //  	{
-//  		printf( "Picture format %s not supported\n", extension );
+//  		WbLog( "Default",  "Picture format %s not supported\n", extension );
 //  		return;
 //  	}
  	

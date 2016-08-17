@@ -10,6 +10,8 @@
 #include <SDL.h>
 #include <GL/glew.h>
 #endif
+#include "FileSystem.h"
+
 
 WHITEBOX_BEGIN
 
@@ -235,6 +237,22 @@ float	COperatingSystem::Tick()
 	m_frameTimer.Start();
 
 	return frameTime;
+}
+
+void	COperatingSystem::GetDataStream( const String& path, CDataStream& dataStream, size_t size /*= 0*/ )
+{
+	TFileHandle file = gVars->pFileSystem->OpenFile( path.c_str(), true, false );
+	if ( size == 0 )
+	{
+		size = gVars->pFileSystem->GetFileSize( file );
+		gVars->pFileSystem->SetCursor( file, 0 );
+	}
+	char* pData = new char[ size + 1 ];
+	pData[ size ] = '\0'; 
+	gVars->pFileSystem->Read( file, 1, size, pData );
+	gVars->pFileSystem->CloseFile( file );
+	
+	dataStream = CDataStream( pData, size );
 }
 
 #endif

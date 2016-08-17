@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include "TextureExporter.h"
 #include "AssetExporter.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -61,12 +62,12 @@ public:
 		IAssetExporter* pExporter = m_assetManager.GetExporter( filePath.get_path_extension() );
 		if ( pExporter == NULL )
 		{
-			printf( "Ignoring file %s...\n", filePath.c_str() );
+			WbLog( "Default",  "Ignoring file %s...\n", filePath.c_str() );
 			return;
 		}
 		
 		String localFilePath( filePath.c_str() + m_assetFolder.length() );
-		printf( "Exporting %s...\n", filePath.c_str() );
+		WbLog( "Default",  "Exporting %s...\n", filePath.c_str() );
 		
 		pExporter->Export( m_assetFolder, m_resourceFolder, localFilePath );
 	}

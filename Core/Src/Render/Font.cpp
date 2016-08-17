@@ -70,7 +70,7 @@ CFont::CFont(  CDataStream& dataStream, uint size /*= 16*/, uint dpi /*= 300*/ )
 
 		if ( offsetY + charHeight >= textureHeight )
 		{
-			printf("Texture too small for font !!\n");
+			WbLog( "Default", "Texture too small for font !!\n");
 			break;
 		}
 

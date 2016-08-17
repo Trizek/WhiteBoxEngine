@@ -3,6 +3,8 @@
 
 #include "BaseTypes.h"
 
+#include "DataStream.h"
+
 WHITEBOX_BEGIN
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -10,6 +12,7 @@ WHITEBOX_BEGIN
 #else
 #include <time.h>
 #endif
+
 
 
 class CTimer
@@ -48,6 +51,8 @@ public:
 	// return frame time since last tick
 	float	Tick();
 
+	void	GetDataStream( const String& path, CDataStream& dataStream, size_t size = 0 );
+
 private:
 #ifndef __GEAR_VR
 	void*	m_pSpecificData;
@@ -55,7 +60,7 @@ private:
 #else
 public:
 	Matrix44*	GetInverseEyeMatrices();
-
+	const char*	GetPackagePath() const;
 
 private:
 	Matrix44	m_inverseEyeTransforms[ 2 ];

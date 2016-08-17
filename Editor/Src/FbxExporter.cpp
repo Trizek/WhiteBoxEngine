@@ -30,7 +30,7 @@ void InitializeSdkObjects(KFbxSdkManager*& pSdkManager, KFbxScene*& pScene)
 
     if (!pSdkManager)
     {
-        printf("Unable to create the FBX SDK manager\n");
+        WbLog( "Default", "Unable to create the FBX SDK manager\n");
         return;
     }
 
@@ -74,52 +74,52 @@ bool LoadScene(KFbxSdkManager* pSdkManager, KFbxDocument* pScene, const char* pF
 
     if( !lImportStatus )
     {
-        printf("Call to KFbxImporter::Initialize() failed.\n");
-        printf("Error returned: %s\n\n", lImporter->GetLastErrorString());
+        WbLog( "Default", "Call to KFbxImporter::Initialize() failed.\n");
+        WbLog( "Default", "Error returned: %s\n\n", lImporter->GetLastErrorString());
 
         if (lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_YET ||
             lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_ANYMORE)
         {
-            printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
-            printf("FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
+            WbLog( "Default", "FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
+            WbLog( "Default", "FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
         }
 
         return false;
     }
 
-    printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
+    WbLog( "Default", "FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
 
     if (lImporter->IsFBX())
     {
-        printf("FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
+        WbLog( "Default", "FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
 
         // From this point, it is possible to access animation stack information without
         // the expense of loading the entire file.
 
-        printf("Animation Stack Information\n");
+        WbLog( "Default", "Animation Stack Information\n");
 
         lAnimStackCount = lImporter->GetAnimStackCount();
 
-        printf("    Number of Animation Stacks: %d\n", lAnimStackCount);
-        printf("    Current Animation Stack: \"%s\"\n", lImporter->GetActiveAnimStackName().Buffer());
-        printf("\n");
+        WbLog( "Default", "    Number of Animation Stacks: %d\n", lAnimStackCount);
+        WbLog( "Default", "    Current Animation Stack: \"%s\"\n", lImporter->GetActiveAnimStackName().Buffer());
+        WbLog( "Default", "\n");
 
         for(i = 0; i < lAnimStackCount; i++)
         {
             KFbxTakeInfo* lTakeInfo = lImporter->GetTakeInfo(i);
 
-            printf("    Animation Stack %d\n", i);
-            printf("         Name: \"%s\"\n", lTakeInfo->mName.Buffer());
-            printf("         Description: \"%s\"\n", lTakeInfo->mDescription.Buffer());
+            WbLog( "Default", "    Animation Stack %d\n", i);
+            WbLog( "Default", "         Name: \"%s\"\n", lTakeInfo->mName.Buffer());
+            WbLog( "Default", "         Description: \"%s\"\n", lTakeInfo->mDescription.Buffer());
 
             // Change the value of the import name if the animation stack should be imported 
             // under a different name.
-            printf("         Import Name: \"%s\"\n", lTakeInfo->mImportName.Buffer());
+            WbLog( "Default", "         Import Name: \"%s\"\n", lTakeInfo->mImportName.Buffer());
 
             // Set the value of the import state to false if the animation stack should be not
             // be imported. 
-            printf("         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
-            printf("\n");
+            WbLog( "Default", "         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
+            WbLog( "Default", "\n");
         }
 
         // Set the import states. By default, the import states are always set to 
@@ -138,7 +138,7 @@ bool LoadScene(KFbxSdkManager* pSdkManager, KFbxDocument* pScene, const char* pF
 
     if(lStatus == false && lImporter->GetLastErrorID() == KFbxIO::ePASSWORD_ERROR)
     {
-        printf("Please enter password: ");
+        WbLog( "Default", "Please enter password: ");
 
         lPassword[0] = '\0';
 
@@ -152,7 +152,7 @@ bool LoadScene(KFbxSdkManager* pSdkManager, KFbxDocument* pScene, const char* pF
 
         if(lStatus == false && lImporter->GetLastErrorID() == KFbxIO::ePASSWORD_ERROR)
         {
-            printf("\nPassword is wrong, import aborted.\n");
+            WbLog( "Default", "\nPassword is wrong, import aborted.\n");
         }
     }
 
@@ -167,11 +167,11 @@ void ParseMesh( KFbxMesh* pMesh )
     int controlPointsCount = pMesh->GetControlPointsCount();
     KFbxVector4* pControlPoints = pMesh->GetControlPoints();
 
-    printf( "Control points\n" );
+    WbLog( "Default",  "Control points\n" );
 
     for ( int i = 0; i < controlPointsCount; i++ )
     {
-		printf( "(%.3f,%.3f,%.3f)\n", pControlPoints[i][0], pControlPoints[i][1], pControlPoints[i][2] );
+		WbLog( "Default",  "(%.3f,%.3f,%.3f)\n", pControlPoints[i][0], pControlPoints[i][1], pControlPoints[i][2] );
 
 /*
         for (int j = 0; j < pMesh->GetLayerCount(); j++)
@@ -201,7 +201,7 @@ void ParseNode( KFbxNode* pNode, const WhiteBox::String& resourceFolder, const W
 	KFbxNodeAttribute::EAttributeType attributeType;
     if(pNode->GetNodeAttribute() == NULL)
     {
-        printf( "NULL Node Attribute\n" );
+        WbLog( "Default",  "NULL Node Attribute\n" );
     }
     else
     {
@@ -214,7 +214,7 @@ void ParseNode( KFbxNode* pNode, const WhiteBox::String& resourceFolder, const W
             break;*/
 
         case KFbxNodeAttribute::eMESH:      
-			printf( "Parsing mesh: %s\n", (char *)pNode->GetName() );
+			WbLog( "Default",  "Parsing mesh: %s\n", (char *)pNode->GetName() );
             ParseMesh( (KFbxMesh*)pNode->GetNodeAttribute() );
             break;
         }   
@@ -234,7 +234,7 @@ void CFbxExporter::Export( const String& assetFolder, const String& resourceFold
 {
 	String completeFilePath = assetFolder + filePath;
 	
-	printf( "Exporting FBX %s\n", completeFilePath.c_str() );
+	WbLog( "Default",  "Exporting FBX %s\n", completeFilePath.c_str() );
 	
     KFbxSdkManager* pSdkManager = NULL;
     KFbxScene* pScene = NULL;
@@ -244,7 +244,7 @@ void CFbxExporter::Export( const String& assetFolder, const String& resourceFold
 	
 	if ( !LoadScene( pSdkManager, pScene, completeFilePath.c_str() ) || pScene == NULL )
 	{
-		printf( "FBX loading scene failed !\n" );
+		WbLog( "Default",  "FBX loading scene failed !\n" );
 	}	
 	
 	ParseNode( pScene->GetRootNode(), resourceFolder, filePath );

@@ -27,6 +27,8 @@ typedef char32_t wchar;
 
 #include "SmartPointer.h"
 
+#include "LogSystem/LogSystem.h"
+
 WHITEBOX_BEGIN
 #include "Maths.h"
 WHITEBOX_END

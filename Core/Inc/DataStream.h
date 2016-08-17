@@ -8,6 +8,7 @@ WHITEBOX_BEGIN
 class CDataStream
 {
 public:
+	CDataStream();
 	CDataStream( void* pData, size_t size );
 	
 	size_t	GetCursor() const;
@@ -51,8 +52,6 @@ public:
 	}
 	
 	bool	ReadString( String& str );
-	
-	static CDataStream	GetStreamFromFile( const String& path, size_t size = 0 );
 	
 private:
 	void*	m_pData;

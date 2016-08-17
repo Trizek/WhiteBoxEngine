@@ -11,6 +11,8 @@
 #include "Render/ShaderSerializer.h"
 #include "Render/ShaderProgramSerializer.h"
 #include "Render/FontSerializer.h"
+#include "System/OperatingSystem.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -98,18 +100,19 @@ void CResourceManager::UpdateResourceLoading()
 			continue; // Can happen if resource queried for load and unload the same frame
 		}
 
-		printf( "Loading resource %s of type %s\n...", pDescriptor->GetName().c_str(), pDescriptor->GetResourceType()->GetName().c_str() );
+		WbLog( "Default",  "Loading resource %s of type %s\n...", pDescriptor->GetName().c_str(), pDescriptor->GetResourceType()->GetName().c_str() );
 		
-		CDataStream dataStream = CDataStream::GetStreamFromFile( m_resourceRootDir + pDescriptor->GetPath(), pDescriptor->GetSize() );
+		CDataStream dataStream;
+		gVars->pOperatingSystem->GetDataStream( m_resourceRootDir + pDescriptor->GetPath(), dataStream, pDescriptor->GetSize() );
 		
 		IResource* pResource = pDescriptor->GetResourceType()->GetSerializer()->Load( dataStream, *pDescriptor );
 		if ( pResource == NULL )
 		{
-			printf( "FAILED loading resource %s\n", pDescriptor->GetName().c_str() );
+			WbLog( "Default",  "FAILED loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		else
 		{
-			printf( "Succeeded loading resource %s\n", pDescriptor->GetName().c_str() );
+			WbLog( "Default",  "Succeeded loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		
 		pDescriptor->SetResource( pResource );
@@ -169,11 +172,11 @@ CResourceDescriptor* CResourceManager::AddResource( const String& path, size_t s
 
 		if ( size == 0 )
 		{
-			printf( "Error : resource file %s not found\n", path.c_str() );
+			WbLog( "Default",  "Error : resource file %s not found\n", path.c_str() );
 		}
 	}
 	
-	printf( "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), (int)size, path.c_str() );
+	WbLog( "Default",  "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), (int)size, path.c_str() );
 	
 	return pResourceType->GetResourceSpecificManager()->AddResource( name, path, extension, size, pResourceType, this );	
 }
@@ -188,7 +191,8 @@ void CResourceManager::ParseResources( const String& resourceFolder )
 
 	m_resourceRootDir = resourceFolderFormat;
 
-	CDataStream dataStream = CDataStream::GetStreamFromFile( "Resources.list" );
+	CDataStream dataStream;
+	gVars->pOperatingSystem->GetDataStream( "Resources.list", dataStream );
 
 	CScriptStreamReader scriptStreamReader;
 	SScriptNodePtr pScriptNode = scriptStreamReader.Parse( dataStream );
@@ -275,7 +279,7 @@ CResourceDescriptor*	CResourceManager::GetResourceDescriptor( const String& path
 
 		if (pDescriptor == nullptr)
 		{
-			printf("Resource %s not found\n", path.c_str());
+			WbLog( "Default", "Resource %s not found\n", path.c_str());
 		}
 	}
 	

@@ -32,12 +32,12 @@ WHITEBOX_BEGIN
 
 class CConsoleLogger : public ILogger
 {
-	virtual void	Log( const String& message ) override
+	virtual void	Log( const char* message ) override
 	{
 #ifdef __GEAR_VR
-		__android_log_print( ANDROID_LOG_ERROR, "WhiteBox", message.c_str(), 0 );
+		__android_log_print( ANDROID_LOG_ERROR, "WhiteBox", message, 0 );
 #else
-		fwrite( message.c_str(), sizeof(char), message.size(), stdout );
+		fwrite( message, sizeof(char), strlen(message), stdout );
 #endif
 	}
 };
@@ -58,10 +58,10 @@ CLogSystem::~CLogSystem()
 
 void	CLogSystem::Log( const char* channel, const char* message )
 {
-	String formatMessage = String(channel) + " : " + String(message);
+	String formatMessage = String(channel) + " : " + String(message) + "\n";
 	for( ILogger* pLogger : m_loggers )
 	{
-		pLogger->Log( formatMessage );
+		pLogger->Log( formatMessage.c_str() );
 	}
 }
 

@@ -3,18 +3,19 @@
 #include "DataStream.h"
 #include "GlobalVariables.h"
 #include "ResourceManager.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
 IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescriptor& descriptor )
 {
-	printf("Loading... file size %zd\n", dataStream.GetSize() );
+	WbLog( "Default", "Loading... file size %zd", dataStream.GetSize() );
 
 
 	// Vertex count
 	int vertexCount = 0;
 	if ( !dataStream.Read( vertexCount ) )	return NULL;
-	printf( "Vertex count %zd\n", vertexCount );
+	WbLog( "Default",  "Vertex count %zd", vertexCount );
 
 	// Vertex format
 	CVertexFormat vertexFormat;
@@ -22,18 +23,18 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 	int singleElementFlags = 0;
 	if ( !dataStream.Read( singleElementFlags ) ) return NULL;
 	vertexFormat.SetSingleElementsFlags( (int)singleElementFlags );
-	printf( "Single elem flags %zd\n", singleElementFlags );
+	WbLog( "Default",  "Single elem flags %zd\n", singleElementFlags );
 	
 	for( size_t iElem = 0 ; iElem < CVertexFormat::eME_Count ; ++iElem )
 	{
 		int elemCount = 0;
 		if ( !dataStream.Read( elemCount ) ) return NULL;
 		vertexFormat.SetMultipleElementCount( (CVertexFormat::EMultipleElement)iElem, (int)elemCount );
-		printf( "Multiple elem %zd count %d\n", iElem, elemCount );
+		WbLog( "Default",  "Multiple elem %zd count %d\n", iElem, elemCount );
 	}
 	
 	vertexFormat.Build();
-	printf(" Vertex format size : %zd\n", vertexFormat.GetSize() );
+	WbLog( "Default", " Vertex format size : %zd\n", vertexFormat.GetSize() );
 	
 	// Vertices
 	CMesh* pMesh = new CMesh();
@@ -43,7 +44,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 	// Parts
 	int partCount = 0;
 	if ( !dataStream.Read( partCount ) ) return NULL;
-	printf( "Part count %zd\n", partCount );
+	WbLog( "Default",  "Part count %zd\n", partCount );
 	for( size_t iPart = 0 ; iPart < partCount ; ++iPart )
 	{
 		int indexCount = 0;	
@@ -52,7 +53,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 			delete pMesh;
 			return NULL;
 		}
-		printf( "Index count %d\n", indexCount );
+		WbLog( "Default",  "Index count %d\n", indexCount );
 		
 		CMesh::CPart* pMeshPart = new CMesh::CPart( *pMesh );
 		pMeshPart->SetIndices( indexCount, (uint*)dataStream.GetCursorData() );
@@ -63,7 +64,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 		dataStream.ReadString( materialName );
 		if ( !materialName.empty() )
 		{
-			printf( "Material %s\n", materialName.c_str() );
+			WbLog( "Default",  "Material %s\n", materialName.c_str() );
 			pMeshPart->SetMaterial( gVars->pResourceManager->GetResource< CMaterial >( materialName ) );
 		}
 

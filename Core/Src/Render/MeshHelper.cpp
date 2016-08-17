@@ -3,6 +3,7 @@
 #include <math.h>
 #include "GlobalVariables.h"
 #include "FileSystem.h"
+#include "LogSystem/LogSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -36,8 +37,8 @@ CMesh::CPart* CMeshPartHelper::ConvertToMeshPart( CMesh& mesh )
 
 void CMeshPartHelper::Print() const
 {
-	printf( "Index count : %zd\n", m_indexArray.size() );
-	printf( "Material name : %s\n", m_materialName.c_str() );
+	WbLog( "Default",  "Index count : %zd\n", m_indexArray.size() );
+	WbLog( "Default",  "Material name : %s\n", m_materialName.c_str() );
 }
 
 
@@ -122,7 +123,7 @@ CMesh* CMeshHelper::ConvertToMesh() const
 	
 	CVertexFormat vertexFormat = GetVertexFormat();
 	
-	printf( "Creating %zd vertices of %zd bytes\n", m_positionArray.size(), vertexFormat.GetSize() );
+	WbLog( "Default",  "Creating %zd vertices of %zd bytes\n", m_positionArray.size(), vertexFormat.GetSize() );
 	char* pVertices = BuildVertexArray( vertexFormat );
 	pMesh->SetSharedVertices( vertexFormat, m_positionArray.size(), pVertices );	
 	delete[] pVertices;
@@ -234,7 +235,7 @@ CVertexFormat CMeshHelper::GetVertexFormat() const
 				{
 					ReadWord( file, buffer );
 					m_meshParts[ iSubmesh ]->SetMaterialName( buffer );
-					printf(" Found material %s for submesh %d\n", buffer, iSubmesh );
+					WbLog( "Default", " Found material %s for submesh %d\n", buffer, iSubmesh );
 				}
 				else if ( strcmp( buffer, "v" ) == 0 )
 				{
@@ -331,16 +332,16 @@ CVertexFormat CMeshHelper::GetVertexFormat() const
 	
 void CMeshHelper::Print() const
 {
-	printf( "Position count : %zd\n", m_positionArray.size() );
-	printf( "Normal count : %zd\n", m_normalArray.size() );
-	printf( "Color count : %zd\n", m_colorArray.size() );
-	printf( "UV0 count : %zd\n", m_uv0Array.size() );
+	WbLog( "Default",  "Position count : %zd\n", m_positionArray.size() );
+	WbLog( "Default",  "Normal count : %zd\n", m_normalArray.size() );
+	WbLog( "Default",  "Color count : %zd\n", m_colorArray.size() );
+	WbLog( "Default",  "UV0 count : %zd\n", m_uv0Array.size() );
 
 
-	printf( "Part count : %zd\n", m_meshParts.size() );
+	WbLog( "Default",  "Part count : %zd\n", m_meshParts.size() );
 	for( size_t iPart = 0 ; iPart < m_meshParts.size() ; ++iPart )
 	{
-		printf( "--- Part %zd ----\n", iPart );
+		WbLog( "Default",  "--- Part %zd ----\n", iPart );
 		m_meshParts[ iPart ]->Print();
 	}
 }

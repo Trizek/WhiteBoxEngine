@@ -14,15 +14,21 @@ LOCAL_SRC_FILES			:=  $(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../..
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/System/GearVR/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/LogSystem/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Types/*.cpp)) \
+
 #../../../../../../../../Src/*.cp
-LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL		# include default libraries
+LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL -lz		# include default libraries
 
-LOCAL_C_INCLUDES		:= $(LOCAL_PATH)/../../../../../../../../Inc/
+LOCAL_C_INCLUDES		:= $(LOCAL_PATH)/../../../../../../../../Inc/ \
+  $(LOCAL_PATH)/../../../../3rdParty/minizip/src \
+  $(LOCAL_PATH)/../../../../VrAppSupport/SystemUtils/Include \
+  $(LOCAL_PATH)/../../../Include
 
-LOCAL_STATIC_LIBRARIES	:= systemutils libovrkernel
+
+LOCAL_STATIC_LIBRARIES	:= systemutils libovrkernel minizip
 LOCAL_SHARED_LIBRARIES	:= vrapi
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,VrApi/Projects/AndroidPrebuilt/jni)
 $(call import-module,VrAppSupport/SystemUtils/Projects/AndroidPrebuilt/jni)
+$(call import-module,3rdParty/minizip/build/androidprebuilt/jni)

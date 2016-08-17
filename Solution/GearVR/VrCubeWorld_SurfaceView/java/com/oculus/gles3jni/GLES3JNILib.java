@@ -3,13 +3,15 @@ package com.oculus.gles3jni;
 
 import android.app.Activity;
 import android.view.Surface;
+import android.content.res.AssetManager;
+
 
 // Wrapper for native library
 
 public class GLES3JNILib
 {
 	// Activity lifecycle
-	public static native long onCreate( Activity obj );
+	public static native long onCreate( Activity obj, AssetManager mgr );
 	public static native void onStart( long handle );
 	public static native void onResume( long handle );
 	public static native void onPause( long handle );

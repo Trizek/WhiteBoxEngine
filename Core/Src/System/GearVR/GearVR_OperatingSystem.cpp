@@ -25,6 +25,9 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 #include <android/native_window_jni.h>	// for native window JNI
 #include <android/input.h>
 
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GLES3/gl3.h>
@@ -120,6 +123,42 @@ static const int NUM_MULTI_SAMPLES = 4;
 #define REDUCED_LATENCY			0
 #define EXPLICIT_EGL_OBJECTS	1
 
+
+char packagePath[ 1024 ];
+AAssetManager* s_assetManager = NULL;
+
+
+const char * GetCurrentPackagePath(JNIEnv * jni, jobject activityObject, char * packageName, int const maxLen)
+{
+	packageName[0] = '\0';
+
+	jclass curActivityClass = jni->GetObjectClass(activityObject);
+	jmethodID getPackageNameId = jni->GetMethodID(curActivityClass, "getPackageCodePath", "()Ljava/lang/String;");
+	if (getPackageNameId != 0)
+	{
+		jstring result = (jstring)jni->CallObjectMethod(activityObject, getPackageNameId);
+		if (!jni->ExceptionOccurred())
+		{
+			const char * currentPackageName = jni->GetStringUTFChars(result, NULL);
+			if (currentPackageName != NULL)
+			{
+				OVR::OVR_sprintf(packageName, maxLen, "%s", currentPackageName);
+				jni->ReleaseStringUTFChars(result, currentPackageName);
+			}
+		}
+		else
+		{
+			jni->ExceptionClear();
+			LOG("Cleared JNI exception");
+		}
+	}
+
+	jni->DeleteLocalRef(curActivityClass);
+
+	
+
+	return packageName;
+}
 /*
 ================================================================================
 
@@ -2421,6 +2460,13 @@ void * AppThreadFunction(void * parm)
 
 
 	SGlobalVariables::Init();
+
+
+
+	GetCurrentPackagePath( java.Env, java.ActivityObject, packagePath, 1024 );
+	WbLog( "GearVR", "Package path %s", packagePath );
+
+
 	gVars->pApplication->InitApplication( screenWidth, screenHeight );
 
 	for (bool destroyed = false; destroyed == false; )
@@ -2550,6 +2596,9 @@ extern "C"
 		appThread->ActivityObject = env->NewGlobalRef(activityObject);
 		appThread->Thread = 0;
 		appThread->NativeWindow = NULL;
+
+
+		
 		ovrMessageQueue_Create(&appThread->MessageQueue);
 
 		const int createErr = pthread_create(&appThread->Thread, NULL, AppThreadFunction, appThread);
@@ -2584,10 +2633,12 @@ Activity lifecycle
 extern "C"
 {
 
-	JNIEXPORT jlong JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onCreate(JNIEnv * env, jobject obj, jobject activity)
+	JNIEXPORT jlong JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onCreate(JNIEnv * env, jobject obj, jobject activity, jobject assetManagerObj)
 	{
 		ALOGV("    GLES3JNILib::onCreate()");
 
+		s_assetManager = AAssetManager_fromJava(env, assetManagerObj);
+		
 		ovrAppThread * appThread = (ovrAppThread *)malloc(sizeof(ovrAppThread));
 		ovrAppThread_Create(appThread, env, activity);
 
@@ -2743,6 +2794,8 @@ extern "C"
 
 	JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onKeyEvent(JNIEnv * env, jobject obj, jlong handle, int keyCode, int action)
 	{
+		return;
+
 		if (action == AKEY_EVENT_ACTION_UP)
 		{
 			ALOGV("    GLES3JNILib::onKeyEvent( %d, %d )", keyCode, action);
@@ -2757,6 +2810,8 @@ extern "C"
 
 	JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onTouchEvent(JNIEnv * env, jobject obj, jlong handle, int action, float x, float y)
 	{
+		return;
+
 		if (action == AMOTION_EVENT_ACTION_UP)
 		{
 			ALOGV("    GLES3JNILib::onTouchEvent( %d, %1.0f, %1.0f )", action, x, y);
@@ -2800,6 +2855,10 @@ Matrix44*	COperatingSystem::GetInverseEyeMatrices()
 	return m_inverseEyeTransforms;
 }
 
+const char*	COperatingSystem::GetPackagePath() const
+{
+	return packagePath;
+}
 
 WHITEBOX_END
 
