@@ -22,8 +22,7 @@ CResourceManager::CResourceManager()
 	AddResourceType< CMesh, CMeshSerializer >( "msh" );
 	AddResourceType< CMaterial, CMaterialSerializer >( "mat" );
 	AddResourceType< CTexture, CTextureSerializer >( "dds" );
-// 	AddResourceExtension< CTexture >( "tga" );
-// 	AddResourceExtension< CTexture >( "dds" );
+ 	AddResourceExtension< CTexture >( "png" );
 
 	AddResourceType< CShader, CShaderSerializer >( "vs" );
 	AddResourceExtension< CShader >( "ps" );
@@ -189,10 +188,10 @@ void CResourceManager::ParseResources( const String& resourceFolder )
 		resourceFolderFormat = resourceFolderFormat + "/";
 	}
 
-	m_resourceRootDir = resourceFolderFormat;
+	m_resourceRootDir = resourceFolderFormat + "Resources/";
 
 	CDataStream dataStream;
-	gVars->pOperatingSystem->GetDataStream( "Resources.list", dataStream );
+	gVars->pOperatingSystem->GetDataStream( resourceFolderFormat + "Resources.list", dataStream );
 
 	CScriptStreamReader scriptStreamReader;
 	SScriptNodePtr pScriptNode = scriptStreamReader.Parse( dataStream );
@@ -231,10 +230,11 @@ void CResourceManager::ParseResources( const String& resourceFolder )
 	}
 }
 
-void CResourceManager::ComputeResourceDependencies( const String& path, std::vector< String >& dependencies )
+void CResourceManager::ComputeResourceDependencies(const String& resourceRootDir, const String& path, std::vector< String >& dependencies )
 {
 	CResourceManager tempResourceManager;
 	tempResourceManager.m_bCheckForDependencyMode = true;
+	tempResourceManager.m_resourceRootDir = resourceRootDir;
 
 	CResourceManager* pOldResMan = gVars->pResourceManager;
 	gVars->pResourceManager = &tempResourceManager;

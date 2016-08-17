@@ -1,0 +1,15 @@
+
+
+Material
+{
+  emissiveColor = ()
+  ambientColor = ()
+  diffuseColor = ()
+  specularColor = ()
+  shininess = 0.00000
+  
+  TextureLayer
+  {
+    texture = "Ezio/CR_U_Ezio_Boots_R3-4_DiffuseMap.dds"
+  }
+}

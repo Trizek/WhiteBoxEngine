@@ -59,19 +59,19 @@ void CApplication::InitApplication( uint width, uint height )
 
 #ifndef __GEAR_VR
  	CAssetManager assetManager;
- 	assetManager.Export( "Assets", "Resources" );
+ 	assetManager.Export( "../../../Assets", "" );
 #endif
 
-	gVars->pResourceManager->ParseResources( "Resources" );
+	gVars->pResourceManager->ParseResources( "" );
 
 	//ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
 	//ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
 	meca = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
 //	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
 // 
-// 	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
+	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 // 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
-// 	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("vr.program"); // white.program");
+ 	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
 // 
 // 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
@@ -322,7 +322,7 @@ void CApplication::FrameUpdate()
 	{
 
 		for (size_t i = 0; i< meca->GetPartCount();++i)
-		CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, pProg.get(), true);
+			CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, whiteshader.get(), true);
 	}
 
 

@@ -2860,6 +2860,11 @@ const char*	COperatingSystem::GetPackagePath() const
 	return packagePath;
 }
 
+EShaderPlatform	COperatingSystem::GetShaderPlatform() const
+{
+	return EShaderPlatform::eGearVR;
+}
+
 WHITEBOX_END
 
 #endif

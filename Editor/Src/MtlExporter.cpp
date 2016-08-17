@@ -16,6 +16,12 @@ void CMtlExporter::Export( const String& assetFolder, const String& resourceFold
 	bool bMat = false;
 	bool bTex = false;
 
+#ifdef EXPORT_TO_PNG
+	const char* extension = ".png";
+#else
+	const char* extension = ".dds";
+#endif
+
 	while( ReadWord( file, buffer ) )
 	{
 		if ( strcmp( buffer, "newmtl" ) == 0 )
@@ -24,7 +30,7 @@ void CMtlExporter::Export( const String& assetFolder, const String& resourceFold
 			{
 				if (bTex)
 				{
-					textureName = textureName.get_path_base() + textureName.get_path_name() + ".dds";
+					textureName = textureName.get_path_base() + textureName.get_path_name() + extension;
 					matHelper.m_textureLayers[0].m_textureName = filePath.get_path_base() + textureName;
 				}
 

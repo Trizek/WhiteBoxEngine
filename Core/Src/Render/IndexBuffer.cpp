@@ -9,7 +9,11 @@ WHITEBOX_BEGIN
 CIndexBuffer::CIndexBuffer( CVertexBuffer* pVertexBuffer, size_t indexCount, uint const * pIndices )
 	: m_indexCount(indexCount)
 {
+#ifdef COOK
+	m_pBufferId = nullptr;
+#else
 	m_pBufferId = gVars->pRenderer->CreateIndexBuffer( pVertexBuffer, indexCount, pIndices );
+#endif
 }
 
 CIndexBuffer::~CIndexBuffer()

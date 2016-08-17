@@ -1,5 +1,5 @@
 :: Clean
-rmdir /s /q ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView
+:: rmdir /s /q ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView
 rmdir /s /q ..\..\Core\Libs\GearVR\WhiteBoxGearLib
 
 :: Build WhitexBox gear library
@@ -13,7 +13,13 @@ rmdir /s /q ..\..\Core\Libs\GearVR\WhiteBoxGearLib
 :: Copy and build WhitexBox gear vr application
 xcopy VrCubeWorld_SurfaceView ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView /s /i /h /e /y
 xcopy OsigFiles\* ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView\assets\ /y
+
+:: Export assets to Android
+"..\Windows\Cook for Android\WhiteBoxEngine.exe" ../../Assets ../../Core/Libs/GearVR/VrSamples/Native/VrCubeWorld_SurfaceView/assets
+
+
 cd ../../Core/Libs/GearVR/VrSamples/Native/VrCubeWorld_SurfaceView/Projects/Android
+
 
 
 cmd /c build

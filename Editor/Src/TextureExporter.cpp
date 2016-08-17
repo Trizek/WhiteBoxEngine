@@ -10,11 +10,27 @@ extern "C" {
 #include "image_DXT.h"
 #endif
 
+
+#include "Png/lodepng.h"
+
 WHITEBOX_BEGIN
 
 void CTextureExporter::Export( const String& assetFolder, const String& resourceFolder, const String& filePath )
 {
+#ifdef EXPORT_TO_PNG
+	const char* extension = ".png";
+#else
+	const char* extension = ".dds";
+#endif
+
 	String completeFilePath = assetFolder + filePath;
+	String outFilePath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + extension;
+
+	if ( gVars->pFileSystem->DoesFileExist( outFilePath ) )
+	{
+		return;
+	}
+	 	
 
 	// Load image with FreeImage
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType( completeFilePath.c_str(), 0 );
@@ -43,11 +59,26 @@ void CTextureExporter::Export( const String& assetFolder, const String& resource
 		}
 	}
 
-	// Save to DDS
-	String ddsOutFilePath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + ".dds";
-	gVars->pFileSystem->CreateFileDir( ddsOutFilePath );
-	save_image_as_DDS( ddsOutFilePath.c_str(), width, height, 4, pixels );
+#ifdef EXPORT_TO_PNG
 	
+	// Save to PNG
+	unsigned char*	pngData = nullptr;
+	size_t			pngSize = 0;
+	lodepng_encode_memory( &pngData, &pngSize, pixels, width, height, LodePNGColorType::LCT_RGBA, 8 );
+
+	gVars->pFileSystem->CreateFileDir( outFilePath );
+	TFileHandle pngFile = gVars->pFileSystem->OpenFile( outFilePath.c_str(), false, true );
+	gVars->pFileSystem->Write( pngFile, sizeof(char), pngSize, pngData );
+	gVars->pFileSystem->CloseFile( pngFile );
+
+#else
+	
+	// Save to DDS
+ 	gVars->pFileSystem->CreateFileDir( outFilePath );
+	save_image_as_DDS( outFilePath.c_str(), width, height, 4, pixels );
+	
+#endif
+
 	delete[] pixels;
 	FreeImage_Unload( freeImage );
 }

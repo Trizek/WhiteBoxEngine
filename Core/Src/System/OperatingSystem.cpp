@@ -255,6 +255,12 @@ void	COperatingSystem::GetDataStream( const String& path, CDataStream& dataStrea
 	dataStream = CDataStream( pData, size );
 }
 
+
+EShaderPlatform	COperatingSystem::GetShaderPlatform() const
+{
+	return EShaderPlatform::eDesktop;
+}
+
 #endif
 
 WHITEBOX_END

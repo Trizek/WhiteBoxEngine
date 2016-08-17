@@ -33,7 +33,9 @@ private:
 	void			Load( const char* extension, CDataStream& datastream );
 	void			Destroy();
 
-public:
+	void			LoadDDS( CDataStream& dataStream );
+	void			LoadPNG( CDataStream& dataStream );
+
 
 	uint			m_width;
 	uint			m_height;

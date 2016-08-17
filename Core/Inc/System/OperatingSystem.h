@@ -13,6 +13,11 @@ WHITEBOX_BEGIN
 #include <time.h>
 #endif
 
+enum class EShaderPlatform
+{
+	eDesktop = 0,
+	eGearVR,
+};
 
 
 class CTimer
@@ -52,6 +57,8 @@ public:
 	float	Tick();
 
 	void	GetDataStream( const String& path, CDataStream& dataStream, size_t size = 0 );
+
+	EShaderPlatform	GetShaderPlatform() const;
 
 private:
 #ifndef __GEAR_VR

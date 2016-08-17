@@ -144,6 +144,19 @@ public:
 		
 		return npos;
 	}
+
+	size_t find_reverse (char c ) const
+	{
+		for( size_t iChar = m_length ; iChar > 0 ; --iChar )
+		{
+			if ( m_str[ iChar - 1 ] == c )
+			{
+				return iChar - 1;
+			}
+		}
+		
+		return npos;
+	}
 	
 	CString substr (size_t pos = 0, size_t len = npos) const
 	{
@@ -165,7 +178,7 @@ public:
 	
 	CString get_path_extension() const
 	{
-		size_t point_pos = find( '.' );
+		size_t point_pos = find_reverse( '.' );
 		if ( point_pos == npos )
 		{
 			return CString();
@@ -176,7 +189,7 @@ public:
 	
 	CString get_path_name() const
 	{
-		size_t point_pos = find( '.' );
+		size_t point_pos = find_reverse( '.' );
 		if ( point_pos == npos || point_pos == 0 )
 		{
 			return CString();
@@ -193,7 +206,7 @@ public:
 	
 	CString get_path_base() const
 	{
-		size_t point_pos = find( '.' );
+		size_t point_pos = find_reverse( '.' );
 		if ( point_pos == npos || point_pos == 0 )
 		{
 			return CString();
@@ -230,24 +243,44 @@ public:
 
 	void	ConvertToWindowsPath()
 	{
+		char* str = new char[ m_length + 1 ];
+		strncopy( str, m_str, m_length );
+		str[ m_length ] = '\0';
+
 		for ( size_t i = 0; i < m_length; ++i )
 		{
-			if ( m_str[ i ] == '/' )
+			if ( str[ i ] == '/' )
 			{
-				m_str[ i ] = '\\';
+				str[ i ] = '\\';
 			}
 		}
+
+		DecreaseRefCount();
+		m_str = nullptr;
+		m_pRefCount = nullptr;
+		Set( str );
+		delete[] str;
 	}
 
 	void	ConvertToUnixPath()
 	{
+		char* str = new char[ m_length + 1 ];
+		strncopy( str, m_str, m_length );
+		str[ m_length ] = '\0';
+
 		for ( size_t i = 0; i < m_length; ++i )
 		{
-			if ( m_str[ i ] == '\\' )
+			if ( str[ i ] == '\\' )
 			{
-				m_str[ i ] = '/';
+				str[ i ] = '/';
 			}
 		}
+
+		DecreaseRefCount();
+		m_str = nullptr;
+		m_pRefCount = nullptr;
+		Set( str );
+		delete[] str;
 	}
 
 	template< typename T >
@@ -295,6 +328,8 @@ private:
 			{
 				delete m_pRefCount;
 				delete[] m_str;
+				m_str = nullptr;
+				m_pRefCount = nullptr;
 			}
 		}	
 	}

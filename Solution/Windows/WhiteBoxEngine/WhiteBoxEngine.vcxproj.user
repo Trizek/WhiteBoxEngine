@@ -8,6 +8,10 @@
     <LocalDebuggerWorkingDirectory>$(ProjectDir)../Data</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Cook for Android|Win32'">
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)../Data</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>

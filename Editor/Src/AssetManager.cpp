@@ -23,11 +23,14 @@ CAssetManager::CAssetManager()
 	AddExporter( "obj", new CObjExporter() );
 	AddExporter( "mtl", new CMtlExporter() );
 	
+#ifdef EXPORT_TO_PNG
+	AddExporter( "dds", new CTextureExporter() ); // , new CCopyExporter() );
+#else
 	AddExporter( "dds", new CCopyExporter() );
+#endif
 	AddExporter( "jpg", new CTextureExporter() );
 	AddExporter( "tga", new CTextureExporter() );
 	AddExporter( "bmp", new CTextureExporter() );
-	AddExporter( "png", new CTextureExporter() );
 
 	AddExporter( "ps", new CCopyExporter() );
 	AddExporter( "vs", new CCopyExporter() );
@@ -98,7 +101,7 @@ public:
 			gVars->pFileSystem->CloseFile( file );
 
 			std::vector< String > dependencies;
-			CResourceManager::ComputeResourceDependencies( filePath, dependencies );
+			CResourceManager::ComputeResourceDependencies( m_resourceFolder, completeFilePath, dependencies );
 			
 			for( String& dependency : dependencies )
 			{
@@ -129,7 +132,10 @@ void	CAssetManager::GenerateResourceListFile( const String& resourceFolder )
 		scriptNodeWriter.EndGroup();	
 	}
 
-	CScriptFileWriter scriptFileWriter( CString("Resources.list").c_str() );
+	String resourceSubFolder = "Resources/";
+	String resourceListFolder = resourceFolder.substr( 0, resourceFolder.length() - resourceSubFolder.length() );
+
+	CScriptFileWriter scriptFileWriter( (resourceListFolder + "Resources.list").c_str() );
 	scriptFileWriter.WriteNode( scriptNodeWriter.GetRootNode() );	
 }
 
@@ -146,6 +152,7 @@ void	CAssetManager::Export( const String& assetFolder, const String& resourceFol
 	{
 		resourceFolderFormat = resourceFolderFormat + "/";
 	}
+	resourceFolderFormat = resourceFolderFormat + "Resources/";
 	
 	CAssetBrowser assetBrowser( *this, assetFolderFormat, resourceFolderFormat );
 	gVars->pFileSystem->BrowseDirectory( assetFolderFormat, assetBrowser );

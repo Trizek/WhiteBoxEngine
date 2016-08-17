@@ -130,9 +130,9 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 		renderProxy.uniformValues.SetUniformValue< Matrix44 >(renderProxy.pShaderProgram, "modelMatrix", renderProxy.transformMatrix);
 #endif
  		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
-/* 		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);*/
+ 		//renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);
 
-		/*gVars->pRenderer->BindUniformBuffer(m_sceneMatUniformBufferId, 0);*/
+		renderProxy.uniformValues.SetUniformValue< Vec3 >(renderProxy.pShaderProgram, "lightDirection", lightDir);
  		
  		renderProxy.uniformValues.ApplyValues( renderProxy.pShaderProgram );
 
@@ -148,7 +148,7 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 					break;
 				}
 
-				//gVars->pRenderer->BindTexture( pTexture->GetTextureId(), iTex );
+				gVars->pRenderer->BindTexture( pTexture->GetTextureId(), iTex );
 
 // 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 // 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

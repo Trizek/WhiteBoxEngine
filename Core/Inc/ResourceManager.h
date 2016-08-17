@@ -42,7 +42,7 @@ public:
 		return CResourcePointer< TResourceType >( GetResourceDescriptor( path ) );
 	}
 
-	static	void ComputeResourceDependencies( const String& path, std::vector< String >& dependencies );
+	static	void ComputeResourceDependencies( const String& resourceRootDir, const String& path, std::vector< String >& dependencies );
 
 private:
 	CResourceDescriptor*				GetResourceDescriptor( const String& path );

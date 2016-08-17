@@ -11,7 +11,12 @@ CTexture::CTexture( uint width, uint height, uint mipMapCount, CPicture::EPictur
 	, m_mipMapCount(mipMapCount)
 	, m_format(format)
 {
+
+#ifdef COOK
+	m_pTextureId = nullptr;
+#else
 	m_pTextureId = gVars->pRenderer->CreateTexture( m_width, m_height, m_mipMapCount, m_format, pPixelData );
+#endif
 }
 
 CTexture::~CTexture()

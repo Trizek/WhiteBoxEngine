@@ -12,13 +12,13 @@ struct ISerializer
 	virtual bool BeginGroup( const String& name ) = 0;
 	virtual void EndGroup() = 0;
 
-	virtual void Value( const String& name, int& val ) = 0;
-	virtual void Value( const String& name, float& val ) = 0;
-	virtual void Value( const String& name, String& val ) = 0;
+	virtual bool Value( const String& name, int& val ) = 0;
+	virtual bool Value( const String& name, float& val ) = 0;
+	virtual bool Value( const String& name, String& val ) = 0;
 	
-	virtual void Value( const String& name, Vec2& vec ) = 0;
-	virtual void Value( const String& name, Vec3& vec ) = 0;
-	virtual void Value( const String& name, Vec4& vec ) = 0;
+	virtual bool Value( const String& name, Vec2& vec ) = 0;
+	virtual bool Value( const String& name, Vec3& vec ) = 0;
+	virtual bool Value( const String& name, Vec4& vec ) = 0;
 };
 
 WHITEBOX_END

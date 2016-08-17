@@ -2,11 +2,20 @@
 #include "Render/ShaderProgram.h"
 #include "GlobalVariables.h"
 #include "ResourceManager.h"
+#include "System/OperatingSystem.h"
+
+
+const char*	s_shaderPlatforms[] = {
+	"Desktop",
+	"GearVR",
+};
 
 WHITEBOX_BEGIN
 
 IResource*	CShaderProgramSerializer::Load( ISerializer& serializer, const CResourceDescriptor& descriptor )
 {
+	const char* curShaderPlatform = s_shaderPlatforms[ (int)gVars->pOperatingSystem->GetShaderPlatform() ];
+
 	CShaderProgram* pShaderProgram = new CShaderProgram();
 
 	if ( serializer.BeginGroup("Program") )
@@ -37,6 +46,14 @@ IResource*	CShaderProgramSerializer::Load( ISerializer& serializer, const CResou
 		while ( serializer.BeginGroup("Uniform") )
 		{
 			int	size = 0;
+
+			String shaderPlatform;
+			if ( serializer.Value( "platform", shaderPlatform ) && shaderPlatform != curShaderPlatform )
+			{
+				serializer.EndGroup();
+				continue;
+			}
+
 
 			String uniformName;
 			serializer.Value( "name", uniformName );

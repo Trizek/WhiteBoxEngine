@@ -1,4 +1,5 @@
 #include "Render/Picture.h"
+#include "Png/lodepng.h"
 
 #define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
 #define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
@@ -56,11 +57,28 @@ void* CPicture::GetPixelData()
 
 void CPicture::Load( const char* extension, CDataStream& dataStream )
 {	
-	if ( strcmp( extension, "dds" ) != 0 )
+	if ( strcmp( extension, "dds" ) == 0 )
 	{
-		WbLog( "Default",  "Error loading texture, only DDS is supported\n" );
+		LoadDDS( dataStream );
 	}
+	if ( strcmp( extension, "png" ) == 0 )
+	{
+		LoadPNG( dataStream );
+	}
+	else
+	{
+		WbLog( "Default",  "Unsupported texture format : %s\n", extension );
+	}
+}
 
+void CPicture::Destroy()
+{
+	m_pPixelData = nullptr;
+}
+
+
+void CPicture::LoadDDS( CDataStream& dataStream )
+{
 	char const* header = (char const*)dataStream.GetCursorData() + 4;
 
 	m_height = *(unsigned int*)&(header[8]);
@@ -80,39 +98,13 @@ void CPicture::Load( const char* extension, CDataStream& dataStream )
 		break;
 		// free
 	}
-
-
-
-
-
-// 
-//  	if ( strcmp( extension, "jpg" ) == 0 || strcmp( extension, "jpeg" ) == 0 )
-//  	{
-//  		m_format = ePF_B8G8R8;
-//  		fif = FIF_JPEG;
-//  	}
-//  	else if ( strcmp( extension, "tga" ) == 0 )
-//  	{
-//  		m_format = ePF_R8G8B8A8;
-//  		fif = FIF_TARGA;
-//  	}
-//  	else if ( strcmp( extension, "dds" ) == 0 )
-//  	{
-//  		m_format = ePF_B8G8R8A8;
-//  		fif = FIF_DDS;
-//  	}	
-//  	else
-//  	{
-//  		WbLog( "Default",  "Picture format %s not supported\n", extension );
-//  		return;
-//  	}
- 	
-	//	
 }
 
-void CPicture::Destroy()
+void CPicture::LoadPNG( CDataStream& dataStream )
 {
-	m_pPixelData = nullptr;
+	lodepng_decode_memory( (unsigned char**)&m_pPixelData, &m_width, &m_height, (unsigned char*)dataStream.GetCursorData(), dataStream.GetSize(), LodePNGColorType::LCT_RGBA, 8 );
+	m_format = ePF_R8G8B8A8;
+	m_mipMapCount = 0;
 }
-	
+
 WHITEBOX_END

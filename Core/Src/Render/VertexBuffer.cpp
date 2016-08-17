@@ -8,7 +8,11 @@ WHITEBOX_BEGIN
 CVertexBuffer::CVertexBuffer( const CVertexFormat& vertexFormat, size_t vertexCount, void* pVertices )
 	: m_vertexFormat(vertexFormat), m_vertexCount(vertexCount)
 {
+#ifdef COOK
+	m_pBufferId = nullptr;
+#else
 	m_pBufferId = gVars->pRenderer->CreateVertexBuffer( vertexCount * m_vertexFormat.GetSize(), pVertices );
+#endif
 }
 
 CVertexBuffer::~CVertexBuffer()

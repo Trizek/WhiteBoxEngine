@@ -1,0 +1,15 @@
+
+
+Material
+{
+  emissiveColor = ()
+  ambientColor = ()
+  diffuseColor = ()
+  specularColor = ()
+  shininess = 0.00000
+  
+  TextureLayer
+  {
+    texture = "Vanquish/Visor.dds"
+  }
+}

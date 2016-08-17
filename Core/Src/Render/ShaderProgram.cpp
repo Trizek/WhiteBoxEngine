@@ -18,7 +18,11 @@ CShaderProgram::CShaderProgram()
 	: m_uniformCount(0)
 	, m_uniformsSize(0)
 {
+#ifdef COOK
+	m_pProgramId = nullptr;
+#else
 	m_pProgramId = gVars->pRenderer->CreateProgram();
+#endif
 }
 
 CShaderProgram::~CShaderProgram()
@@ -35,6 +39,10 @@ bool	CShaderProgram::LinkProgram()
 
 bool	CShaderProgram::LinkProgram( String& errorMessage )
 {
+#ifdef COOK
+	return false;
+#endif
+
 	Bind( true );
 
 	for( CShaderPtr& shader : m_shaders )

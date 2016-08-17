@@ -1,0 +1,919 @@
+
+
+Resources
+{
+  
+  Resource
+  {
+    path = "detour.program"
+    size = 198
+    
+    Dependency
+    {
+      path = "detourvertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "detourfragment.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "detourfragment.ps"
+    size = 537
+  }
+  
+  Resource
+  {
+    path = "detourvertex.vs"
+    size = 970
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_Universal_TeethClean_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_Universal_TeethClean_SpecularMap.dds"
+    size = 43832
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R3_DiffuseMap.dds"
+    size = 349680
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R3_SpecularMap.dds"
+    size = 43832
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ArmShield_R4_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Blason_DiffuseMap.dds"
+    size = 43856
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Blason_SpecularMap.dds"
+    size = 5608
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Boots_R3-4_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Boots_R3-4_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    size = 174904
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Bracer_a_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Chest_R3_DiffuseMap.dds"
+    size = 349672
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    size = 349680
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Down_SpecularMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    size = 699192
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Gant_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    size = 174904
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_HiddenBladeGun_DiffuseMap.dds"
+    size = 11064
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_Poutch_a_DiffuseMap.dds"
+    size = 87536
+  }
+  
+  Resource
+  {
+    path = "Ezio/CR_U_Ezio_ShoulderPad_R3_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/CU_EzioFlorentin_Hair_Textures_DiffuseMap.dds"
+    size = 174928
+  }
+  
+  Resource
+  {
+    path = "Ezio/Ezio.msh"
+    size = 829527
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material001.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material002.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material003.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material004.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material005.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material006.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material007.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material008.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material009.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material010.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material011.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material012.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material013.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material014.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material015.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material016.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material017.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material018.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material019.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material020.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material021.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material022.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material023.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material024.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material025.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material026.mat"
+    }
+    
+    Dependency
+    {
+      path = "Ezio/Model001_Material027.mat"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material001.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material002.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material003.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_ezio_Head_Old_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material004.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material005.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material006.mat"
+    size = 196
+    
+    Dependency
+    {
+      path = "Ezio/eyes_diffuse.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material007.mat"
+    size = 218
+    
+    Dependency
+    {
+      path = "Ezio/CR_Universal_TeethClean_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material008.mat"
+    size = 214
+    
+    Dependency
+    {
+      path = "Ezio/Universal_Male_Hand_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material009.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material010.mat"
+    size = 219
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_HiddenBladeGun_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material011.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material012.mat"
+    size = 215
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Boots_R3-4_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material013.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material014.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material015.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material016.mat"
+    size = 209
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Gant_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material017.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_ArmShield_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material018.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material019.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Bracer_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material020.mat"
+    size = 216
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Top_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material021.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material022.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Chest_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material023.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material024.mat"
+    size = 217
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Clothes_Down_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material025.mat"
+    size = 213
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Poutch_a_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material026.mat"
+    size = 211
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_Blason_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Model001_Material027.mat"
+    size = 219
+    
+    Dependency
+    {
+      path = "Ezio/CR_U_Ezio_ShoulderPad_R3_DiffuseMap.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Ezio/Universal_Male_Hand_DiffuseMap.dds"
+    size = 87528
+  }
+  
+  Resource
+  {
+    path = "Ezio/Universal_Male_Hand_SpecularMap.dds"
+    size = 21992
+  }
+  
+  Resource
+  {
+    path = "font.ttf"
+    size = 367112
+  }
+  
+  Resource
+  {
+    path = "fragment.ps"
+    size = 1012
+  }
+  
+  Resource
+  {
+    path = "meca.msh"
+    size = 102844
+  }
+  
+  Resource
+  {
+    path = "shader.program"
+    size = 447
+    
+    Dependency
+    {
+      path = "vertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "fragment.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "text.program"
+    size = 226
+    
+    Dependency
+    {
+      path = "text.vs"
+    }
+    
+    Dependency
+    {
+      path = "text.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "text.ps"
+    size = 735
+  }
+  
+  Resource
+  {
+    path = "text.vs"
+    size = 1041
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirtyinnersuit_d.dds"
+    size = 262272
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirtyoutersuitlower_d.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirtyoutersuitlower_n.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirtyoutersuitupper_d.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirtyoutersuitupper_n.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/dirt_null.dds"
+    size = 192
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Innersuit_d.dds"
+    size = 262272
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Innersuit_n.dds"
+    size = 262272
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material001.mat"
+    size = 204
+    
+    Dependency
+    {
+      path = "Vanquish/dirtyinnersuit_d.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material002.mat"
+    size = 204
+    
+    Dependency
+    {
+      path = "Vanquish/dirtyinnersuit_d.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material003.mat"
+    size = 209
+    
+    Dependency
+    {
+      path = "Vanquish/dirtyoutersuitlower_d.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material004.mat"
+    size = 209
+    
+    Dependency
+    {
+      path = "Vanquish/dirtyoutersuitupper_d.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material005.mat"
+    size = 193
+    
+    Dependency
+    {
+      path = "Vanquish/Visor.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Model001_Material006.mat"
+    size = 209
+    
+    Dependency
+    {
+      path = "Vanquish/dirtyoutersuitupper_d.dds"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/norm_null.dds"
+    size = 192
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Outersuitlower_d.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Outersuitlower_n.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Outersuitupper_d.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Outersuitupper_n.dds"
+    size = 1048704
+  }
+  
+  Resource
+  {
+    path = "Vanquish/vanquish.msh"
+    size = 527586
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material001.mat"
+    }
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material002.mat"
+    }
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material003.mat"
+    }
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material004.mat"
+    }
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material005.mat"
+    }
+    
+    Dependency
+    {
+      path = "Vanquish/Model001_Material006.mat"
+    }
+  }
+  
+  Resource
+  {
+    path = "Vanquish/vanquish1.dds"
+    size = 518128
+  }
+  
+  Resource
+  {
+    path = "Vanquish/Visor.dds"
+    size = 131200
+  }
+  
+  Resource
+  {
+    path = "vertex.vs"
+    size = 1242
+  }
+  
+  Resource
+  {
+    path = "vr.program"
+    size = 222
+    
+    Dependency
+    {
+      path = "vr.vs"
+    }
+    
+    Dependency
+    {
+      path = "vr.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "vr.ps"
+    size = 350
+  }
+  
+  Resource
+  {
+    path = "vr.vs"
+    size = 915
+  }
+  
+  Resource
+  {
+    path = "white.program"
+    size = 743
+    
+    Dependency
+    {
+      path = "vertex.vs"
+    }
+    
+    Dependency
+    {
+      path = "white.ps"
+    }
+  }
+  
+  Resource
+  {
+    path = "white.ps"
+    size = 1028
+  }
+}

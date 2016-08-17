@@ -17,6 +17,10 @@ IResource*	CShaderSerializer::Load( CDataStream& dataStream, const CResourceDesc
 		shaderType = EShaderType::PS;
 	}
 
+
+#ifdef COOK
+	return new CShader( shaderType, nullptr );
+#else
 	void* pShaderId = gVars->pRenderer->CreateShader( (char const*)dataStream.GetCursorData(), shaderType );
 	
 	String errorMessage;
@@ -27,6 +31,7 @@ IResource*	CShaderSerializer::Load( CDataStream& dataStream, const CResourceDesc
 	}
 
 	return new CShader( shaderType, pShaderId );
+#endif
 }
 
 WHITEBOX_END

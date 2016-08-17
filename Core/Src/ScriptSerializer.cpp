@@ -74,11 +74,11 @@ void CScriptNodeReader::EndGroup()
 	}
 }
 
-void CScriptNodeReader::Value( const String& name, int& val )
+bool CScriptNodeReader::Value( const String& name, int& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -86,14 +86,17 @@ void CScriptNodeReader::Value( const String& name, int& val )
 	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Int )
 	{
 		val = (*attIt).m_int;
+		return true;
 	}
+
+	return false;
 }
 
-void CScriptNodeReader::Value( const String& name, float& val )
+bool CScriptNodeReader::Value( const String& name, float& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -101,14 +104,17 @@ void CScriptNodeReader::Value( const String& name, float& val )
 	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Float )
 	{
 		val = (*attIt).m_float;
+		return true;
 	}
+
+	return false;
 }
 
-void CScriptNodeReader::Value( const String& name, String& val )
+bool CScriptNodeReader::Value( const String& name, String& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -116,14 +122,17 @@ void CScriptNodeReader::Value( const String& name, String& val )
 	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_String )
 	{
 		val = (*attIt).m_string;
+		return true;
 	}
+
+	return false;
 }
 
-void CScriptNodeReader::Value( const String& name, Vec2& val )
+bool CScriptNodeReader::Value( const String& name, Vec2& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -132,15 +141,17 @@ void CScriptNodeReader::Value( const String& name, Vec2& val )
 	{
 		val.x = (*attIt).m_vector.x;
 		val.y = (*attIt).m_vector.y;
+		return true;
 	}
 
+	return false;
 }
 
-void CScriptNodeReader::Value( const String& name, Vec3& val )
+bool CScriptNodeReader::Value( const String& name, Vec3& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -150,14 +161,17 @@ void CScriptNodeReader::Value( const String& name, Vec3& val )
 		val.x = (*attIt).m_vector.x;
 		val.y = (*attIt).m_vector.y;
 		val.z = (*attIt).m_vector.z;
+		return true;
 	}
+
+	return false;
 }
 
-void CScriptNodeReader::Value( const String& name, Vec4& val )
+bool CScriptNodeReader::Value( const String& name, Vec4& val )
 {
 	if ( m_groupStack.empty() )
 	{
-		return;
+		return false;
 	}
 
 	SScriptNodePtr pNode = m_groupStack.back().m_pScriptNode;
@@ -165,7 +179,10 @@ void CScriptNodeReader::Value( const String& name, Vec4& val )
 	if ( attIt != nullptr && (*attIt).m_type == SScriptNode::SAttribute::eT_Vector )
 	{
 		val = (*attIt).m_vector;
+		return true;
 	}
+
+	return false;
 }
 
 
@@ -214,11 +231,11 @@ void CScriptNodeWriter::EndGroup()
 	}
 }
 
-void CScriptNodeWriter::Value( const String& name, int& val )
+bool CScriptNodeWriter::Value( const String& name, int& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -227,13 +244,15 @@ void CScriptNodeWriter::Value( const String& name, int& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_Int;
 	attribute.m_int = val;
 	pNode->m_attributes[ name ] = attribute;
+
+	return true;
 }
 
-void CScriptNodeWriter::Value( const String& name, float& val )
+bool CScriptNodeWriter::Value( const String& name, float& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -242,13 +261,15 @@ void CScriptNodeWriter::Value( const String& name, float& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_Float;
 	attribute.m_float = val;
 	pNode->m_attributes[ name ] = attribute;
+
+	return true;
 }
 
-void CScriptNodeWriter::Value( const String& name, String& val )
+bool CScriptNodeWriter::Value( const String& name, String& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -257,13 +278,15 @@ void CScriptNodeWriter::Value( const String& name, String& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_String;
 	attribute.m_string = val;
 	pNode->m_attributes[ name ] = attribute;
+	
+	return true;
 }
 
-void CScriptNodeWriter::Value( const String& name, Vec2& val )
+bool CScriptNodeWriter::Value( const String& name, Vec2& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -272,13 +295,15 @@ void CScriptNodeWriter::Value( const String& name, Vec2& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_Vector;
 	attribute.m_vector = Vec4( val.x, val.y, 0.0f, 0.0f );
 	pNode->m_attributes[ name ] = attribute;
+
+	return true;
 }
 
-void CScriptNodeWriter::Value( const String& name, Vec3& val )
+bool CScriptNodeWriter::Value( const String& name, Vec3& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -287,13 +312,15 @@ void CScriptNodeWriter::Value( const String& name, Vec3& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_Vector;
 	attribute.m_vector = Vec4( val.x, val.y, val.z, 0.0f );
 	pNode->m_attributes[ name ] = attribute;
+
+	return true;
 }
 
-void CScriptNodeWriter::Value( const String& name, Vec4& val )
+bool CScriptNodeWriter::Value( const String& name, Vec4& val )
 {
 	if ( m_nodeStack.empty() )
 	{
-		return;
+		return false;
 	}
 	
 	SScriptNodePtr pNode = m_nodeStack.back();
@@ -302,6 +329,8 @@ void CScriptNodeWriter::Value( const String& name, Vec4& val )
 	attribute.m_type = SScriptNode::SAttribute::eT_Vector;
 	attribute.m_vector = val;
 	pNode->m_attributes[ name ] = attribute;
+
+	return true;
 }
 
 SScriptNodePtr	CScriptNodeWriter::GetRootNode()
