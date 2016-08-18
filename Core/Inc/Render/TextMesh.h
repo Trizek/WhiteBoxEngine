@@ -14,7 +14,7 @@ public:
 
 	void			SetText( const CText& text, const CFontPtr& pFont );
 
-	const CMeshPtr&	GetMesh() const;
+	CMeshPtr	GetMesh() const;
 
 private:
 	void		CreateMesh( size_t characterCount );

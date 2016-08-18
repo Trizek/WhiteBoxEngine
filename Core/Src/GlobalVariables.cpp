@@ -18,9 +18,7 @@ void SGlobalVariables::Init()
 
 	gVars->pFileSystem = new CFileSystem();
 	gVars->pLogSystem = new CLogSystem();
-#ifndef __GEAR_VR
 	gVars->pFontSystem = new CFontSystem();
-#endif
 	gVars->pRenderer = new CRenderer();
 	gVars->pOperatingSystem = new COperatingSystem();
 	gVars->pApplication = new CApplication();

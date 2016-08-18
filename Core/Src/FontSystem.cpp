@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 
-#ifndef __GEAR_VR
 
 WHITEBOX_BEGIN
 
@@ -17,6 +16,7 @@ void	CFontSystem::Init()
 	if ( !m_bInit )
 	{
 		m_bInit = FT_Init_FreeType( &m_library ) == 0;
+		WbLog( "Font", "Freetype init : %d", (int)m_bInit );
 	}
 }
 
@@ -32,5 +32,3 @@ FT_Library&	CFontSystem::GetLibrary()
 
 WHITEBOX_END
 
-
-#endif

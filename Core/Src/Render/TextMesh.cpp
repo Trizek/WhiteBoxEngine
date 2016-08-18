@@ -8,8 +8,6 @@
 #include "Render/RenderPipeline.h"
 #include "Render/Material.h"
 
-#ifndef __GEAR_VR
-
 WHITEBOX_BEGIN
 
 
@@ -100,11 +98,9 @@ void	CTextMesh::CreateMesh( size_t characterCount )
 	delete[] indices;
 }
 
-const CMeshPtr&	CTextMesh::GetMesh() const
+CMeshPtr	CTextMesh::GetMesh() const
 {
 	return m_pMesh;
 }
 
 WHITEBOX_END
-
-#endif

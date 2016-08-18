@@ -29,7 +29,7 @@ CResourceManager::CResourceManager()
 
 	AddResourceType< CShaderProgram, CShaderProgramSerializer >( "program" );
 
-/*	AddResourceType< CFont, CFontSerializer >( "ttf" );*/
+	AddResourceType< CFont, CFontSerializer >( "ttf" );
 }
 
 void CResourceManager::AddResourceType( const String& name, const String& extension, IResourceSerializer* pSerializer )
@@ -99,7 +99,7 @@ void CResourceManager::UpdateResourceLoading()
 			continue; // Can happen if resource queried for load and unload the same frame
 		}
 
-		WbLog( "Default",  "Loading resource %s of type %s\n...", pDescriptor->GetName().c_str(), pDescriptor->GetResourceType()->GetName().c_str() );
+		//WbLog( "Default",  "Loading resource %s of type %s\n...", pDescriptor->GetName().c_str(), pDescriptor->GetResourceType()->GetName().c_str() );
 		
 		CDataStream dataStream;
 		gVars->pOperatingSystem->GetDataStream( m_resourceRootDir + pDescriptor->GetPath(), dataStream, pDescriptor->GetSize() );
@@ -107,11 +107,11 @@ void CResourceManager::UpdateResourceLoading()
 		IResource* pResource = pDescriptor->GetResourceType()->GetSerializer()->Load( dataStream, *pDescriptor );
 		if ( pResource == NULL )
 		{
-			WbLog( "Default",  "FAILED loading resource %s\n", pDescriptor->GetName().c_str() );
+			//WbLog( "Default",  "FAILED loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		else
 		{
-			WbLog( "Default",  "Succeeded loading resource %s\n", pDescriptor->GetName().c_str() );
+		//	WbLog( "Default",  "Succeeded loading resource %s\n", pDescriptor->GetName().c_str() );
 		}
 		
 		pDescriptor->SetResource( pResource );
@@ -171,11 +171,11 @@ CResourceDescriptor* CResourceManager::AddResource( const String& path, size_t s
 
 		if ( size == 0 )
 		{
-			WbLog( "Default",  "Error : resource file %s not found\n", path.c_str() );
+	//		WbLog( "Default",  "Error : resource file %s not found\n", path.c_str() );
 		}
 	}
 	
-	WbLog( "Default",  "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), (int)size, path.c_str() );
+//	WbLog( "Default",  "Adding resource %s of extension %s and type %s and size %d, located at %s\n", name.c_str(), extension.c_str(), pResourceType->GetName().c_str(), (int)size, path.c_str() );
 	
 	return pResourceType->GetResourceSpecificManager()->AddResource( name, path, extension, size, pResourceType, this );	
 }

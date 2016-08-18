@@ -2,7 +2,7 @@ Program
 {
 	Shader
 	{
-		name = "text.vs"
+		name = "vertex.vs"
 	}
 
 	Shader
@@ -28,4 +28,40 @@ Program
 		name = "uv0"
 	}
 
+	Uniform
+	{
+		name = "SceneMatrices"
+		type = "Buffer"
+		size = 64
+		platform = "Desktop"
+	}
+
+	Uniform
+	{
+		name = "SceneMatrices"
+		type = "Buffer"
+		size = 192
+		platform = "GearVR"
+	}
+
+	Uniform
+	{
+		name = "modelViewMatrix"
+		type = "Matrix4x4"
+		platform = "Desktop"
+	}
+
+	Uniform
+	{
+		name = "modelMatrix"
+		type = "Matrix4x4"
+		platform = "GearVR"
+	}
+
+	Uniform
+	{
+		name = "shaderTexture"
+		type = "Int"
+	}
 }
+

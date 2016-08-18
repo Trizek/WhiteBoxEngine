@@ -4,7 +4,6 @@
 #include "BaseTypes.h"
 
 
-#ifndef __GEAR_VR
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -31,4 +30,3 @@ WHITEBOX_END
 
 #endif
 
-#endif

@@ -10,6 +10,8 @@ rmdir /s /q ..\..\Core\Libs\GearVR\WhiteBoxGearLib
 :: Copy the library
 :: xcopy WhiteBoxGearLib ..\..\Core\Libs\GearVR\WhiteBoxGearLib /s /i /h /e /y
 
+xcopy LibFreeType ..\..\Core\Libs\GearVR\LibFreeType /s /i /h /e /y
+
 :: Copy and build WhitexBox gear vr application
 xcopy VrCubeWorld_SurfaceView ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView /s /i /h /e /y
 xcopy OsigFiles\* ..\..\Core\Libs\GearVR\VrSamples\Native\VrCubeWorld_SurfaceView\assets\ /y

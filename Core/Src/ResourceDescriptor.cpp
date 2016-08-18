@@ -29,15 +29,15 @@ CResourceDescriptor::CResourceDescriptor( const String& name, const String& path
 	, m_pResourceType(pResourceType)
 	, m_pResourceManager(pResourceManager)
 {
-	WbLog( "Default", "Create descriptor %s\n", name.c_str());
+//	WbLog( "Default", "Create descriptor %s\n", name.c_str());
 }
 
 CResourceDescriptor::~CResourceDescriptor()
 {
-	if ( m_name.empty())
-	WbLog( "Default", "Destroying empty descriptor\n");
-	else
-	WbLog( "Default", "Desotrying descriptor %s\n", m_name.c_str());
+	//if ( m_name.empty())
+	//WbLog( "Default", "Destroying empty descriptor\n");
+	//else
+	//WbLog( "Default", "Desotrying descriptor %s\n", m_name.c_str());
 }
 
 void CResourceDescriptor::Acquire()
@@ -45,7 +45,7 @@ void CResourceDescriptor::Acquire()
 	if ( m_refCount == 0 && m_pResource == nullptr && !m_bProcedural ) // resource can be not null with refcount 0 (unload then load the same frame)
 	{
 		// async load
-		WbLog( "Default",  "Request loading resource %s\n", m_name.c_str() );
+	//	WbLog( "Default",  "Request loading resource %s\n", m_name.c_str() );
 		m_pResourceManager->AddLoadResourceQuery( *this );
 	}
 	m_refCount++;
@@ -63,7 +63,7 @@ void CResourceDescriptor::Release()
 		}
 		else
 		{
-			WbLog( "Default",  "Marking %s to destroy\n", m_name.c_str() );
+		//	WbLog( "Default",  "Marking %s to destroy\n", m_name.c_str() );
 			m_pResourceManager->AddUnloadResourceQuery( *this );
 		}
 	}
@@ -73,7 +73,7 @@ void CResourceDescriptor::DestroyIfNoRef()
 {
 	if ( m_pResource != nullptr && m_refCount == 0 )
 	{
-		WbLog( "Default",  "Destroy resource %s\n", m_name.c_str());
+	//	WbLog( "Default",  "Destroy resource %s\n", m_name.c_str());
 		delete m_pResource;
 		m_pResource = nullptr;
 	}

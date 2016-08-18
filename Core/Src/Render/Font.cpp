@@ -1,5 +1,3 @@
-#ifndef __GEAR_VR
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -19,6 +17,7 @@ CFont::CFont(  CDataStream& dataStream, uint size /*= 16*/, uint dpi /*= 300*/ )
 
 	if ( !gVars->pFontSystem->IsInit() )
 	{
+		WbLog( "Font", "Font system not init !!" );
 		return;
 	}
 
@@ -121,5 +120,3 @@ CMaterialPtr					CFont::GetMaterial() const
 }
 
 WHITEBOX_END
-
-#endif

@@ -1610,7 +1610,7 @@ static ovrFrameParms ovrRenderer_RenderFrame(ovrRenderer * renderer, const ovrJa
 		GL(glCullFace(GL_BACK));
 		GL(glViewport(0, 0, frameBuffer->Width, frameBuffer->Height));
 		GL(glScissor(0, 0, frameBuffer->Width, frameBuffer->Height));
-		GL(glClearColor(0.125f, 0.0f, 0.125f, 1.0f));
+		GL(glClearColor(1, 1, 1, 1));// 0.125f, 0.0f, 0.125f, 1.0f));
 		GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 // 		GL(glBindVertexArray(scene->Cube.VertexArrayObject));
 // 		GL(glDrawElementsInstanced(GL_TRIANGLES, scene->Cube.IndexCount, GL_UNSIGNED_SHORT, NULL, NUM_INSTANCES));

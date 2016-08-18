@@ -34,12 +34,14 @@ CTexturePtr ezioTexture;
 
 CShaderProgramPtr shader, detourshader, whiteshader, textProgram;
 
-//CFontPtr font;
-//CTextMesh textMesh, textMesh2;
+CFontPtr font;
+CTextMesh textMesh, textMesh2;
 
 
 CMeshPtr q;
 CShaderProgramPtr pProg;
+
+CTimer timer;
 
 void CApplication::InitApplication( uint width, uint height )
 {
@@ -65,15 +67,15 @@ void CApplication::InitApplication( uint width, uint height )
 	gVars->pResourceManager->ParseResources( "" );
 
 	//ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
-	//ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
+	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");
 	meca = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
 //	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
 // 
-	shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
+	//shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 // 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
  	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
 // 
-// 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
+	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 
 	{
 		CMeshHelper m;
@@ -220,7 +222,7 @@ void CApplication::InitApplication( uint width, uint height )
 
 		quad->GetPart(0)->SetMaterial( pMat );
 
-		//font = gVars->pResourceManager->GetResource< CFont >( "font.ttf" );
+		font = gVars->pResourceManager->GetResource< CFont >( "font.ttf" );
 
 
 
@@ -228,6 +230,8 @@ void CApplication::InitApplication( uint width, uint height )
 
 	
 		gVars->pResourceManager->UpdateResourceLoading();
+
+		timer.Start();
 
 	//
 }
@@ -246,14 +250,21 @@ float angle = 0;
 
 void CApplication::FrameUpdate()
 {
+	
+
 	float frameTime = gVars->pOperatingSystem->Tick();
+	
+	timer.Stop();
+	frameTime = timer.GetDuration();
+	timer.Start();
+	
 	float fps = 1.0f / frameTime; (void)fps;
 
-// 	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
-// 	textMesh.SetText(text, font);
-// 
-// 	CText txt2( U"François Fournel était\ndans la place" );
-// 	textMesh2.SetText(txt2, font);
+ 	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
+ 	textMesh.SetText(text, font);
+ 
+ 	CText txt2( U"François Fournel était\ndans la place" );
+ 	textMesh2.SetText(txt2, font);
 
 
 	bool bClick = gVars->pOperatingSystem->GetMouseButton(0);
@@ -316,6 +327,7 @@ void CApplication::FrameUpdate()
 	ttt.rotation = Quat::CreateRotZ(Degree(aaa)) * Quat::CreateRotX(Degree(90.0f));
 	ttt.position.z = -5.0f; // 100.0f;
 	ttt.position.y = -5.0f;
+	ttt.position.x = 7.0f;
 	ttt.scale = 5.0f;
 
 	if (pProg)
@@ -323,7 +335,21 @@ void CApplication::FrameUpdate()
 
 		for (size_t i = 0; i< meca->GetPartCount();++i)
 			CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, whiteshader.get(), true);
+
+		ttt.position.x = 1.0f;
+
+
+		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
+			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, ttt, whiteshader.get(), true);
 	}
+
+
+	Transform textTransf;
+
+	textTransf = m_pRenderPipeline->mainCamera.transform;
+	textTransf.position = textTransf.position + m_pRenderPipeline->mainCamera.transform.rotation * Vec3(-750.0f, 1000.0f, 0.0f);
+
+	CRenderPipeline::AddRenderProxyToQueue(textMesh.GetMesh().get(), 0, m_pRenderPipeline->proxies, textTransf, textProgram.get(), true);
 
 
 	m_pRenderPipeline->Render();
@@ -340,10 +366,6 @@ void CApplication::FrameUpdate()
 
 
 
-	Transform textTransf;
-	
-	textTransf = m_pRenderPipeline->mainCamera.transform;
-	textTransf.position = textTransf.position + m_pRenderPipeline->mainCamera.transform.rotation * Vec3(-500.0f, 1000.0f, 0.0f);
 	//textTransf.rotation = Quat();
 
 

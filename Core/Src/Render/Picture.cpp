@@ -67,7 +67,7 @@ void CPicture::Load( const char* extension, CDataStream& dataStream )
 	}
 	else
 	{
-		WbLog( "Default",  "Unsupported texture format : %s\n", extension );
+//		WbLog( "Default",  "Unsupported texture format : %s\n", extension );
 	}
 }
 
