@@ -33,6 +33,13 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 #include <GLES3/gl3.h>
 #include <GLES3/gl3ext.h>
 
+#include <iostream>
+#include <thread>
+
+
+
+
+
 
 
 #include "Android/JniUtils.h"
@@ -56,6 +63,11 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 
 #include "LogSystem/LogSystem.h"
 
+#include "System/Thread.h"
+
+using namespace WhiteBox;
+
+
 extern "C"
 {
 #include "VrApi.h"
@@ -67,7 +79,6 @@ extern "C"
 
 #include "Render/RenderPipeline.h"
 
-using namespace WhiteBox;
 
 #if !defined( EGL_OPENGL_ES3_BIT_KHR )
 #define EGL_OPENGL_ES3_BIT_KHR		0x0040
@@ -119,7 +130,7 @@ static const int CPU_LEVEL = 2;
 static const int GPU_LEVEL = 3;
 static const int NUM_MULTI_SAMPLES = 4;
 
-#define MULTI_THREADED			0
+#define MULTI_THREADED			1
 #define REDUCED_LATENCY			0
 #define EXPLICIT_EGL_OBJECTS	1
 
@@ -130,6 +141,7 @@ AAssetManager* s_assetManager = NULL;
 
 const char * GetCurrentPackagePath(JNIEnv * jni, jobject activityObject, char * packageName, int const maxLen)
 {
+
 	packageName[0] = '\0';
 
 	jclass curActivityClass = jni->GetObjectClass(activityObject);
@@ -1715,7 +1727,9 @@ void * RenderThreadFunction(void * parm)
 
 	ovrJava java;
 	java.Vm = renderThread->JavaVm;
-	(*java.Vm)->AttachCurrentThread(java.Vm, &java.Env, NULL);
+	
+	ovr_AttachCurrentThread(java.Vm, &java.Env, nullptr);
+
 	java.ActivityObject = renderThread->ActivityObject;
 
 	// Note that AttachCurrentThread will reset the thread name.
@@ -1725,9 +1739,22 @@ void * RenderThreadFunction(void * parm)
 	ovrEgl_CreateContext(&egl, renderThread->ShareEgl);
 
 	ovrRenderer renderer;
-	ovrRenderer_Create(&renderer, &java);
+	ovrRenderer_Create(&renderer, &java, true);// (glExtensions.multi_view && vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_MULTIVIEW_AVAILABLE)));
 
 	ovrScene * lastScene = NULL;
+
+	screenWidth = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_WIDTH),
+		screenHeight = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_HEIGHT),
+
+
+		SGlobalVariables::Init();
+
+
+
+	GetCurrentPackagePath(java.Env, java.ActivityObject, packagePath, 1024);
+	WbLog("GearVR", "Package path %s", packagePath);
+
+	gVars->pApplication->InitApplication(screenWidth, screenHeight);
 
 	for (; ; )
 	{
@@ -2450,24 +2477,26 @@ void * AppThreadFunction(void * parm)
 	perfParms.RenderThreadTid = ovrRenderThread_GetTid(&appState.RenderThread);
 #else
 	ovrRenderer_Create(&appState.Renderer, &java, appState.UseMultiview);
+
+	screenWidth = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_WIDTH),
+		screenHeight = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_HEIGHT),
+
+
+		SGlobalVariables::Init();
+
+
+
+	GetCurrentPackagePath(java.Env, java.ActivityObject, packagePath, 1024);
+	WbLog("GearVR", "Package path %s", packagePath);
+
+
+	gVars->pApplication->InitApplication(screenWidth, screenHeight);
 #endif
 
 
 
 
-	screenWidth = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_WIDTH),
-	screenHeight = vrapi_GetSystemPropertyInt(&java, VRAPI_SYS_PROP_SUGGESTED_EYE_TEXTURE_HEIGHT),
 
-
-	SGlobalVariables::Init();
-
-
-
-	GetCurrentPackagePath( java.Env, java.ActivityObject, packagePath, 1024 );
-	WbLog( "GearVR", "Package path %s", packagePath );
-
-
-	gVars->pApplication->InitApplication( screenWidth, screenHeight );
 
 	for (bool destroyed = false; destroyed == false; )
 	{

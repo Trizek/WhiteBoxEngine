@@ -294,6 +294,9 @@
     <ClInclude Include="..\..\..\Core\Inc\Png\lodepng.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\System\Thread.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Application.cpp">
@@ -456,6 +459,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\Png\lodepng.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\System\Thread.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
