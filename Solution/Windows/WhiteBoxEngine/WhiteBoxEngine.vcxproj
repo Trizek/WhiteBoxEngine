@@ -189,6 +189,8 @@
     <ClInclude Include="..\..\..\Core\Inc\BaseTypes.h" />
     <ClInclude Include="..\..\..\Core\Inc\BehaviorComponent.h" />
     <ClInclude Include="..\..\..\Core\Inc\BehaviorManager.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Command.h" />
+    <ClInclude Include="..\..\..\Core\Inc\CommandBuffer.h" />
     <ClInclude Include="..\..\..\Core\Inc\DataStream.h" />
     <ClInclude Include="..\..\..\Core\Inc\Event.h" />
     <ClInclude Include="..\..\..\Core\Inc\FileSystem.h" />
@@ -247,6 +249,7 @@
     <ClInclude Include="..\..\..\Core\Inc\System\Thread.h" />
     <ClInclude Include="..\..\..\Core\Inc\Temp.h" />
     <ClInclude Include="..\..\..\Core\Inc\Text.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ThreadDoubleBuffer.h" />
     <ClInclude Include="..\..\..\Core\Inc\Types\Array.h" />
     <ClInclude Include="..\..\..\Core\Inc\Types\BitArray.h" />
     <ClInclude Include="..\..\..\Core\Inc\Types\HashMap.h" />
