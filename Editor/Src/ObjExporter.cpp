@@ -41,8 +41,8 @@ void CObjExporter::Export( const String& assetFolder, const String& resourceFold
 		{
 			Vec3 pos;
 			if ( ReadWord( file, buffer ) ){ pos.x = ToFloat( buffer ); }
-			if ( ReadWord( file, buffer ) ){ pos.y = ToFloat( buffer ); }
 			if ( ReadWord( file, buffer ) ){ pos.z = ToFloat( buffer ); }
+			if ( ReadWord( file, buffer ) ){ pos.y = -ToFloat( buffer ); }
 			
 			meshHelper.AddPosition( pos );
 			

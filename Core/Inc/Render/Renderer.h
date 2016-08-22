@@ -108,7 +108,7 @@ public:
 	void	RenderBoundTriangles( size_t indexCount );
 	
 	// Debug
-	void	DrawLine( const Vec3& from, const Vec3& to, const Color& color );
+	void	DrawLine( const Vec3& from, const Vec3& to, const Color& color, const Matrix44& projectionMatrix);
 
 	
 private:

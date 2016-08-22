@@ -4,6 +4,13 @@
 #include "BaseTypes.h"
 #include "System/OperatingSystem.h"
 
+struct SBone
+{
+	WhiteBox::Transform t;
+	std::vector<SBone> children;
+};
+
+
 WHITEBOX_BEGIN
 
 class CApplication

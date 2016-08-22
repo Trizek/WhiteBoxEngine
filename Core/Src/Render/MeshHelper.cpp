@@ -4,6 +4,7 @@
 #include "GlobalVariables.h"
 #include "FileSystem.h"
 #include "LogSystem/LogSystem.h"
+#include "Render/VertexBuffer.h"
 
 WHITEBOX_BEGIN
 
@@ -105,6 +106,17 @@ void CMeshHelper::AddUV0( const Vec2& uv )
 	m_uv0Array.push_back( uv );
 }
 
+void CMeshHelper::AddBlendWeight( size_t attributePosition, const SVertexBlendWeight& blendBone )
+{
+	m_blendBoneArray[ attributePosition ].push_back( blendBone );
+}
+
+
+void CMeshHelper::AddBlendWeight( size_t attributePosition, float boneIndex, float boneWeight )
+{
+	m_blendBoneArray[ attributePosition ].push_back( SVertexBlendWeight(boneIndex, boneWeight) );
+}
+
 void CMeshHelper::AddMeshPart()
 {
 	m_meshParts.push_back( new CMeshPartHelper() );
@@ -153,7 +165,7 @@ char*	 CMeshHelper::BuildVertexArray( const CVertexFormat& vertexFormat ) const
 			*((float*)pCursor) = m_positionArray[ iVertex ].z;
 			pCursor = pCursor + sizeof(float); 	
 			
-			if ( m_normalArray.size() > 0 )
+			if ( m_normalArray.size() > 0 && m_normalArray.size() == m_positionArray.size())
 			{
 				*((float*)pCursor) = m_normalArray[ iVertex ].x;
 				pCursor = pCursor + sizeof(float); 
@@ -163,7 +175,7 @@ char*	 CMeshHelper::BuildVertexArray( const CVertexFormat& vertexFormat ) const
 				pCursor = pCursor + sizeof(float);
 			}
 			
-			if ( m_colorArray.size() > 0 )
+			if ( m_colorArray.size() > 0 && m_colorArray.size() == m_positionArray.size() )
 			{
 				*((float*)pCursor) = m_colorArray[ iVertex ].x;
 				pCursor = pCursor + sizeof(float); 
@@ -173,13 +185,24 @@ char*	 CMeshHelper::BuildVertexArray( const CVertexFormat& vertexFormat ) const
 				pCursor = pCursor + sizeof(float);
 			}		
 			
-			if ( m_uv0Array.size() > 0 )
+			if ( m_uv0Array.size() > 0 && m_uv0Array.size() == m_positionArray.size() )
 			{
 				*((float*)pCursor) = m_uv0Array[ iVertex ].x;
 				pCursor = pCursor + sizeof(float); 
 				*((float*)pCursor) = m_uv0Array[ iVertex ].y;
 				pCursor = pCursor + sizeof(float); 
-			}								
+			}
+
+			if ( m_blendBoneArray[ 0 ].size() == m_positionArray.size() )
+			{
+				SVertexBoneWeights boneWeights( m_blendBoneArray[0][iVertex].index, m_blendBoneArray[0][iVertex].weight,
+					m_blendBoneArray[1][iVertex].index, m_blendBoneArray[1][iVertex].weight,
+					m_blendBoneArray[2][iVertex].index, m_blendBoneArray[2][iVertex].weight,
+					m_blendBoneArray[3][iVertex].index, m_blendBoneArray[3][iVertex].weight );
+
+				*((SVertexBoneWeights*)pCursor) = boneWeights;
+				pCursor += sizeof(SVertexBoneWeights);
+			}
 		}
 	}
 	return pVertices;		
@@ -190,17 +213,21 @@ CVertexFormat CMeshHelper::GetVertexFormat() const
 	CVertexFormat vertexFormat;
 	vertexFormat.AddSingleElement( CVertexFormat::eSE_Position );
 
-	if ( m_normalArray.size() > 0 )
+	if ( m_normalArray.size() > 0 && m_normalArray.size() == m_positionArray.size())
 	{
 		vertexFormat.AddSingleElement( CVertexFormat::eSE_Normal );
 	}
-	if ( m_colorArray.size() > 0 )
+	if ( m_colorArray.size() > 0 && m_colorArray.size() == m_positionArray.size())
 	{
 		vertexFormat.AddSingleElement( CVertexFormat::eSE_Color );
 	}
-	if ( m_uv0Array.size() > 0 )
+	if ( m_uv0Array.size() > 0 && m_uv0Array.size() == m_positionArray.size())
 	{
 		vertexFormat.AddMultipleElement( CVertexFormat::eME_UV );
+	}
+	if ( m_blendBoneArray[0].size() == m_positionArray.size() )
+	{
+		vertexFormat.AddSingleElement( CVertexFormat::eSE_BoneWeights );
 	}
 	
 	vertexFormat.Build();	

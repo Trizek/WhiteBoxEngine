@@ -4,6 +4,192 @@
 /*#include "System.h"*/
 #include "FileSystem.h"
 
+#pragma optimize( "", on ) 
+#include "FbxConv.h"
+#pragma optimize( "", off ) 
+
+#include "Application.h"
+#include "Animation/Skeleton.h"
+
+SBone skel;
+
+using namespace fbxconv;
+using namespace WhiteBox;
+
+void	Parse(Node* node, SBone& bone, const Transform& parent)
+{
+	Transform boneT;
+	
+	boneT.rotation = Quat(node->transform.rotation[1], node->transform.rotation[2], node->transform.rotation[3], node->transform.rotation[0]);// *Quat::CreateRotZ(Degree(90.0f));
+	boneT.position = Vec3(node->transform.translation[0], -node->transform.translation[2], node->transform.translation[1]);
+	
+	boneT.scale = Vec3(node->transform.scale[0], node->transform.scale[1], node->transform.scale[2]);
+
+
+	bone.t = parent.GetInverse() * boneT;
+
+	Vec3 f = bone.t.rotation * Vec3::Forward;
+	Vec3 l = bone.t.rotation * Vec3::Left;
+	Vec3 u = bone.t.rotation * Vec3::Up;
+
+/*	bone.t = bone.t.GetInverse();*/
+
+	for (Node* child : node->children)
+	{
+		bone.children.push_back(SBone());
+		SBone& childBone = bone.children.back();
+		Parse(child, childBone, boneT);
+	}
+
+}
+
+WHITEBOX_BEGIN
+
+void ParseModelNode( Node* node, CSkeleton& skeleton, const String& parentName )
+{
+	Transform transf;
+
+	transf.rotation = Quat(node->transform.rotation[1], node->transform.rotation[2], node->transform.rotation[3], node->transform.rotation[0]);
+	transf.position = Vec3(node->transform.translation[0], -node->transform.translation[2], node->transform.translation[1]);
+	transf.scale = Vec3(node->transform.scale[0], node->transform.scale[1], node->transform.scale[2]);
+
+	String boneName = node->id.c_str();
+
+	skeleton.AddBone( boneName, parentName, transf );
+
+	for ( Node* child : node->children )
+	{
+		ParseModelNode( child, skeleton, boneName );
+	}
+}
+
+
+void CFbxExporter::Export( const String& assetFolder, const String& resourceFolder, const String& filePath )
+{
+	return;
+	log::Log log(new log::DefaultMessages(), -1);
+	FbxConv conv(&log);
+
+	Settings settings;
+	settings.flipV = false;
+	settings.packColors = false;
+	settings.verbose = true;
+	settings.maxNodePartBonesCount = 120;
+	settings.maxVertexBonesCount = 4;
+	settings.maxVertexCount = INT_MAX; //   (1 << 15) - 1;
+	settings.maxIndexCount = INT_MAX; // (1 << 15) - 1;
+	settings.outType = FILETYPE_AUTO;
+	settings.inType = FILETYPE_FBX;
+	settings.inFile = std::string( (assetFolder + filePath).c_str() );
+
+	modeldata::Model *model = new modeldata::Model();
+	if (!conv.load(&settings, model))
+	{
+		return;
+	}
+
+	conv.info(model);
+
+	for (Node* node : model->nodes)
+	{
+		CSkeleton* pSkeleton = new CSkeleton();
+		ParseModelNode( node, *pSkeleton, "" );
+
+
+		String skeletonPath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + ".skel";
+		gVars->pFileSystem->CreateFileDir( skeletonPath );
+		pSkeleton->SaveToFile( skeletonPath );
+
+		delete pSkeleton;
+	}
+
+
+	for (Mesh* mesh : model->meshes)
+	{
+		CMeshHelper mh;
+		size_t vertexCount = mesh->vertexCount();
+		size_t vertexFloatCount = mesh->vertexSize;
+		mh.m_positionArray.reserve(vertexCount);
+		mh.m_normalArray.reserve(vertexCount);
+
+		size_t attCount = mesh->attributes.length();
+		for (size_t att = 0; att < attCount; ++att)
+		{
+			size_t idx = mesh->attributes.get(att);
+
+
+			unsigned int offset = 0;
+			for (unsigned int i = 0; i < idx; i++)
+				if (mesh->attributes.has(i))
+					offset += (unsigned int)ATTRIBUTE_SIZE(i);
+		
+
+			switch (idx)
+			{
+			case ATTRIBUTE_POSITION:
+			{
+				for (size_t i = 0; i < vertexCount; ++i)
+				{
+					mh.AddPosition(*(Vec3*)(&mesh->vertices[vertexFloatCount * i]));
+
+
+
+				}
+				break;
+			}
+			case ATTRIBUTE_NORMAL:
+			{
+		
+					for (size_t i = 0; i < vertexCount; ++i)
+					{
+						mh.AddNormal(*(Vec3*)(&mesh->vertices[offset + vertexFloatCount * i]));
+					}
+				break;
+			}
+			case ATTRIBUTE_BLENDWEIGHT0:
+			case ATTRIBUTE_BLENDWEIGHT1:
+			case ATTRIBUTE_BLENDWEIGHT2:
+			case ATTRIBUTE_BLENDWEIGHT3:
+			case ATTRIBUTE_BLENDWEIGHT4:
+			case ATTRIBUTE_BLENDWEIGHT5:
+			case ATTRIBUTE_BLENDWEIGHT6:
+			case ATTRIBUTE_BLENDWEIGHT7:
+			{
+				size_t attributeIndex = idx - (size_t)ATTRIBUTE_BLENDWEIGHT0;
+				for (size_t i = 0; i < vertexCount; ++i)
+				{
+					mh.AddBlendWeight( attributeIndex, *((SVertexBlendWeight*)(&mesh->vertices[offset + vertexFloatCount * i])) );
+				}
+				break;
+			}
+			}
+
+		}
+
+		for (MeshPart* meshPart : mesh->parts)
+		{
+			mh.AddMeshPart();
+			CMeshPartHelper* part = mh.GetMeshPart(mh.m_meshParts.size()-1);
+
+			for (unsigned short indice : meshPart->indices)
+			{
+				part->AddIndex(indice);
+			}
+		}
+
+		String meshPath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + ".msh";
+		
+		gVars->pFileSystem->CreateFileDir( meshPath );
+		mh.SaveToFile( meshPath );
+	}
+}
+
+
+
+WHITEBOX_END
+
+
+
 #define FBX_EXPORTER 0
 #if FBX_EXPORTER
 
@@ -334,12 +520,4 @@ void CFbxExporter::Export( const String& assetFolder, const String& resourceFold
 
 }
 
-#else
-
-WHITEBOX_BEGIN
-
-void CFbxExporter::Export( const String& assetFolder, const String& resourceFolder, const String& filePath )
-{}
 #endif
-
-WHITEBOX_END

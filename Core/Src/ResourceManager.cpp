@@ -13,12 +13,15 @@
 #include "Render/FontSerializer.h"
 #include "System/OperatingSystem.h"
 #include "LogSystem/LogSystem.h"
+#include "Animation/SkeletonSerializer.h"
+#include "Animation/Skeleton.h"
 
 WHITEBOX_BEGIN
 
 CResourceManager::CResourceManager()
 	: m_bCheckForDependencyMode(false)
 {
+	AddResourceType< CSkeleton, CSkeletonSerializer >( "skel" );
 	AddResourceType< CMesh, CMeshSerializer >( "msh" );
 	AddResourceType< CMaterial, CMaterialSerializer >( "mat" );
 	AddResourceType< CTexture, CTextureSerializer >( "dds" );

@@ -28,7 +28,7 @@ public:
 	
 	bool	ReadByte( TFileHandle fileHandle, char&	byte );
 	bool	WriteByte( TFileHandle fileHandle, char byte );
-	
+
 	bool	WriteString( TFileHandle fileHandle, const String& str )
 	{
 		size_t length = str.length();

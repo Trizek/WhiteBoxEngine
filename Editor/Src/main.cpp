@@ -4,8 +4,8 @@
 #include "LogSystem/LogSystem.h"
 #include "AssetManager.h"
 
-#include "System/Thread.h"
-#include <thread>
+#include "ThreadDoubleBuffer.h"
+
 using namespace WhiteBox;
 
 

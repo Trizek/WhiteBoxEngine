@@ -60,4 +60,9 @@ Vec2& CVertexBuffer::GetUV0( void* pLockedData, size_t index ) const
 	return *(Vec2*)(((char*)pLockedData) + m_vertexFormat.GetMultipleElementOffset(CVertexFormat::eME_UV, 0) + index * m_vertexFormat.GetSize());
 }
 
+SVertexBoneWeights& CVertexBuffer::GetBoneWeights( void* pLockedData, size_t index ) const
+{
+	return *(SVertexBoneWeights*)(((char*)pLockedData) + m_vertexFormat.GetSingleElementOffset(CVertexFormat::eSE_BoneWeights) + index * m_vertexFormat.GetSize());
+}
+
 WHITEBOX_END

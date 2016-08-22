@@ -153,6 +153,18 @@ void	CRenderer::BindVertexBuffer( void* pBufferId, size_t vertexCount, const CVe
 		++attribIndex;
 	}
 
+	// Bones
+	if  (vertexFormat.HasSingleElement( CVertexFormat::eSE_BoneWeights ))
+	{
+		glEnableVertexAttribArray( attribIndex );
+		glVertexAttribPointer( attribIndex, 4, GL_FLOAT, false, (GLsizei)vertexFormat.GetSize(), (void*)vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_BoneWeights ) );
+		++attribIndex;
+
+		glEnableVertexAttribArray( attribIndex );
+		glVertexAttribPointer( attribIndex, 4, GL_FLOAT, false, (GLsizei)vertexFormat.GetSize(), (void*)(vertexFormat.GetSingleElementOffset( CVertexFormat::eSE_BoneWeights ) + sizeof(float)*4) );
+		++attribIndex;
+	}
+
 #if defined(OLD_OPENGL)
 	// Position
 	glEnableClientState( GL_VERTEX_ARRAY );
@@ -915,14 +927,20 @@ void	CRenderer::RenderBoundTriangles( size_t indexCount )
 	//glEnd();
 }
 
-void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color )
+void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color, const Matrix44& projectionMatrix )
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(&projectionMatrix.a11);
+
 	glLineWidth( 2.5f ); 
-// 	glColor3f( color.r, color.g, color.b );
-// 	glBegin( GL_LINES );
-// 	glVertex3f( from.x, from.y, from.z );
-// 	glVertex3f( to.x, to.y, to.z );
-// 	glEnd();	
+ 	glColor3f( color.r, color.g, color.b );
+ 	glBegin( GL_LINES );
+ 	glVertex3f( from.x, from.z, -from.y );
+ 	glVertex3f( to.x, to.z, -to.y );
+ 	glEnd();	
 }
 
 // Draw

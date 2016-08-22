@@ -7,21 +7,38 @@
 #include <stdio.h>
 WHITEBOX_BEGIN
 
+struct SVertexBoneWeights
+{
+	SVertexBoneWeights( float i0, float w0, float i1, float w1, float i2, float w2, float i3, float w3 )
+	{
+		indices[0] = i0; weights[0] = w0;
+		indices[1] = i1; weights[1] = w1;
+		indices[2] = i2; weights[2] = w2;
+		indices[3] = i3; weights[3] = w3;
+	}
+
+	float	indices[4];
+	float	weights[4];
+};
+
+
 class CVertexFormat
 {
 public:
+	
+	
 	enum ESingleElement
 	{
 		eSE_Position = 0,
 		eSE_Normal,
 		eSE_Color,
+		eSE_BoneWeights,
 		eSE_Count,
 	};
 	
 	enum EMultipleElement
 	{
 		eME_UV = 0,
-		eME_BlendWeight,
 		eME_Count,
 	};
 	
@@ -31,7 +48,6 @@ public:
 		: m_singleElementsFlags(0)
 	{
 		m_multipleElementsCounts[ eME_UV ] = 0;
-		m_multipleElementsCounts[ eME_BlendWeight ] = 0;
 	}
 	
 	size_t	GetSize() const
@@ -63,7 +79,7 @@ public:
 	{
 		return (uint)m_multipleElementsCounts[ element ];
 	}
-	
+
 	void	AddSingleElement( ESingleElement element )
 	{
 		m_singleElementsFlags |= BIT( element );
@@ -102,13 +118,18 @@ public:
 			m_elementOffsets[ eSE_Color ] = m_size;
 			m_size += 3 * sizeof(float);
 		}	
+		if (m_singleElementsFlags & BIT(eSE_BoneWeights))
+		{
+			m_elementOffsets[ eSE_BoneWeights ] = m_size;
+			m_size += sizeof(SVertexBoneWeights);
+		}
 
 		for( size_t iElem = 0 ; iElem < eME_Count ; ++iElem )
 		{
 			for( size_t iInstance = 0 ; iInstance < m_multipleElementsCounts[ iElem ] ; ++iInstance )
 			{
 				m_elementOffsets[ eSE_Count + iElem * MaxMultipleElementCount + iInstance ] = m_size;
-				m_size += ( iElem == eME_UV )? 2 * sizeof(float) : sizeof(float);
+				m_size += 2 * sizeof(float);
 			}
 		}
 	}
@@ -138,6 +159,7 @@ public:
 	Vec3&					GetPosition( void* pLockedData, size_t index ) const;
 	Vec3&					GetNormal( void* pLockedData, size_t index ) const;
 	Vec2&					GetUV0( void* pLockedData, size_t index ) const;
+	SVertexBoneWeights&		GetBoneWeights( void* pLockedData, size_t index ) const;
 
 private:
 	CVertexFormat		m_vertexFormat;

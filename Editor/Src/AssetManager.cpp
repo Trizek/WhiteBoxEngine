@@ -4,7 +4,7 @@
 #include "FileSystem.h"
 #include "ScriptSerializer.h"
  
-/*#include "FbxExporter.h"*/
+#include "FbxExporter.h"
 #include "ObjExporter.h"
 #include "MtlExporter.h"
 #include "CopyExporter.h"
@@ -18,7 +18,7 @@ WHITEBOX_BEGIN
 
 CAssetManager::CAssetManager()
 {
-/*	AddExporter( "fbx", new CFbxExporter() );*/
+	AddExporter( "FBX", new CFbxExporter() );
 
 	AddExporter( "obj", new CObjExporter() );
 	AddExporter( "mtl", new CMtlExporter() );

@@ -9,6 +9,14 @@
 
 WHITEBOX_BEGIN
 
+struct SVertexBlendWeight
+{
+	SVertexBlendWeight() = default;
+	SVertexBlendWeight( float _index, float _weight ) : index(_index), weight(_weight) {}
+
+	float	index, weight;
+};
+
 class CMesh : public IResource
 {
 public:

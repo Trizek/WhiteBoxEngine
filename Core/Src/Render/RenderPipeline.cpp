@@ -6,7 +6,14 @@
 #include "Render/Mesh.h"
 #include "System/OperatingSystem.h"
 
+#include "Application.h"
+#include "Animation/Skeleton.h"
+
 WHITEBOX_BEGIN
+
+extern CSkeletonPtr skel;
+extern CMeshPtr ezio;
+
 
 #ifdef __GEAR_VR
 struct SceneMatrices
@@ -74,6 +81,8 @@ CShaderUniformsValues&		CRenderPipeline::AddRenderProxyToQueue( CMesh* pMesh, si
 	return proxy.uniformValues;
 }
 
+extern void* skinMatId;
+
 void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetPtr pRenderTarget, const Matrix34& invCamMatrix, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount )
 {
 	drawCalls = renderProxies.size();
@@ -132,6 +141,8 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
  		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
  		//renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);
 
+		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SkinningMatrices", skinMatId);
+
 		renderProxy.uniformValues.SetUniformValue< Vec3 >(renderProxy.pShaderProgram, "lightDirection", lightDir);
  		
  		renderProxy.uniformValues.ApplyValues( renderProxy.pShaderProgram );
@@ -185,7 +196,12 @@ void			CRenderPipeline::Init( uint width, uint height )
 	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Matrix44) );
 	m_lightUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Vec3)  );
 #endif
+
+
+
 }
+
+
 
 void			CRenderPipeline::Render()
 {
@@ -199,6 +215,7 @@ void			CRenderPipeline::Render()
 
  	mainCamera.ComputeProjectionMatrix();
 #endif
+
 	
 	mainCamera.ComputeInverseTransformMatrix();
 

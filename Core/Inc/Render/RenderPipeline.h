@@ -15,6 +15,8 @@ class CMaterial;
 class CShaderProgram;
 class CMesh;
 
+
+
 typedef std::pair< String, Matrix44 > TMatrix44Param;
 typedef std::pair< String, int > TIntParam;
 typedef std::pair< String, Vec3 > TVec3Param;

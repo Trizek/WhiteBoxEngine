@@ -33,23 +33,28 @@ public:
 	void	AddNormal( const Vec3& normal );
 	void	AddColor( const Vec3& color );		
 	void	AddUV0( const Vec2& uv );
+	void	AddBlendWeight( size_t attributePosition, const SVertexBlendWeight& blendBone );
+	void	AddBlendWeight( size_t attributePosition, float boneIndex, float boneWeight );
+
 	
 	void	AddMeshPart();
 	CMeshPartHelper*	GetMeshPart( size_t index );
 	
 	CMesh*	ConvertToMesh() const;
 	
-private:
+public:
 	char*			BuildVertexArray( const CVertexFormat& vertexFormat ) const;
 	CVertexFormat	GetVertexFormat() const;
 	
 	void			Print() const;
+
 	
-private:
 	std::vector< Vec3 >	m_positionArray;
 	std::vector< Vec3 > m_normalArray;
 	std::vector< Vec3 > m_colorArray;
 	std::vector< Vec2 > m_uv0Array;
+
+	std::vector< SVertexBlendWeight > m_blendBoneArray[ 4 ];
 
 	std::vector< CMeshPartHelper* > m_meshParts;
 };
