@@ -7,7 +7,7 @@ Program
 
 	Shader
 	{
-		name = "white.ps"
+		name = "whitecolor.ps"
 	}
 
 

@@ -1,4 +1,12 @@
-﻿#include "Application.h"
+﻿#ifndef COOK
+
+#include <math.h>
+#include <btBulletDynamicsCommon.h>
+#include <iostream>
+
+#endif
+
+#include "Application.h"
 #include "GlobalVariables.h"
 #include "Render/Renderer.h"
 #include "Render/MeshHelper.h"
@@ -20,6 +28,9 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Animation.h"
 
+
+// #include <iostream>
+
 WHITEBOX_BEGIN
 
 bool click = false;
@@ -29,12 +40,12 @@ CApplication::CApplication()
 
 
 CMesh* quad;
-CMeshPtr ezio;
-CMeshPtr meca, city;
+CMeshPtr third, ezio;
+CMeshPtr meca, city, vanquish;
 
 CTexturePtr ezioTexture;
 
-CShaderProgramPtr shader, detourshader, whiteshader, textProgram, skin;
+CShaderProgramPtr shader, detourshader, whiteshader, texprogram, textProgram, skin;
 
 CFontPtr font;
 CTextMesh textMesh, textMesh2;
@@ -53,18 +64,79 @@ float normalizedTime = 0.0f;
 
 void CApplication::InitApplication( uint width, uint height )
 {
+#ifndef COOK
+	{
+		btBroadphaseInterface* broadphase = new btDbvtBroadphase();
 
-	CDataStream stream;
-	gVars->pOperatingSystem->GetDataStream("toto.txt", stream);
+		btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+		btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+		btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+		btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+
+		dynamicsWorld->setGravity(btVector3(0, -10, 0));
 
 
+		btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+
+		btCollisionShape* fallShape = new btSphereShape(1);
+
+
+		btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
+		btRigidBody::btRigidBodyConstructionInfo
+			groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+		btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+		dynamicsWorld->addRigidBody(groundRigidBody);
+
+
+		btDefaultMotionState* fallMotionState =
+			new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+		btScalar mass = 1;
+		btVector3 fallInertia(0, 0, 0);
+		fallShape->calculateLocalInertia(mass, fallInertia);
+		btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
+		btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+		dynamicsWorld->addRigidBody(fallRigidBody);
+
+
+		for (int i = 0; i < 300; i++) {
+			dynamicsWorld->stepSimulation(1 / 60.f, 10);
+
+			btTransform trans;
+			fallRigidBody->getMotionState()->getWorldTransform(trans);
+
+			std::cout << "sphere height: " << trans.getOrigin().getY() << std::endl;
+		}
+
+		dynamicsWorld->removeRigidBody(fallRigidBody);
+		delete fallRigidBody->getMotionState();
+		delete fallRigidBody;
+
+		dynamicsWorld->removeRigidBody(groundRigidBody);
+		delete groundRigidBody->getMotionState();
+		delete groundRigidBody;
+
+
+		delete fallShape;
+
+		delete groundShape;
+
+
+		delete dynamicsWorld;
+		delete solver;
+		delete collisionConfiguration;
+		delete dispatcher;
+		delete broadphase;
+	}
+#endif
 
 
 	m_pRenderPipeline = new CRenderPipeline();
 	m_pRenderPipeline->Init( width, height );
 
 
-	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -20.0f, 0.0f);
+	m_pRenderPipeline->mainCamera.transform.position = Vec3(0.0f, -600.0f, 150.0f);
 
 
 #ifndef __GEAR_VR
@@ -75,14 +147,17 @@ void CApplication::InitApplication( uint width, uint height )
 	gVars->pResourceManager->ParseResources( "" );
 
 	//ezioTexture = gVars->pResourceManager->GetResource< CTexture >("Ezio/CR_U_Ezio_Blason_DiffuseMap.dds");
-	ezio = gVars->pResourceManager->GetResource< CMesh >("SK_Mannequin.msh");//   ("Ezio/Ezio.msh");
-	meca = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
+	third = gVars->pResourceManager->GetResource< CMesh >("SK_Mannequin.msh");//   ("Ezio/Ezio.msh");
+	meca = gVars->pResourceManager->GetResource< CMesh >("Interior/house.msh");// "Vanquish/vanquish.msh");
+	vanquish = gVars->pResourceManager->GetResource< CMesh >("Vanquish/vanquish.msh");
+	ezio = gVars->pResourceManager->GetResource< CMesh >("Ezio/Ezio.msh");// "Vanquish/vanquish.msh");
 //	city = gVars->pResourceManager->GetResource< CMesh >("castle/castle.msh");
 // 
 	//shader = gVars->pResourceManager->GetResource< CShaderProgram >("shader.program");
 // 	detourshader = gVars->pResourceManager->GetResource< CShaderProgram >("detour.program");
  	whiteshader = gVars->pResourceManager->GetResource< CShaderProgram >("white.program");
-// 
+	texprogram = gVars->pResourceManager->GetResource< CShaderProgram >("tex.program");
+	// 
 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 	skin = gVars->pResourceManager->GetResource< CShaderProgram >("skinning.program");
 
@@ -301,17 +376,17 @@ void CApplication::FrameUpdate()
 	{
 		if (first)
 		{
-			void* data = ezio->GetVertexBuffer()->Lock(true, true);
+			void* data = third->GetVertexBuffer()->Lock(true, true);
 
-			size_t vertexCount = ezio->GetVertexBuffer()->GetVertexCount();
+			size_t vertexCount = third->GetVertexBuffer()->GetVertexCount();
 			for (size_t i = 0; i < vertexCount; ++i)
 			{
-				positions.push_back(ezio->GetVertexBuffer()->GetPosition(data, i));
+				positions.push_back(third->GetVertexBuffer()->GetPosition(data, i));
 			}
 
 
 
-			ezio->GetVertexBuffer()->Unlock();
+			third->GetVertexBuffer()->Unlock();
 
 
 			skinMatId = gVars->pRenderer->CreateUniformBuffer(sizeof(Matrix44) * 64);
@@ -528,37 +603,51 @@ void CApplication::FrameUpdate()
 	static float aaa = 0;
 	aaa += 200.0f * frameTime;
 	Transform ttt;
-	ttt.rotation = Quat::CreateRotZ(Degree(aaa));// *Quat::CreateRotX(Degree(90.0f));
+	//ttt.rotation = Quat::CreateRotZ(Degree(aaa));// *Quat::CreateRotX(Degree(90.0f));
 	ttt.position.z = -5.0f; // 100.0f;
-	ttt.position.y = -5.0f;
-	ttt.position.x = 7.0f;
+	ttt.position.y = 450.0f;
+	ttt.position.x = 0.0f;
 	ttt.scale = 5.0f;
 
 	if (pProg)
 	{
 
-		for (size_t i = 0; i< meca->GetPartCount();++i)
+
+
+		for (size_t i = 0; i < meca->GetPartCount(); ++i)
 			CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, whiteshader.get(), true);
 
+		ttt.scale = 100.0f;
+		ttt.rotation = Quat::CreateRotZ(Degree(aaa));
+		ttt.position.x = 700.0f;
+
+// 		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
+// 			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, ttt, texprogram.get(), true);
+
+		ttt.position.x += 300.0f;
+
+		//for (size_t i = 0; i < vanquish->GetPartCount(); ++i)
+		//	CRenderPipeline::AddRenderProxyToQueue(vanquish.get(), i, m_pRenderPipeline->proxies, ttt, texprogram.get(), true);
+
 		ttt.rotation = Quat::CreateRotZ(Degree(45.0f));
-		ttt.position.x = 10.0f;
+
 		ttt.scale = Vec3(0.1f, 0.1f, 0.1f);
 
 		Transform t5;
-	t5.position.y += 150.0f;
+	t5.position.y -= 450.0f;
 	t5.position.x += 100.0f;
 	t5.rotation = Quat::CreateRotZ(Degree(25.0f));
 
 	// renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SkinningMatrices", skinMatId);
 
- 		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
- 			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId);
+ 		for (size_t i = 0; i < third->GetPartCount(); ++i)
+ 			CRenderPipeline::AddRenderProxyToQueue(third.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId);
 
 
 		t5.position.x -= 100.0f;
 
-		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
-			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId2);
+		for (size_t i = 0; i < third->GetPartCount(); ++i)
+			CRenderPipeline::AddRenderProxyToQueue(third.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId2);
 
 	}
 
@@ -594,7 +683,9 @@ void CApplication::FrameUpdate()
 
 
 	Vec3 lightDirection = m_pRenderPipeline->mainCamera.transform.TransformVector(Vec3(1.0f, 1.0f, 0.0f));
-	lightDirection = m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
+	lightDirection = Vec3(-1.0f, 0.0f, -1.0f);
+		
+	//	m_pRenderPipeline->mainCamera.transform.GetInverse().TransformVector(lightDirection);
 	lightDirection = Vec3(lightDirection.x, lightDirection.z, -lightDirection.y);
 	lightDirection.Normalize();
 
@@ -650,9 +741,9 @@ void CApplication::FrameUpdate()
 
 		if (i < 5)
 		{
-			for (size_t j = 0; j < ezio->GetPartCount(); ++j)
+			for (size_t j = 0; j < third->GetPartCount(); ++j)
 			{
-				CShaderUniformsValues& uniforms = CRenderPipeline::AddRenderProxyToQueue(ezio.get(), j, m_pRenderPipeline->proxies, t2, shader.get(), true);
+				CShaderUniformsValues& uniforms = CRenderPipeline::AddRenderProxyToQueue(third.get(), j, m_pRenderPipeline->proxies, t2, shader.get(), true);
 			//	uniforms.SetUniformValue<int>(shader.get(), "shaderTexture", 0);
 				//uniforms.SetUniformValue<Vec3>(shader.get(), "lightDirection", lightDirection);
 			}

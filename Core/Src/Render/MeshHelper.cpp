@@ -45,6 +45,12 @@ void CMeshPartHelper::Print() const
 
 void	CMeshHelper::SaveToFile( const String& filePath ) const
 {
+	if (m_positionArray.size() != m_normalArray.size())
+	{
+		const_cast<CMeshHelper*>(this)->ComputeNormals(); 
+	}
+
+
 	TFileHandle file = gVars->pFileSystem->OpenFile( filePath.c_str(), false, true );
 	
 	// -----Shared vertices :
@@ -126,10 +132,45 @@ CMeshPartHelper*	CMeshHelper::GetMeshPart( size_t index )
 {
 	return m_meshParts[ index ];
 }
+
+void	CMeshHelper::ComputeNormals()
+{
+	m_normalArray.clear();
+	m_normalArray.resize(m_positionArray.size());
+
+	for (int iPart = 0; iPart < m_meshParts.size(); ++iPart)
+	{
+		CMeshPartHelper* pPart = m_meshParts[iPart];
+
+		for (int i = 0; i < pPart->GetIndexArray().size(); i += 3)
+		{
+			Vec3 A = m_positionArray[ pPart->GetIndexArray()[i] ];
+			Vec3 B = m_positionArray[pPart->GetIndexArray()[i + 1]];
+			Vec3 C = m_positionArray[pPart->GetIndexArray()[i + 2]];
+
+			Vec3 n = (B - A) * (C - A);
+			n.Normalize();
+
+			m_normalArray[pPart->GetIndexArray()[i]] = m_normalArray[pPart->GetIndexArray()[i]] + n;
+			m_normalArray[pPart->GetIndexArray()[i+1]] = m_normalArray[pPart->GetIndexArray()[i+1]] + n;
+			m_normalArray[pPart->GetIndexArray()[i+2]] = m_normalArray[pPart->GetIndexArray()[i+2]] + n;
+		}
+	}
+
+	for (Vec3& n : m_normalArray)
+	{
+		n.Normalize();
+	}
+}
 	
 CMesh* CMeshHelper::ConvertToMesh() const
 {
 	CMesh* pMesh = new CMesh();
+
+	if (m_positionArray.size() != m_normalArray.size())
+	{
+		const_cast<CMeshHelper*>(this)->ComputeNormals();
+	}
 
 
 	

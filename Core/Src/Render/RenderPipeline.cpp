@@ -12,7 +12,7 @@
 WHITEBOX_BEGIN
 
 extern CSkeletonPtr skel;
-extern CMeshPtr ezio;
+extern CMeshPtr third;
 
 
 #ifdef __GEAR_VR
@@ -109,7 +109,7 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 	gVars->pRenderer->UnlockUniformBuffer();
 #endif
 
-	Vec3 lightDir(1.0f, 0.0f, 0.0f);
+	Vec3 lightDir = Vec3(-1.0f, 0.0f, -1.0f);
 
 
 	//Vec3* pLightDir = (Vec3*)gVars->pRenderer->LockUniformBuffer( m_lightUniformBufferId, 0, sizeof(Vec3) );
@@ -178,7 +178,7 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 
 		pLastRenderProxy = &renderProxy;
 
-		polyCount += renderProxy.pIndexBuffer->GetIndexCount();
+		polyCount += renderProxy.pIndexBuffer->GetIndexCount() / 3;
 	}
 }
 

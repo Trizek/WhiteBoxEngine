@@ -83,6 +83,7 @@ void	CRenderer::StartRenderFrame()
 #ifndef __GEAR_VR
 	glShadeModel(GL_SMOOTH);									// Enable Smooth Shading
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspectiv	
+	glEnable(GL_MULTISAMPLE);
 #endif
 	glClearDepthf(1.0f);											// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);									// Enables Depth Testing

@@ -41,12 +41,11 @@ void main(void)
 	// Calculate the position of the vertex against the world, view, and projection matrices.
 #if __GEAR_VR
 	gl_Position = sm.ProjectionMatrix * (sm.ViewMatrix[VIEW_ID] * (modelMatrix * (vec4(inputPosition, 1.0))));
-	outNormal = mat3(sm.ViewMatrix[VIEW_ID]) * (mat3(modelMatrix) * normal);
+	outNormal = normalize(mat3(sm.ViewMatrix[VIEW_ID]) * (mat3(modelMatrix) * normal));
 #else
 	gl_Position = sm.projectionMatrix * (modelViewMatrix * vec4(inputPosition, 1.0f));
-	outNormal = mat3(modelViewMatrix) * normal;
+	outNormal = normalize(mat3(modelViewMatrix) * normal);
 #endif
 
 	texCoord = uv0;
-	outNormal = normalize(outNormal);
 }

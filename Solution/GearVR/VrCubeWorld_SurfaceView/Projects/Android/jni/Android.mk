@@ -19,15 +19,16 @@ LOCAL_SRC_FILES			:=  $(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../..
 
 
 #../../../../../../../../Src/*.cp
-LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL -lz		# include default libraries
+LOCAL_LDLIBS			:= -llog -landroid -lGLESv3 -lEGL -lz -lm	# include default libraries
 
 LOCAL_C_INCLUDES		:= $(LOCAL_PATH)/../../../../../../../../Inc/ \
   $(LOCAL_PATH)/../../../../3rdParty/minizip/src \
   $(LOCAL_PATH)/../../../../VrAppSupport/SystemUtils/Include \
   $(LOCAL_PATH)/../../../Include \
+  $(LOCAL_PATH)/../../../../../../../../Libs/Bullet/src \
 
 
-LOCAL_STATIC_LIBRARIES	:= systemutils libovrkernel minizip libfreetype
+LOCAL_STATIC_LIBRARIES	:= systemutils libovrkernel minizip libfreetype libBullet
 LOCAL_SHARED_LIBRARIES	:= vrapi
 
 include $(BUILD_SHARED_LIBRARY)
@@ -36,3 +37,4 @@ $(call import-module,VrApi/Projects/AndroidPrebuilt/jni)
 $(call import-module,VrAppSupport/SystemUtils/Projects/AndroidPrebuilt/jni)
 $(call import-module,3rdParty/minizip/build/androidprebuilt/jni)
 $(call import-module,LibFreeType/Projects/AndroidPrebuilt/jni)
+$(call import-module,LibBullet/Projects/AndroidPrebuilt/jni)

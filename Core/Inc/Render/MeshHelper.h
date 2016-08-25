@@ -39,6 +39,8 @@ public:
 	
 	void	AddMeshPart();
 	CMeshPartHelper*	GetMeshPart( size_t index );
+
+	void	ComputeNormals();
 	
 	CMesh*	ConvertToMesh() const;
 	

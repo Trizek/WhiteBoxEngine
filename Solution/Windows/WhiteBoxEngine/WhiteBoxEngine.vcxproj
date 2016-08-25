@@ -102,14 +102,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;..\..\..\Editor\Libs\FbxSdk\2015.1\include;%(AdditionalIncludeDirectories);..\..\..\Editor\Libs\FbxConv\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;..\..\..\Editor\Libs\FbxSdk\2015.1\include;%(AdditionalIncludeDirectories);..\..\..\Editor\Libs\FbxConv\src;..\..\..\Core\Libs\Bullet\src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>
       </MultiProcessorCompilation>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS; _CRT_NO_VA_START_VALIDATION;	FBXSDK_SHARED</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);libfbxsdk.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv;..\..\..\Core\Libs\Bullet\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);libfbxsdk.lib;LinearMath_vs2010.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,16 +128,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;..\..\..\Editor\Libs\FbxSdk\2015.1\include;%(AdditionalIncludeDirectories);..\..\..\Editor\Libs\FbxConv\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Core\Inc;..\..\..\Editor\Inc;..\..\..\Core\Libs\SDL\include;..\..\..\Core\Libs\Glew\include;..\..\..\Core\Libs\FreeType\include;..\..\..\Editor\Libs\DDS;..\..\..\Editor\Libs\FreeImage\Dist\x32;..\..\..\Editor\Libs\FbxSdk\2015.1\include;%(AdditionalIncludeDirectories);..\..\..\Editor\Libs\FbxConv\src;..\..\..\Core\Libs\Bullet\src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>
       </MultiProcessorCompilation>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS; _CRT_NO_VA_START_VALIDATION;	FBXSDK_SHARED</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);;libfbxsdk.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv;..\..\..\Core\Libs\Bullet\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);libfbxsdk.lib;LinearMath_vs2010.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Cook for Android|Win32'">
