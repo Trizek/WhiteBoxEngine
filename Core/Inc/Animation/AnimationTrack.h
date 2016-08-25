@@ -5,7 +5,7 @@
 
 WHITEBOX_BEGIN
 
-class CAnimationTrack
+class CAnimationTrack : public CSmartPointerData
 {
 public:
 	static const int AnimationFrameRate = 30;
@@ -17,6 +17,8 @@ public:
 		eKFF_Quaternion48Bits,
 	};
 	
+	CAnimationTrack()
+		: m_keyFrames(nullptr){}
 	CAnimationTrack( EKeyFrameFormat keyFrameFormat, void* keyFrames, size_t keyFrameCount );
 	~CAnimationTrack();
 	
@@ -25,9 +27,8 @@ public:
 	void	GetKeyFrame( size_t index, Transform& keyFrame ) const;
 	void	Sample( float animTime, Transform& fromKeyFrame, Transform& toKeyFrame, float& toWeight ) const;
 	void	AccumulateSample( float animTime, float sampleWeight, Transform& accTransform ) const;
-
 	
-private:
+public:
 	EKeyFrameFormat	m_keyFrameFormat;
 	void*			m_keyFrames;
 	size_t			m_keyFrameCount;

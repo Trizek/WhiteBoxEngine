@@ -29,17 +29,23 @@ int	CBoneInfo::GetParentIndex() const
 
 void CSkeleton::AddBone( const String& boneName, const String& parentName, const Transform& globalTransform )
 {
+	Transform transform = globalTransform;
+
 	int parentIndex = -1;
 	TBoneNameToIndexMap::FindRes parentIt = m_boneNameToIndex.FindElement( parentName );
 	if ( parentIt != nullptr )
 	{
 		parentIndex = (int)*parentIt;
 	}
+	else
+	{
+		transform = Transform();
+	}
 	
 	int boneIndex = (int)m_boneInfos.size();
 	
 	m_boneInfos.push_back( CBoneInfo( boneName, boneIndex, parentIndex ) );
-	m_globalBindPose.m_boneTransforms.push_back( globalTransform );
+	m_localBindPose.m_boneTransforms.push_back( transform );
 	
 	m_boneNameToIndex[ boneName ] = boneIndex;
 }

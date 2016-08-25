@@ -27,6 +27,42 @@ typedef std::vector< CBoneInfo > TBoneInfoArray;
 class CPose
 {
 public:
+	void	Zero()
+	{
+		for( Transform& transform : m_boneTransforms )
+		{
+			transform = Transform::Zero;
+		}
+	}
+
+	void	Normalize( float weight )
+	{
+		if ( weight < 1.0f )
+		{
+			for( Transform& transform : m_boneTransforms )
+			{
+				Transform t = (1.0f - weight) * Transform();
+				if ( (transform.rotation | t.rotation) < 0.0f )
+				{
+					t.rotation = -1.0f * t.rotation;
+				}
+
+				transform = transform + t;
+			}
+		}
+
+		int i = 0;
+		for( Transform& transform : m_boneTransforms )
+		{
+			if (i++ == 55)
+			{
+				int x = 2;
+			}
+
+			transform.Normalize();
+		}
+	}
+
 	std::vector< Transform >	m_boneTransforms;
 };
 
@@ -51,8 +87,8 @@ public:
 	void ComputeSkinningPose( const CPose& globalPose, CPose& skinPose ) const;
 
 	void	SaveToFile( const String& filePath ) const;
-
-private:
+/*
+private:*/
 	TBoneInfoArray	m_boneInfos;
 	CPose			m_invertedGlobalBindPose;
 	CPose			m_globalBindPose;

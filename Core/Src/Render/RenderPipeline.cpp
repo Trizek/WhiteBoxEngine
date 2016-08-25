@@ -141,7 +141,7 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
  		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
  		//renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);
 
-		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SkinningMatrices", skinMatId);
+	//	renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SkinningMatrices", skinMatId);
 
 		renderProxy.uniformValues.SetUniformValue< Vec3 >(renderProxy.pShaderProgram, "lightDirection", lightDir);
  		
@@ -224,6 +224,13 @@ void			CRenderPipeline::Render()
 
 	RenderQueue(proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
  	proxies.clear();
+
+	Transform invCam = mainCamera.transform.GetInverse();
+	for (const SDrawLine& drawLine : m_drawLines)
+	{
+		gVars->pRenderer->DrawLine(invCam * drawLine.p0, invCam * drawLine.p1, drawLine.color, mainCamera.projectionMatrix);
+	}
+	m_drawLines.clear();
 
 
  	gVars->pRenderer->UnbindIndexBuffer();

@@ -217,7 +217,7 @@ namespace readers {
 		}
 
 		void updateNode(Model * const &model, Node * const &node) {
-			FbxAMatrix &m = node->source->EvaluateGlobalTransform();
+			FbxAMatrix &m = node->source->EvaluateLocalTransform();
 			set<3>(node->transform.translation, m.GetT().mData);
 			set<4>(node->transform.rotation, m.GetQ().mData);
 			set<3>(node->transform.scale, m.GetS().mData);
@@ -785,9 +785,11 @@ namespace readers {
 					k2 = keyframes[i];
 					k3 = keyframes[i+1];
 					// Check if the middle keyframe can be calculated by information, if so dont add it
-					if ((translate && !isLerp(k1->translation, k1->time, k2->translation, k2->time, k3->translation, k3->time, 3)) ||
-						(rotate && !isLerp(k1->rotation, k1->time, k2->rotation, k2->time, k3->rotation, k3->time, 3)) || // FIXME use slerp for quaternions
-						(scale && !isLerp(k1->scale, k1->time, k2->scale, k2->time, k3->scale, k3->time, 3))) {
+					//if ((translate && !isLerp(k1->translation, k1->time, k2->translation, k2->time, k3->translation, k3->time, 3)) ||
+					//	(rotate && !isLerp(k1->rotation, k1->time, k2->rotation, k2->time, k3->rotation, k3->time, 3)) || // FIXME use slerp for quaternions
+					//	(scale && !isLerp(k1->scale, k1->time, k2->scale, k2->time, k3->scale, k3->time, 3))) {
+					if (true)
+					{
 							anim->keyframes.push_back(k2);
 							k1 = k2;
 					} else

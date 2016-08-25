@@ -62,6 +62,23 @@ Vec3 operator-( const Vec3& rhs )
 	return Vec3( -rhs.x, -rhs.y, -rhs.z );
 }
 
+Transform Transform::Zero = Transform( Vec3::Zero, Quat(0.0f, 0.0f, 0.0f, 0.0f), Vec3::Zero );
+
+Transform Transform::operator*( const Transform& t ) const
+{
+	Transform res;
+	res.position = position + rotation * t.position;
+	res.rotation = rotation * t.rotation;
+	res.scale = Vec3( scale.x*t.scale.x, scale.y*t.scale.y, scale.z*t.scale.z );		
+	return res;
+}
+
+Transform Transform::operator+( const Transform& t ) const
+{
+	return Transform( position + t.position, rotation + t.rotation );
+}
+
+
 ushort	Quat::EncodeComponent( float component )
 {
 	static short start = (short)(1 << (sizeof(short)*8-1));
@@ -122,7 +139,7 @@ Transform operator!( const Transform& t )
 
 Transform operator*( float factor, const Transform& t )
 {
-	return Transform( factor * t.position, factor * t.rotation );
+	return Transform( factor * t.position, factor * t.rotation, factor * t.scale );
 }
 
 const Color Color::Black = Color( 0.0f, 0.0f, 0.0f );

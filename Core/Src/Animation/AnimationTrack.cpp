@@ -9,18 +9,18 @@ CAnimationTrack::CAnimationTrack( EKeyFrameFormat keyFrameFormat, void* keyFrame
 	: m_keyFrameFormat(keyFrameFormat)
 	, m_keyFrames(keyFrames)
 	, m_keyFrameCount(keyFrameCount){}
-
+ 
 CAnimationTrack::~CAnimationTrack()
 {
 	if ( m_keyFrames )
 	{
-		delete[] (char*)m_keyFrames;
+		delete (char*)m_keyFrames;
 	}
 }
 
 float	CAnimationTrack::GetLength() const
 {
-	return float(m_keyFrameCount) / float(AnimationFrameRate);
+	return float(m_keyFrameCount - 1) / float(AnimationFrameRate);
 }
 
 void	CAnimationTrack::GetKeyFrame( size_t index, Transform& keyFrame ) const
@@ -52,12 +52,12 @@ void	CAnimationTrack::GetKeyFrame( size_t index, Transform& keyFrame ) const
 
 void	CAnimationTrack::Sample( float animTime, Transform& fromKeyFrame, Transform& toKeyFrame, float& weight ) const
 {
-	size_t fromKeyIndex = size_t(animTime * AnimationFrameRate);
-	size_t toKeyIndex = Min( fromKeyIndex + 1, m_keyFrameCount - 1 );
-	
+	size_t fromKeyIndex = size_t(animTime * AnimationFrameRate) % (m_keyFrameCount - 1);
+	size_t toKeyIndex = ( fromKeyIndex + 1 ) % (m_keyFrameCount - 1);// Min( fromKeyIndex + 1, m_keyFrameCount - 1 );
+
 	GetKeyFrame( fromKeyIndex, fromKeyFrame );
 	GetKeyFrame( toKeyIndex, toKeyFrame );
-	weight = animTime - (float)fromKeyIndex;
+	weight = animTime * AnimationFrameRate - ((float)fromKeyIndex);
 }
 
 void	CAnimationTrack::AccumulateSample( float animTime, float sampleWeight, Transform& accTransform ) const
@@ -65,7 +65,20 @@ void	CAnimationTrack::AccumulateSample( float animTime, float sampleWeight, Tran
 	float weight;
 	Transform fromKeyFrame, toKeyFrame;
 	Sample( animTime, fromKeyFrame, toKeyFrame, weight );
-	
+
+	if ( (accTransform.rotation | fromKeyFrame.rotation) < 0.0f)
+	{
+		fromKeyFrame.rotation = -1.0f * fromKeyFrame.rotation;
+	}
+
+	if ( (fromKeyFrame.rotation | toKeyFrame.rotation) < 0.0f)
+	{
+		toKeyFrame.rotation = -1.0f * toKeyFrame.rotation;
+	}
+
+	//accTransform = accTransform + sampleWeight * fromKeyFrame;
+
+	//return;
 	accTransform = accTransform + sampleWeight * (1.0f - weight) * fromKeyFrame + sampleWeight * weight * toKeyFrame;
 }
 

@@ -47,10 +47,6 @@ uniform SkinningMatrices
 void main(void)
 {
 	// Calculate the position of the vertex against the world, view, and projection matrices.
-#if __GEAR_VR
-	gl_Position = sm.ProjectionMatrix * (sm.ViewMatrix[VIEW_ID] * (modelMatrix * (vec4(inputPosition, 1.0))));
-	outNormal = mat3(sm.ViewMatrix[VIEW_ID]) * (mat3(modelMatrix) * normal);
-#else
 	vec4 pos = vec4(inputPosition, 1.0f);
 	vec4 pos2 = vec4(0, 0, 0, 1);
 	pos2 += boneWeights[0] * (skin.mat[int(boneIndices[0])] * pos);
@@ -64,6 +60,13 @@ void main(void)
 	n2 += boneWeights[1] * (mat3(skin.mat[int(boneIndices[1])]) * norm);
 	n2 += boneWeights[2] * (mat3(skin.mat[int(boneIndices[2])]) * norm);
 	n2 += boneWeights[3] * (mat3(skin.mat[int(boneIndices[3])]) * norm);
+
+
+#if __GEAR_VR
+	gl_Position = sm.ProjectionMatrix * (sm.ViewMatrix[VIEW_ID] * (modelMatrix * (vec4(pos2.xyz, 1.0))));
+	outNormal = mat3(sm.ViewMatrix[VIEW_ID]) * (mat3(modelMatrix) * n2);
+#else
+
 
 
 	gl_Position = sm.projectionMatrix * (modelViewMatrix * vec4(pos2.xyz, 1.0f));

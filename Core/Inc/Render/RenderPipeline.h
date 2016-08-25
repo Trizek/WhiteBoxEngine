@@ -132,6 +132,12 @@ typedef  std::vector< SRenderUnit > TRenderQueue2;
 
 typedef std::vector< SRenderProxy >	TRenderProxies;
 
+struct SDrawLine
+{
+	Vec3 p0, p1;
+	Color	color;
+};
+
 class CRenderPipeline
 {
 public:
@@ -162,6 +168,13 @@ public:
 
 	void*					m_sceneMatUniformBufferId;
 	void*					m_lightUniformBufferId;
+
+	void					DrawLine(const Vec3& p0, const Vec3& p1, const Color& col)
+	{
+		m_drawLines.push_back({ p0,p1,col });
+	}
+
+	std::vector< SDrawLine >	m_drawLines;
 };
 
 

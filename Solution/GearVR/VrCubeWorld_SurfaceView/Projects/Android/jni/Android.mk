@@ -15,6 +15,7 @@ LOCAL_SRC_FILES			:=  $(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../..
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/LogSystem/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Types/*.cpp)) \
 	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Png/*.cpp)) \
+	$(addprefix ../,$(wildcard $(LOCAL_PATH)/../../../../../../../../Src/Animation/*.cpp)) \
 
 
 #../../../../../../../../Src/*.cp

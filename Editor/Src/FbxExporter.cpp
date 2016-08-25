@@ -10,48 +10,30 @@
 
 #include "Application.h"
 #include "Animation/Skeleton.h"
+#include "Animation/Animation.h"
 
 SBone skel;
 
 using namespace fbxconv;
 using namespace WhiteBox;
 
-void	Parse(Node* node, SBone& bone, const Transform& parent)
-{
-	Transform boneT;
-	
-	boneT.rotation = Quat(node->transform.rotation[1], node->transform.rotation[2], node->transform.rotation[3], node->transform.rotation[0]);// *Quat::CreateRotZ(Degree(90.0f));
-	boneT.position = Vec3(node->transform.translation[0], -node->transform.translation[2], node->transform.translation[1]);
-	
-	boneT.scale = Vec3(node->transform.scale[0], node->transform.scale[1], node->transform.scale[2]);
-
-
-	bone.t = parent.GetInverse() * boneT;
-
-	Vec3 f = bone.t.rotation * Vec3::Forward;
-	Vec3 l = bone.t.rotation * Vec3::Left;
-	Vec3 u = bone.t.rotation * Vec3::Up;
-
-/*	bone.t = bone.t.GetInverse();*/
-
-	for (Node* child : node->children)
-	{
-		bone.children.push_back(SBone());
-		SBone& childBone = bone.children.back();
-		Parse(child, childBone, boneT);
-	}
-
-}
-
 WHITEBOX_BEGIN
+
+extern Map< String, Transform > anim;
+
 
 void ParseModelNode( Node* node, CSkeleton& skeleton, const String& parentName )
 {
 	Transform transf;
 
-	transf.rotation = Quat(node->transform.rotation[1], node->transform.rotation[2], node->transform.rotation[3], node->transform.rotation[0]);
-	transf.position = Vec3(node->transform.translation[0], -node->transform.translation[2], node->transform.translation[1]);
+	transf.rotation = Quat(node->transform.rotation[3], node->transform.rotation[0], node->transform.rotation[1], node->transform.rotation[2]);
+	transf.position = Vec3(node->transform.translation[0], node->transform.translation[1], node->transform.translation[2]);
 	transf.scale = Vec3(node->transform.scale[0], node->transform.scale[1], node->transform.scale[2]);
+
+	if (transf.rotation.w < 0.0f)
+	{
+		transf.rotation = -1.0f * transf.rotation;
+	}
 
 	String boneName = node->id.c_str();
 
@@ -63,10 +45,8 @@ void ParseModelNode( Node* node, CSkeleton& skeleton, const String& parentName )
 	}
 }
 
-
 void CFbxExporter::Export( const String& assetFolder, const String& resourceFolder, const String& filePath )
 {
-	return;
 	log::Log log(new log::DefaultMessages(), -1);
 	FbxConv conv(&log);
 
@@ -90,17 +70,79 @@ void CFbxExporter::Export( const String& assetFolder, const String& resourceFold
 
 	conv.info(model);
 
+	CSkeleton* pLastSkeleton = nullptr;
+
 	for (Node* node : model->nodes)
 	{
 		CSkeleton* pSkeleton = new CSkeleton();
 		ParseModelNode( node, *pSkeleton, "" );
+		pSkeleton->ComputeGlobalPose(pSkeleton->m_localBindPose, pSkeleton->m_globalBindPose);
 
 
 		String skeletonPath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + ".skel";
 		gVars->pFileSystem->CreateFileDir( skeletonPath );
 		pSkeleton->SaveToFile( skeletonPath );
 
-		delete pSkeleton;
+		if ( pLastSkeleton != nullptr )
+		{
+			delete pLastSkeleton;
+		}
+
+		pLastSkeleton = pSkeleton;
+	}
+
+
+	for (Animation* ani : model->animations)
+	{
+		CAnimation* pAnimation = new CAnimation();
+
+		for (NodeAnimation* nodeAnim : ani->nodeAnimations)
+		{
+			int idx = pLastSkeleton->m_boneNameToIndex[nodeAnim->node->id.c_str()];
+			if (idx < 0)
+				continue;
+
+			const std::vector< Keyframe* >& keyframes = nodeAnim->keyframes;
+
+			Transform* trackKeys = new Transform[ keyframes.size() ];
+
+			for (size_t iKey = 0; iKey < keyframes.size(); ++iKey)
+			{
+				const Keyframe& k = *(keyframes[ iKey ]);
+
+				Transform transf;
+				transf.rotation = Quat(k.rotation[3], k.rotation[0], k.rotation[1], k.rotation[2]);
+
+				if (transf.rotation.w < 0.0f)
+				{
+					transf.rotation = -1.0f * transf.rotation;
+				}
+
+				transf.position = Vec3(k.translation[0], k.translation[1], k.translation[2]);
+				transf.scale = Vec3(k.scale[0], k.scale[1], k.scale[2]);
+
+				transf = pLastSkeleton->m_localBindPose.m_boneTransforms[idx].GetInverse() * transf;
+				
+				if (String(nodeAnim->node->id.c_str()).Contains("twist"))
+				{
+					transf = Transform();
+				}
+
+				trackKeys[ iKey ] = transf;
+			}
+
+			pAnimation->AddAnimationTack( new CAnimationTrack( CAnimationTrack::eKFF_Transform, trackKeys, keyframes.size() ), idx );
+		}
+
+		String animPath = resourceFolder + filePath.get_path_base() + filePath.get_path_name() + ".anim";
+		gVars->pFileSystem->CreateFileDir(animPath);
+		pAnimation->SaveToFile(animPath);
+		delete pAnimation;
+	}
+
+	if (pLastSkeleton != nullptr)
+	{
+		delete pLastSkeleton;
 	}
 
 

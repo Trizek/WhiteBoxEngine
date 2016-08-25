@@ -221,6 +221,21 @@ public:
 		return substr( 0, name_pos );	
 	}	
 
+	bool Contains( const char* str ) const
+	{
+		const char* src = m_str;
+		size_t len = strlen(str);
+		for( ;src != nullptr && *src != '\0'; ++src )
+		{
+			if ( strncmp( src, str, len ) == 0 )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	CString operator+( const CString& rhs ) const
 	{
 		CString res;

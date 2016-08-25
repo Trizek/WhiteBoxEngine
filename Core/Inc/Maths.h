@@ -283,6 +283,7 @@ struct Quat
 		if ( w || x || y || z )
 		{
 			float length = Length();
+
 			w /= length;
 			x /= length;
 			y /= length;
@@ -292,7 +293,8 @@ struct Quat
 	
 	Quat operator+( const Quat& q ) const
 	{
-		return Quat( w + q.w, x + q.x, y + q.y, z + q.z );
+		Quat res( w + q.w, x + q.x, y + q.y, z + q.z );
+		return res;
 	}
 	
 	Quat operator*( const Quat& q ) const
@@ -306,6 +308,11 @@ struct Quat
 		return res; 
 	}
 	
+	float	operator|( const Quat& q ) const
+	{
+		return w*q.w + x*q.x + y*q.y + z*q.z;
+	}
+
 	Quat getInverse() const
 	{
 		return Quat( -w, x, y, z );
@@ -339,6 +346,8 @@ Quat operator*( float factor, const Quat& q );
 
 struct Transform
 {
+	static Transform Zero;
+
 	Transform()
 		: scale(1.0f){}
 		
@@ -346,20 +355,15 @@ struct Transform
 		: position(_position)
 		, rotation(_rotation)
 		, scale(1.0f){}
-		
-	Transform operator+( const Transform& t ) const
-	{
-		return Transform( position + t.position, rotation + t.rotation );
-	}
 
-	Transform operator*( const Transform& t ) const
-	{
-		Transform res;
-		res.position = position + rotation * t.position;
-		res.rotation = rotation * t.rotation;
-		res.scale = Vec3( scale.x*t.scale.x, scale.y*t.scale.y, scale.z*t.scale.z );		
-		return res;
-	}
+	Transform( const Vec3& _position, const Quat& _rotation, const Vec3& _scale )
+		: position(_position)
+		, rotation(_rotation)
+		, scale(_scale){}
+		
+	Transform operator+( const Transform& t ) const;
+
+	Transform operator*(const Transform& t) const;
 	
 	Vec3 operator*( const Vec3& v ) const
 	{

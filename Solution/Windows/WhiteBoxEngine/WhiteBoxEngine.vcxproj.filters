@@ -327,6 +327,9 @@
     <ClInclude Include="..\..\..\Editor\Libs\FbxConv\src\readers\util.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Animation\AnimationSerializer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Application.cpp">
@@ -498,6 +501,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Editor\Libs\FbxConv\src\modeldata\Serialization.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\Animation\AnimationSerializer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

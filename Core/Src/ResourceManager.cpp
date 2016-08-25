@@ -15,6 +15,8 @@
 #include "LogSystem/LogSystem.h"
 #include "Animation/SkeletonSerializer.h"
 #include "Animation/Skeleton.h"
+#include "Animation/AnimationSerializer.h"
+#include "Animation/Animation.h"
 
 WHITEBOX_BEGIN
 
@@ -22,6 +24,7 @@ CResourceManager::CResourceManager()
 	: m_bCheckForDependencyMode(false)
 {
 	AddResourceType< CSkeleton, CSkeletonSerializer >( "skel" );
+	AddResourceType< CAnimation, CAnimationSerializer >( "anim" );
 	AddResourceType< CMesh, CMeshSerializer >( "msh" );
 	AddResourceType< CMaterial, CMaterialSerializer >( "mat" );
 	AddResourceType< CTexture, CTextureSerializer >( "dds" );

@@ -929,6 +929,9 @@ void	CRenderer::RenderBoundTriangles( size_t indexCount )
 
 void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color, const Matrix44& projectionMatrix )
 {
+#ifndef __GEAR_VR
+	glUseProgram(0);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -941,6 +944,7 @@ void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color, 
  	glVertex3f( from.x, from.z, -from.y );
  	glVertex3f( to.x, to.z, -to.y );
  	glEnd();	
+#endif
 }
 
 // Draw

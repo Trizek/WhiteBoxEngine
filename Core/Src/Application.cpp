@@ -18,6 +18,7 @@
 #include "Render/Font.h"
 #include "Render/TextMesh.h"
 #include "Animation/Skeleton.h"
+#include "Animation/Animation.h"
 
 WHITEBOX_BEGIN
 
@@ -45,6 +46,10 @@ CShaderProgramPtr pProg;
 CTimer timer;
 
 CSkeletonPtr skel;
+CAnimationPtr pAnim1, pAnim2;
+
+float blendWeight = 0.5f;
+float normalizedTime = 0.0f;
 
 void CApplication::InitApplication( uint width, uint height )
 {
@@ -81,7 +86,10 @@ void CApplication::InitApplication( uint width, uint height )
 	textProgram = gVars->pResourceManager->GetResource< CShaderProgram >("text.program");
 	skin = gVars->pResourceManager->GetResource< CShaderProgram >("skinning.program");
 
-	skel = gVars->pResourceManager->GetResource< CSkeleton >("ThirdPersonWalk.skel");
+	skel = gVars->pResourceManager->GetResource< CSkeleton >("ThirdPersonRun.skel");
+
+	pAnim1 = gVars->pResourceManager->GetResource< CAnimation >( "ThirdPersonWalk.anim" );
+	pAnim2 = gVars->pResourceManager->GetResource< CAnimation >( "ThirdPersonRun.anim" );
 
 	{
 		CMeshHelper m;
@@ -260,7 +268,13 @@ bool first = true;
 
 float a = 0, d = 1;
 
-void* skinMatId;
+void* skinMatId,  *skinMatId2;
+
+
+
+float animTime = 0.0f;
+
+float tim = 0;
 
 void CApplication::FrameUpdate()
 {
@@ -277,6 +291,9 @@ void CApplication::FrameUpdate()
  	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
  	textMesh.SetText(text, font);
  
+
+
+
  	CText txt2( U"François Fournel était\ndans la place" );
  	textMesh2.SetText(txt2, font);
 
@@ -298,6 +315,7 @@ void CApplication::FrameUpdate()
 
 
 			skinMatId = gVars->pRenderer->CreateUniformBuffer(sizeof(Matrix44) * 64);
+			skinMatId2 = gVars->pRenderer->CreateUniformBuffer(sizeof(Matrix44) * 64);
 
 			first = false;
 		}
@@ -308,14 +326,7 @@ void CApplication::FrameUpdate()
 
 		Vec3 pos;
 
-		for (size_t i = 0; i < boneCount; ++i)
-		{
-			int parent = skel->GetBones()[i].GetParentIndex();
-			pos = (parent >= 0) ? skel->GetGlobalBindPose().m_boneTransforms[parent].position : skel->GetGlobalBindPose().m_boneTransforms[i].position;
-
-			gVars->pRenderer->DrawLine(camInv * pos, camInv * skel->GetGlobalBindPose().m_boneTransforms[i].position, Color::Green, m_pRenderPipeline->mainCamera.projectionMatrix);
-		}
-
+	
 
 	
 
@@ -329,59 +340,129 @@ void CApplication::FrameUpdate()
 
 		CPose pose;
 		pose.m_boneTransforms.resize(boneCount);
-		pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
+		pose.Zero();
+		//pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
 
-		itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("spine_02");
-		pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
+		//itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("spine_02");
+		//pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
 
-		itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("spine_01");
-		pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
+		//itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("spine_01");
+		//pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a * 0.25f));
 
-		itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("head");
-		pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a));
+		//itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("head");
+		//pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a));
+
+		float factor = 1.f;
 
 
+	/*	tim = 4.95f;*/
+		if (tim < 4.0f)
+		{
+			blendWeight = 0;
+		}
+		else if (tim < 6.0f)
+		{
+			blendWeight = (tim - 4.0f) / 2.0f;
+		}
+		else if (tim < 10.0f)
+		{
+
+			blendWeight = 1.0f;
+		}
+		else if (tim < 12.0f)
+		{
+			blendWeight = 1.0f - (tim - 10.0f) / 2.0f;
+		}
+		else
+		{
+			tim = 0.0f;
+		}
+		tim += frameTime * factor;
+
+
+		/*blendWeight = 1.0f;*/
+
+// 		normalizedTime = 0.60f;
+
+		float length = (1.0f - blendWeight) * pAnim1->m_length + blendWeight * pAnim2->m_length;
+		float speed = 1.0f / length;
+		normalizedTime += speed * frameTime * factor;
+		
+		float w = 0.0f;
+
+		pAnim1->AccumulateSamplePose( normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w );
+		pAnim2->AccumulateSamplePose( normalizedTime * pAnim2->m_length, blendWeight, pose, w );
+
+		//pAnim1->AccumulateSamplePose(normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w);
+		//pAnim2->AccumulateSamplePose(normalizedTime * pAnim2->m_length, blendWeight, pose, w);
+
+		pose.Normalize(w);
 
 
 
 		skel->ConvertFromBindToLocalSpace(pose);
 		skel->ComputeGlobalPose(pose, pose);
+// 	
+// 		for (int i = 0; i < skel->GetBones().size(); ++i)
+// 		{
+// 			int parentIdx = skel->GetBones()[i].GetParentIndex();
+// 			if (parentIdx < 0)
+// 				continue;
+// 
+// 			m_pRenderPipeline->DrawLine(skel->m_globalBindPose.m_boneTransforms[i].position, skel->m_globalBindPose.m_boneTransforms[parentIdx].position, Color::Red);
+// 
+// 
+// 			m_pRenderPipeline->DrawLine(pose.m_boneTransforms[i].position, pose.m_boneTransforms[parentIdx].position, Color::Green);
+// 		}
+
 		skel->ComputeSkinningPose(pose, pose);
 
-		void* data = ezio->GetVertexBuffer()->Lock(false, true);
 
-		size_t vertexCount = ezio->GetVertexBuffer()->GetVertexCount();
-		for (size_t i = 0; i < vertexCount; ++i)
+
+//		textMesh.SetText(CText(skel->GetBones()[(int)tim].GetName()), font);
+
+
+
 		{
-			break;
-			SVertexBoneWeights& weights = ezio->GetVertexBuffer()->GetBoneWeights(data, i);
-			Vec3& position = ezio->GetVertexBuffer()->GetPosition(data, i);
-
-			Vec3 pos = Vec3::Zero;
-			for (int j = 0; j < 4; ++j)
+			Matrix44* matrices = (Matrix44*)gVars->pRenderer->LockUniformBuffer(skinMatId, 0, 64 * sizeof(Matrix44));
+			for (int i = 0; i < Min<int>(boneCount, 64); ++i)
 			{
-				pos = pos + weights.weights[j] * (pose.m_boneTransforms[(int)weights.indices[j]] * positions[i]);
+				Matrix34 m;
+				m.FromTransform(pose.m_boneTransforms[i]);
+
+				matrices[i] = Matrix44(m);
 			}
 
-			position = pos;
+			gVars->pRenderer->UnlockUniformBuffer();
 		}
 
+		static float at2 = 0;
+		at2 += frameTime;
+
+		pose.Zero();
+		pAnim1->AccumulateSamplePose(at2, 1.0f, pose, w);
+		pose.Normalize(1);
 
 
-		ezio->GetVertexBuffer()->Unlock();
+		itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("head");
+		pose.m_boneTransforms[*itBoneInfo].rotation = Quat::CreateRotX(Degree(a));
 
+		skel->ConvertFromBindToLocalSpace(pose);
+		skel->ComputeGlobalPose(pose, pose);
+		skel->ComputeSkinningPose(pose, pose);
 
-		Matrix44* matrices = (Matrix44*)gVars->pRenderer->LockUniformBuffer(skinMatId, 0, 64 * sizeof(Matrix44));
-		for(int i = 0; i < Min<int>(boneCount, 64); ++i)
 		{
-			Matrix34 m;
-			m.FromTransform(pose.m_boneTransforms[i]);
+			Matrix44* matrices = (Matrix44*)gVars->pRenderer->LockUniformBuffer(skinMatId2, 0, 64 * sizeof(Matrix44));
+			for (int i = 0; i < Min<int>(boneCount, 64); ++i)
+			{
+				Matrix34 m;
+				m.FromTransform(pose.m_boneTransforms[i]);
 
-			matrices[i] = Matrix44(m);
+				matrices[i] = Matrix44(m);
+			}
+
+			gVars->pRenderer->UnlockUniformBuffer();
 		}
-			
-		gVars->pRenderer->UnlockUniformBuffer();
-
 
 
 	}
@@ -459,15 +540,26 @@ void CApplication::FrameUpdate()
 		for (size_t i = 0; i< meca->GetPartCount();++i)
 			CRenderPipeline::AddRenderProxyToQueue(meca.get(), i, m_pRenderPipeline->proxies, ttt, whiteshader.get(), true);
 
-		ttt.rotation = Quat();
-		ttt.position.x = 1.0f;
+		ttt.rotation = Quat::CreateRotZ(Degree(45.0f));
+		ttt.position.x = 10.0f;
 		ttt.scale = Vec3(0.1f, 0.1f, 0.1f);
 
 		Transform t5;
-	t5.position.y += 50.0f;
+	t5.position.y += 150.0f;
+	t5.position.x += 100.0f;
+	t5.rotation = Quat::CreateRotZ(Degree(25.0f));
+
+	// renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SkinningMatrices", skinMatId);
 
  		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
- 			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true);
+ 			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId);
+
+
+		t5.position.x -= 100.0f;
+
+		for (size_t i = 0; i < ezio->GetPartCount(); ++i)
+			CRenderPipeline::AddRenderProxyToQueue(ezio.get(), i, m_pRenderPipeline->proxies, t5, skin.get(), true).SetUniformValue<void*>(skin.get(), "SkinningMatrices", skinMatId2);
+
 	}
 
 
