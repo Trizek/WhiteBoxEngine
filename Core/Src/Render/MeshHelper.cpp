@@ -5,6 +5,7 @@
 #include "FileSystem.h"
 #include "LogSystem/LogSystem.h"
 #include "Render/VertexBuffer.h"
+#include "TriMesh.h"
 
 WHITEBOX_BEGIN
 
@@ -165,7 +166,26 @@ void	CMeshHelper::ComputeNormals()
 	
 CMesh* CMeshHelper::ConvertToMesh() const
 {
-	CMesh* pMesh = new CMesh();
+	CTriMeshPtr	pTriMesh = new CTriMesh();
+	pTriMesh->ReserveVertices( m_positionArray.size() );
+	for( const Vec3& pos : m_positionArray )
+	{
+		pTriMesh->AddVertex( pos );
+	}
+
+	for ( const CMeshPartHelper* pPart : m_meshParts )
+	{
+		const std::vector< uint >& indices = const_cast< CMeshPartHelper* >(pPart)->GetIndexArray();
+
+		pTriMesh->ReserveIndices( indices.size() );
+		for( uint index : indices )
+		{
+			pTriMesh->AddIndex( index );
+		}
+	}
+
+
+	CMesh* pMesh = new CMesh( pTriMesh );
 
 	if (m_positionArray.size() != m_normalArray.size())
 	{

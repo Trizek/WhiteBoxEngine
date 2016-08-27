@@ -11,6 +11,7 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 {
 	WbLog( "Default", "Loading... file size %zd", dataStream.GetSize() );
 
+	CTriMeshPtr pTriMesh = new CTriMesh();
 
 	// Vertex count
 	int vertexCount = 0;
@@ -35,10 +36,20 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 	
 	vertexFormat.Build();
 	WbLog( "Default", " Vertex format size : %zd\n", vertexFormat.GetSize() );
+
 	
 	// Vertices
-	CMesh* pMesh = new CMesh();
+	CMesh* pMesh = new CMesh( pTriMesh );
 	pMesh->SetSharedVertices( vertexFormat, vertexCount, dataStream.GetCursorData() );
+
+	// Fill TriMesh vertices
+	CVertexBuffer* pVB = pMesh->GetVertexBuffer();
+	pTriMesh->ReserveVertices( vertexCount );
+	for ( size_t iVertex = 0; iVertex < vertexCount; ++iVertex )
+	{
+		pTriMesh->AddVertex( pVB->GetPosition(dataStream.GetCursorData(), iVertex) );
+	}
+
 	dataStream.SetCursor( dataStream.GetCursor() + vertexCount * vertexFormat.GetSize() );
 	
 	// Parts
@@ -57,8 +68,16 @@ IResource*	CMeshSerializer::Load( CDataStream& dataStream, const CResourceDescri
 		
 		CMesh::CPart* pMeshPart = new CMesh::CPart( *pMesh );
 		pMeshPart->SetIndices( indexCount, (uint*)dataStream.GetCursorData() );
+
+		// Fill TriMesh vertices
+		pTriMesh->ReserveIndices( indexCount );
+		for ( size_t iIndex = 0; iIndex < indexCount; ++iIndex )
+		{
+			pTriMesh->AddIndex( ((uint*)dataStream.GetCursorData())[ iIndex ] );
+		}
+
 		dataStream.SetCursor( dataStream.GetCursor() + indexCount * sizeof(uint) );
-		
+
 		// Material
 		String materialName;
 		dataStream.ReadString( materialName );

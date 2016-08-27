@@ -15,6 +15,7 @@ class COperatingSystem;
 class CApplication;
 class CResourceManager;
 class CLogSystem;
+class IPhysicsSystem;
 struct SGlobalVariables
 {
 	static void Init();
@@ -26,6 +27,7 @@ struct SGlobalVariables
 	COperatingSystem*	pOperatingSystem;
 	CApplication*		pApplication;
 	CResourceManager*	pResourceManager;
+	IPhysicsSystem*		pPhysicsSystem;
 };
 
 extern SGlobalVariables* gVars;

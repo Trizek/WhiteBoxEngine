@@ -16,34 +16,6 @@ class CShaderProgram;
 class CMesh;
 
 
-
-typedef std::pair< String, Matrix44 > TMatrix44Param;
-typedef std::pair< String, int > TIntParam;
-typedef std::pair< String, Vec3 > TVec3Param;
-
-struct SShaderProgramParams2
-{
-	std::vector< TIntParam >			intParams;
-	std::vector< TVec3Param >			vec3Params;
-	std::vector< TMatrix44Param >		matrix44Params;
-};
-
-struct SRenderUnit
-{
-	SRenderUnit( size_t arrayIndex ) : index(arrayIndex){}
-
-	CIndexBuffer*			pIndexBuffer;
-	CMaterial*				pMaterial;
-	CShaderProgram*			pShaderProgram;
-	SShaderProgramParams2	shaderParams;
-	bool					bCullBackFace;
-	Matrix44				transformMatrix;
-
-	size_t					index;
-
-	ulong					key;
-};
-
 class CShaderUniformsValues
 {
 public:
@@ -125,10 +97,11 @@ struct SRenderProxy
 	bool					bCullBackFace;
 
 	Matrix34				transformMatrix;
+
+	size_t					index;
 };
 
 
-typedef  std::vector< SRenderUnit > TRenderQueue2;
 
 typedef std::vector< SRenderProxy >	TRenderProxies;
 
@@ -143,11 +116,6 @@ class CRenderPipeline
 public:
 	~CRenderPipeline();
 
-	static SRenderUnit&		AddRenderUnit( TRenderQueue2& renderQueue );
-	static void				AddMeshToRenderQueue( CMesh* pMesh, TRenderQueue2& renderQueue, const Transform& meshTransform, const Matrix34& inverseCameraMatrix, CShaderProgram* pShaderProgram, SShaderProgramParams2& shaderParams, bool bCullFace );
-	static void				SortRenderQueue( TRenderQueue2& renderQueue );
-	static void				RenderQueue( const TRenderQueue2& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount );
-
 	static CShaderUniformsValues&		AddRenderProxyToQueue( CMesh* pMesh, size_t part, TRenderProxies& renderProxies, const Transform& meshTransform, CShaderProgram* pShaderProgram, bool bCullFace );
 	void				RenderQueue( TRenderProxies& renderProxies, IRenderTargetPtr pRenderTarget, const Matrix34& invCamMatrix, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount );
 
@@ -157,10 +125,14 @@ public:
 	size_t					GetDrawCalls() const;
 	size_t					GetPolyCount() const;
 
-	CCamera					mainCamera;
-	TRenderQueue2			mainRenderQueue;
+	CCamera					mainCamera;;
 
 	TRenderProxies			proxies;
+
+	TRenderProxies			m_proxies;
+
+	SRenderProxy&			AddRenderProxy();
+	void					RemoveRenderProxy( const SRenderProxy& proxy );
 
 //private:
 	size_t					m_drawCalls;

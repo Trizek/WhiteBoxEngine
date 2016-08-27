@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "Application.h"
 #include "LogSystem/LogSystem.h"
+#include "Physics/BulletPhysicsSystem.h"
 
 WHITEBOX_BEGIN
 
@@ -23,6 +24,7 @@ void SGlobalVariables::Init()
 	gVars->pOperatingSystem = new COperatingSystem();
 	gVars->pApplication = new CApplication();
 	gVars->pResourceManager = new CResourceManager();
+	gVars->pPhysicsSystem = new CBulletPhysicsSystem();
 };
 
 

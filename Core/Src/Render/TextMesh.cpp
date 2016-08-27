@@ -72,7 +72,7 @@ void	CTextMesh::SetText( const CText& text, const CFontPtr& pFont )
 void	CTextMesh::CreateMesh( size_t characterCount )
 {
 	m_characterCount = characterCount;
-	m_pMesh = CMeshPtr(new CMesh());
+	m_pMesh = CMeshPtr( new CMesh(nullptr) );
 
 	CVertexFormat vertexFormat;
 	vertexFormat.AddSingleElement(CVertexFormat::eSE_Position);

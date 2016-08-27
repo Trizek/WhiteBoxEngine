@@ -6,6 +6,7 @@
 #include "Material.h"
 
 #include "Resource.h"
+#include "TriMesh.h"
 
 WHITEBOX_BEGIN
 
@@ -40,7 +41,7 @@ public:
 		CMaterialPtr	m_pMaterial;
 	};
 
-	CMesh();
+	CMesh( CTriMeshPtr pTriMesh );
 	~CMesh();
 	
 	CVertexBuffer*	GetVertexBuffer();
@@ -49,6 +50,11 @@ public:
 	size_t		GetPartCount() const;
 	CPart*		GetPart( size_t iPart );
 	void		AddPart( CPart* pPart );
+
+	CTriMeshPtr	GetTriMesh() const
+	{
+		return m_pTriMesh;
+	}
 	
 	void		Render() const;
 	
@@ -56,6 +62,8 @@ private:
 	CVertexBuffer*	m_pSharedVertexBuffer;
 
 	std::vector< CPart* >	m_parts;
+
+	CTriMeshPtr		m_pTriMesh;
 };
 
 DECLARE_RESOURCE_POINTER( CMesh );

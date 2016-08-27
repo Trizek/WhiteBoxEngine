@@ -3,9 +3,12 @@
 
 #include "BaseTypes.h"
 #include "ResourceDescriptor.h"
+#include "WhiteBoxString.h"
 
 
 WHITEBOX_BEGIN
+
+CResourceDescriptor*	CResourcePointer_GetDescriptor(const String& path);
 
 template< class TResourceType >
 class CResourcePointer
@@ -33,8 +36,26 @@ public:
 		{
 			m_pDescriptor->Acquire();
 		}	
-	}		
-								
+	}
+
+	CResourcePointer( const String& resourcePath )
+	{
+		m_pDescriptor = CResourcePointer_GetDescriptor( resourcePath );
+		if ( m_pDescriptor )
+		{
+			m_pDescriptor->Acquire();
+		}
+	}
+	
+	CResourcePointer( const char* resourcePath )
+	{
+		m_pDescriptor = CResourcePointer_GetDescriptor( resourcePath );
+		if ( m_pDescriptor )
+		{
+			m_pDescriptor->Acquire();
+		}
+	}
+
 	CResourcePointer( const CResourcePointer< TResourceType >& pResource )
 		: m_pDescriptor(pResource.m_pDescriptor)
 	{

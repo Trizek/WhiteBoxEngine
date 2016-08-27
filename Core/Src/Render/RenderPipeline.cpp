@@ -23,47 +23,6 @@ struct SceneMatrices
 };
 #endif
 
-SRenderUnit&	CRenderPipeline::AddRenderUnit( TRenderQueue2& renderQueue )
-{
-	renderQueue.push_back( SRenderUnit( renderQueue.size() ) );
-	return renderQueue.back();
-}
-
-void	CRenderPipeline::AddMeshToRenderQueue( CMesh* pMesh, TRenderQueue2& renderQueue, const Transform& meshTransform, const Matrix34& inverseCameraMatrix, CShaderProgram* pShaderProgram, SShaderProgramParams2& shaderParams, bool bCullBackFace )
-{
-	for( size_t iPart = 0 ; iPart < pMesh->GetPartCount() ; ++iPart )
-	{
-		CMesh::CPart* pPart = pMesh->GetPart( iPart );
-		SRenderUnit& renderUnit = AddRenderUnit( renderQueue );
-
-		renderUnit.pIndexBuffer = pPart->GetIndexBuffer();
-		renderUnit.pMaterial = pPart->GetMaterial().get();
-		renderUnit.pShaderProgram = pShaderProgram;
-		renderUnit.shaderParams = shaderParams;
-		renderUnit.bCullBackFace = bCullBackFace;
-
-		
-		Matrix34 transformMatrix; transformMatrix.FromTransform( meshTransform );
-		transformMatrix = inverseCameraMatrix * transformMatrix;
-
-		gVars->pRenderer->FormatTransformMatrix( transformMatrix, renderUnit.transformMatrix );
-	}
-}
-
-
-
-
-void			CRenderPipeline::SortRenderQueue( TRenderQueue2& renderQueue )
-{
-
-}
-
-void			CRenderPipeline::RenderQueue( const TRenderQueue2& renderQueue, IRenderTargetPtr pRenderTarget, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount )
-{
-
-}
-
-
 CShaderUniformsValues&		CRenderPipeline::AddRenderProxyToQueue( CMesh* pMesh, size_t part, TRenderProxies& renderProxies, const Transform& meshTransform, CShaderProgram* pShaderProgram, bool bCullBackFace )
 {
 	renderProxies.push_back(SRenderProxy());
@@ -81,7 +40,6 @@ CShaderUniformsValues&		CRenderPipeline::AddRenderProxyToQueue( CMesh* pMesh, si
 	return proxy.uniformValues;
 }
 
-extern void* skinMatId;
 
 void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetPtr pRenderTarget, const Matrix34& invCamMatrix, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount )
 {
@@ -225,6 +183,9 @@ void			CRenderPipeline::Render()
 	RenderQueue(proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
  	proxies.clear();
 
+
+	RenderQueue(m_proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
+
 	Transform invCam = mainCamera.transform.GetInverse();
 	for (const SDrawLine& drawLine : m_drawLines)
 	{
@@ -257,6 +218,26 @@ size_t			CRenderPipeline::GetDrawCalls() const
 size_t			CRenderPipeline::GetPolyCount() const
 {
 	return m_polyCount;
+}
+
+
+SRenderProxy&			CRenderPipeline::AddRenderProxy()
+{
+	size_t proxyIndex = m_proxies.size();
+
+	m_proxies.resize( proxyIndex + 1 );
+	m_proxies.back().index = proxyIndex;
+	return m_proxies.back();
+}
+
+void			CRenderPipeline::RemoveRenderProxy( const SRenderProxy& proxy )
+{
+	size_t proxyIndex = proxy.index;
+	if ( proxyIndex < m_proxies.size() - 1 )
+	{
+		m_proxies[ proxyIndex ] = m_proxies[ m_proxies.size() - 1 ];
+	}
+	m_proxies.resize( m_proxies.size() - 1 );
 }
 
 WHITEBOX_END

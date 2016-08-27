@@ -36,6 +36,8 @@ public:
 	void					ParseResources( const String& resourceFolder );
 
 	
+	CResourceDescriptor*				GetResourceDescriptor( const String& path );
+
 	template< class TResourceType >
 	CResourcePointer< TResourceType >	GetResource( const String& path )
 	{
@@ -45,7 +47,6 @@ public:
 	static	void ComputeResourceDependencies( const String& resourceRootDir, const String& path, std::vector< String >& dependencies );
 
 private:
-	CResourceDescriptor*				GetResourceDescriptor( const String& path );
 
 	void								GetRecursiveDependencies( CResourceDescriptor* pDescriptor, std::vector< CResourceDescriptor* >& dependencies );
 

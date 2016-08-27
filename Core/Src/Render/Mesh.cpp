@@ -46,8 +46,10 @@ void	CMesh::CPart::SetMaterial( CMaterialPtr pMaterial )
 }
 		
 
-CMesh::CMesh()
-	: m_pSharedVertexBuffer(NULL){}
+CMesh::CMesh( CTriMeshPtr pTriMesh )
+	: m_pSharedVertexBuffer(NULL),
+	m_pTriMesh(pTriMesh)
+{}
 
 CMesh::~CMesh()
 {
