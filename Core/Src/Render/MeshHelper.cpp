@@ -14,6 +14,13 @@ void	CMeshPartHelper::AddIndex( uint index )
 	m_indexArray.push_back( index );		
 }
 
+void	CMeshPartHelper::AddTriangle( uint i0, uint i1, uint i2 )
+{
+	AddIndex( i0 );
+	AddIndex( i1 );
+	AddIndex( i2 );
+}
+
 std::vector< uint >& CMeshPartHelper::GetIndexArray() 
 {
 	return m_indexArray;

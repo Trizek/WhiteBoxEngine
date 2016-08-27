@@ -135,9 +135,56 @@ static const int NUM_MULTI_SAMPLES = 4;
 #define EXPLICIT_EGL_OBJECTS	1
 
 
+
+
 char packagePath[ 1024 ];
 AAssetManager* s_assetManager = NULL;
 
+static const unsigned int MaxTouchEvent = 32;
+STouchEvent s_touchEventsQueue[ MaxTouchEvent ];
+int s_touchEventCount = 0;
+int s_touchEventStart = 0;
+
+int	GetTouchEventFreeSlot()
+{
+	return ( (s_touchEventStart + s_touchEventCount) % (MaxTouchEvent - 1) );
+}
+
+void  PushTouchEvent( int action, float x, float y )
+{
+	if ( s_touchEventCount < MaxTouchEvent )
+	{
+		ETouchEventType eventType;
+		switch (action)
+		{
+		case AMOTION_EVENT_ACTION_DOWN:	eventType = ETouchEventType::Begin; break;
+		case AMOTION_EVENT_ACTION_UP:	eventType = ETouchEventType::End; break;
+		case AMOTION_EVENT_ACTION_MOVE:	eventType = ETouchEventType::Stay; break;
+		}
+		s_touchEventsQueue[ GetTouchEventFreeSlot() ] = (STouchEvent){ eventType, {x, y} };
+	
+		++s_touchEventCount;
+	}
+}
+
+bool	PopTouchEvent( STouchEvent& touchEvent )
+{
+	if ( s_touchEventCount == 0 )
+	{
+		return false;
+	}
+
+	touchEvent = s_touchEventsQueue[ s_touchEventStart ];
+	s_touchEventStart = (s_touchEventStart + 1) & (MaxTouchEvent - 1);
+	--s_touchEventCount;
+
+	return true;
+}
+
+void	ClearTouchEventsQueue()
+{
+	s_touchEventCount = 0;
+}
 
 const char * GetCurrentPackagePath(JNIEnv * jni, jobject activityObject, char * packageName, int const maxLen)
 {
@@ -2839,6 +2886,7 @@ extern "C"
 
 	JNIEXPORT void JNICALL Java_com_oculus_gles3jni_GLES3JNILib_onTouchEvent(JNIEnv * env, jobject obj, jlong handle, int action, float x, float y)
 	{
+		PushTouchEvent( action, x, y );
 		return;
 
 		if (action == AMOTION_EVENT_ACTION_UP)
@@ -2873,6 +2921,11 @@ Vec2	COperatingSystem::GetMousePos() { return Vec2(); }
 bool	COperatingSystem::GetMouseButton(int button) { return false; }
 bool	COperatingSystem::IsPressingKey(Key key) { return false; }
 bool	COperatingSystem::JustPressedKey(Key key) { return false; }
+
+bool	COperatingSystem::PollTouchEvent( STouchEvent& touchEvent )
+{
+	return PopTouchEvent( touchEvent );
+}
 
 float	COperatingSystem::Tick()
 {

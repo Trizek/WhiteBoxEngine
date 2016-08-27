@@ -16,6 +16,8 @@ private:
 	void*	m_skinMatricesBufferId;
 };
 
+DEFINE_SMART_PTR(CSkinnedMeshRenderNode)
+
 WHITEBOX_END
 
 #endif

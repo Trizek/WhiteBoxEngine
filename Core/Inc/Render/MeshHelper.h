@@ -10,6 +10,7 @@ class CMeshPartHelper
 {
 public:	
 	void					AddIndex( uint index );
+	void					AddTriangle( uint i0, uint i1, uint i2 );
 	std::vector< uint >&	GetIndexArray();
 	
 	const String&			GetMaterialName() const;

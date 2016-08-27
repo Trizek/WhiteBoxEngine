@@ -29,6 +29,16 @@ float	CColliderNode::GetMass() const
 	return m_mass;
 }
 
+void	CColliderNode::AddImpulse( const Vec3& impulse, const Vec3& localPoint /*= Vec3::Zero*/ )
+{
+	gVars->pPhysicsSystem->AddImpulse( m_rigidBodyHandle, impulse, localPoint );
+}
+
+void	CColliderNode::AddForce( const Vec3& force, const Vec3& localPoint /*= Vec3::Zero*/ )
+{
+	gVars->pPhysicsSystem->AddForce( m_rigidBodyHandle, force, localPoint );
+}
+
 
 
 void	CSphereColliderNode::SetRadius( float radius )
@@ -51,6 +61,27 @@ TColliderHandle		CSphereColliderNode::CreateCollider()
 }
 
 
+
+
+
+void	CBoxColliderNode::SetSize( const Vec3& size )
+{
+	m_size = size;
+}
+
+Vec3	CBoxColliderNode::GetSize() const
+{
+	return m_size;
+}
+
+TColliderHandle		CBoxColliderNode::CreateCollider()
+{
+	Transform globalTransform;
+	GetGlobalTransform( globalTransform );
+	Vec3 scale = globalTransform.scale;
+
+	return gVars->pPhysicsSystem->CreateBoxCollider( Vec3(m_size.x * scale.x, m_size.y * scale.y, m_size.z * scale.z) );
+}
 
 void	CStaticMeshColliderNode::SetMesh( CMeshPtr pMesh )
 {

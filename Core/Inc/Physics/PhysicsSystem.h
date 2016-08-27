@@ -24,6 +24,8 @@ public:
 	virtual void					AddRigidyBody( TRigidBodyHandle rigidBody ) = 0;
 	virtual void					RemoveRigidyBody( TRigidBodyHandle rigidBody ) = 0;
 	virtual void					GetRigidBodyTransform( TRigidBodyHandle rigidBody, Transform& transform ) = 0;
+	virtual void					AddImpulse( TRigidBodyHandle rigidBody, const Vec3& impulse, const Vec3& localPoint = Vec3::Zero ) = 0;
+	virtual void					AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint = Vec3::Zero ) = 0;
 
 	virtual void					SetDebugDraw( bool m_bDebug ) = 0;
 

@@ -23,10 +23,11 @@ void	CMeshRenderNode::SetShaderProgram( size_t index, CShaderProgramPtr pShaderP
 
 void	CMeshRenderNode::PropagateTransform( const Transform& globalParentTransform )
 {
+	CSpatialNode::PropagateTransform( globalParentTransform );
+
 	Transform transform;
 	GetGlobalTransform( transform );
 
-	CSpatialNode::PropagateTransform( globalParentTransform );
 	for( size_t proxyIndex : m_renderProxyIndices )
 	{
 		SRenderProxy& renderProxy = gVars->pApplication->m_pRenderPipeline->m_proxies[ proxyIndex ];

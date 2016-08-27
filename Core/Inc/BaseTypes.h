@@ -31,7 +31,7 @@ typedef char32_t wchar;
 
 WHITEBOX_BEGIN
 #include "Maths.h"
-WHITEBOX_END
+
 
 enum class Key : unsigned int
 {
@@ -48,5 +48,21 @@ enum class Key : unsigned int
 
 	Count,
 };
+
+enum class ETouchEventType
+{
+	Begin = 0,
+	Stay,
+	End,
+};
+
+struct STouchEvent
+{
+	ETouchEventType		eventType;
+	Vec2				pos;
+};
+
+WHITEBOX_END
+
 
 #endif

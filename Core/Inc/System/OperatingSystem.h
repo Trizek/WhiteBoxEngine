@@ -53,6 +53,9 @@ public:
 	bool	IsPressingKey(Key key);
 	bool	JustPressedKey(Key key);
 
+	bool	PollTouchEvent( STouchEvent& event );
+
+
 	// return frame time since last tick
 	float	Tick();
 

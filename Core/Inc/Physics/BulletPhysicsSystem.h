@@ -31,8 +31,9 @@ public:
 	virtual TRigidBodyHandle		CreateRigidyBody( TColliderHandle collider, const WhiteBox::Transform& transform, float mass = 0 ) override;
 	virtual void					AddRigidyBody( TRigidBodyHandle rigidBody ) override;
 	virtual void					RemoveRigidyBody( TRigidBodyHandle rigidBody ) override;
-
 	virtual void					GetRigidBodyTransform( TRigidBodyHandle rigidBody, WhiteBox::Transform& transform ) override;
+	virtual void					AddImpulse( TRigidBodyHandle rigidBody, const Vec3& impulse, const Vec3& localPoint = Vec3::Zero ) override;
+	virtual void					AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint = Vec3::Zero ) override;
 
 	virtual void					SetDebugDraw( bool m_bDebug ) override;
 

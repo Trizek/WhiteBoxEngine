@@ -83,10 +83,10 @@ struct SSDLData
 bool ProcessEvents( COperatingSystem& os, SSDLData* pSDLData )
 {
 	
-	/*for (size_t i = 0; i < (size_t)Key::Count; ++i)
+	for (size_t i = 0; i < (size_t)Key::Count; ++i)
 	{
-		m_justPressedKeys[i] = false;
-	}*/
+		pSDLData->m_justPressedKeys[i] = false;
+	}
 
 	SDL_Event event;
 
@@ -235,8 +235,15 @@ bool	COperatingSystem::IsPressingKey( Key key )
 	return static_cast<SSDLData*>(m_pSpecificData)->m_pressedKeys[ (size_t)key ];
 }
 
-bool	COperatingSystem::JustPressedKey(Key key) { return false; }
+bool	COperatingSystem::JustPressedKey( Key key )
+{ 
+	return static_cast<SSDLData*>(m_pSpecificData)->m_justPressedKeys[ (size_t)key ];
+}
 
+bool	COperatingSystem::PollTouchEvent( STouchEvent& event )
+{
+	return false;
+}
 
 float	COperatingSystem::Tick()
 {

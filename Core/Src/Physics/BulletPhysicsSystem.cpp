@@ -79,7 +79,7 @@ CBulletPhysicsSystem::CBulletPhysicsSystem()
 
 	m_dynamicsWorld->setGravity( btVector3(0, -9.8f, 0) );
 
-	m_scale = 0.01f;
+	m_scale = 0.1f;
 
 	m_debugDrawer = new CBulletDebugDrawer( m_scale );
 	m_dynamicsWorld->setDebugDrawer( m_debugDrawer );
@@ -110,7 +110,7 @@ TColliderHandle	CBulletPhysicsSystem::CreateSphereCollider( float radius )
 
 TColliderHandle	CBulletPhysicsSystem::CreateBoxCollider( const Vec3& size )
 {
-	return new btBoxShape( btVector3(m_scale * size.x * 0.5f, m_scale * size.z * 0.5f, -m_scale * size.y * 0.5f) );
+	return new btBoxShape( btVector3(m_scale * size.x * 0.5f, m_scale * size.z * 0.5f, m_scale * size.y * 0.5f) );
 }
 
 TColliderHandle	CBulletPhysicsSystem::CreateCapsuleCollider( float radius, float height )
@@ -165,7 +165,7 @@ TRigidBodyHandle	CBulletPhysicsSystem::CreateRigidyBody( TColliderHandle collide
 
 	if ( mass == 0.0f )
 	{
-		pBulletRigidBody->pRigidBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
+		//pBulletRigidBody->pRigidBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
 	}
 
 	return pBulletRigidBody;
@@ -195,6 +195,16 @@ void	CBulletPhysicsSystem::GetRigidBodyTransform( TRigidBodyHandle rigidBody, Tr
 	Vec3 pos = *((Vec3*)bt.getOrigin().m_floats);
 	transform.position = (1.0f / m_scale) * Vec3(pos.x, -pos.z, pos.y);;
 	transform.rotation = Quat( bt.getRotation().w(), bt.getRotation().x(), -bt.getRotation().z(), bt.getRotation().y() );
+}
+
+void	CBulletPhysicsSystem::AddImpulse( TRigidBodyHandle rigidBody, const Vec3& impulse, const Vec3& localPoint /*= Vec3::Zero*/ )
+{
+	((SBulletRigidyBody*)rigidBody)->pRigidBody->applyImpulse( btVector3(impulse.x, impulse.z, -impulse.y), btVector3(localPoint.x, localPoint.z, -localPoint.y) );
+}
+
+void	CBulletPhysicsSystem::AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint /*= Vec3::Zero*/ )
+{
+	((SBulletRigidyBody*)rigidBody)->pRigidBody->applyImpulse( btVector3(force.x, force.z, -force.y), btVector3(localPoint.x, localPoint.z, -localPoint.y) );
 }
 
 void	CBulletPhysicsSystem::SetDebugDraw( bool m_bDebug )

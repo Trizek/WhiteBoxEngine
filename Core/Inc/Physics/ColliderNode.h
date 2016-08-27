@@ -16,6 +16,9 @@ public:
 	void	SetMass( float mass );
 	float	GetMass() const;
 
+	void	AddImpulse( const Vec3& impulse, const Vec3& localPoint = Vec3::Zero );
+	void	AddForce( const Vec3& force, const Vec3& localPoint = Vec3::Zero );
+
 protected:
 	virtual TColliderHandle		CreateCollider() = 0;
 
@@ -37,6 +40,22 @@ protected:
 	float	m_radius;
 };
 
+DEFINE_SMART_PTR(CSphereColliderNode)
+
+class  CBoxColliderNode : public CColliderNode
+{
+public:
+	void	SetSize( const Vec3& size );
+	Vec3	GetSize() const;
+
+protected:
+	virtual TColliderHandle		CreateCollider() override;
+
+	Vec3	m_size;
+};
+
+DEFINE_SMART_PTR(CBoxColliderNode)
+
 class  CStaticMeshColliderNode : public CColliderNode
 {
 public:
@@ -48,6 +67,8 @@ protected:
 
 	CMeshPtr	m_pMesh;
 };
+
+DEFINE_SMART_PTR(CStaticMeshColliderNode)
 
 WHITEBOX_END
 

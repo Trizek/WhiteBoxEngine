@@ -77,9 +77,32 @@ CMeshRenderNode*pNode4;
 
 TRigidBodyHandle sphere;
 
-CSceneNode* pEzioRoot;
+CSceneNodePtr pEzioRoot;
 
-CSkinnedMeshRenderNode* pThird;
+CSkinnedMeshRenderNodePtr pThird;
+CMeshPtr cube;
+
+CBoxColliderNode*	SpawnCube(const Transform& transform)
+{
+	CBoxColliderNode* pBox = new CBoxColliderNode;
+	
+	pBox->SetSize(Vec3(1.0f));
+
+
+	pBox->AttachTo(&rootNode);
+	pBox->SetMass(2.0f);
+
+	CMeshRenderNode* pRenderBox = new CMeshRenderNode;
+	pRenderBox->AttachTo(pBox);
+	pRenderBox->SetLocalTransform(Transform(Vec3::Zero, Quat()));
+	pRenderBox->SetMesh(cube);
+	pRenderBox->SetShaderProgram(0, "white.program");
+
+	pBox->SetLocalTransform(transform);
+
+	return pBox;
+}
+
 
 void CApplication::InitApplication( uint width, uint height )
 {
@@ -108,12 +131,12 @@ void CApplication::InitApplication( uint width, uint height )
 
 	pEzioRoot = new CSpatialNode;
 	pEzioRoot->AttachTo(&rootNode);
-
-	CMeshRenderNode* pEzioMesh = new CMeshRenderNode;
-	pEzioMesh->AttachTo(pEzioRoot);
-	pEzioMesh->SetLocalTransform(Transform(Vec3(0,0,-75.0f), Quat(), Vec3(100.0f)));
-	pEzioMesh->SetMesh("Ezio/Ezio.msh");
-	pEzioMesh->SetShaderProgram(0, "tex.program");
+// 
+// 	CMeshRenderNode* pEzioMesh = new CMeshRenderNode;
+// 	pEzioMesh->AttachTo(pEzioRoot.get());
+// 	pEzioMesh->SetLocalTransform(Transform(Vec3(0,0,-75.0f), Quat(), Vec3(100.0f)));
+// 	pEzioMesh->SetMesh("Ezio/Ezio.msh");
+// 	pEzioMesh->SetShaderProgram(0, "tex.program");
 
  
  	CMeshRenderNode* pHouse = new CMeshRenderNode;
@@ -139,7 +162,66 @@ void CApplication::InitApplication( uint width, uint height )
 	pThird->SetMesh("SK_Mannequin.msh");
 	pThird->SetShaderProgram(0, "skinning.program");
 
+	
+	CMeshHelper mh;
+	for (int i = 0; i < 6; ++i)
+	{
+		Transform t;
+		float a, b;
+		a = i * 90.0f;
+		b = (i < 4) ? 0 : ((i == 4)? -90.0f : 90.0f);
+		t.rotation = Quat(Degree(a), Degree(b), Degree(0));
 
+
+		Vec3 p0 = t * Vec3(-0.5f, 0.5f, 0.5f);
+		Vec3 p1 = t * Vec3(0.5f, 0.5f, 0.5f);
+		Vec3 p2 = t * Vec3(0.5f, 0.5f, -0.5f);
+		Vec3 p3 = t * Vec3(-0.5f, 0.5f, -0.5f);
+		Vec3 n = t.rotation * Vec3(0, 1, 0);
+
+
+		mh.AddPosition(p0); mh.AddNormal(n);
+		mh.AddPosition(p1); mh.AddNormal(n);
+		mh.AddPosition(p2); mh.AddNormal(n);
+		mh.AddPosition(p3); mh.AddNormal(n);
+		
+		int iTri = 4 * i;
+		mh.AddMeshPart();
+		mh.GetMeshPart(i)->AddTriangle(iTri, iTri + 1, iTri + 2);
+		mh.GetMeshPart(i)->AddTriangle(iTri + 2, iTri + 3, iTri);
+	}
+	cube = mh.ConvertToMesh();
+
+	Vec3 origin(150.0f, -200.0f, 350.0f);
+	float size = 40.0f;
+	for (int i = 0; i < 5; ++i)
+	{
+		break;
+		for (int j = 0; j < 5; ++j)
+		{
+			Vec3 pos = origin + Vec3(i * size * 2.0f, 0.0f, j * size * 2.0f);
+
+			SpawnCube(Transform(pos, Quat(), Vec3(size)));
+
+			continue;
+
+
+			CBoxColliderNodePtr pBox = new CBoxColliderNode;
+			pBox->AttachTo(&rootNode);
+			pBox->SetSize(Vec3(size));
+
+			
+			pBox->AttachTo(&rootNode);
+			pBox->SetLocalTransform(Transform(pos, Quat()));
+			pBox->SetMass(2.0f);
+
+			CMeshRenderNodePtr pRenderBox = new CMeshRenderNode;
+			pRenderBox->AttachTo(pBox.get());
+			pRenderBox->SetLocalTransform(Transform(Vec3::Zero, Quat(), Vec3(size)));
+			pRenderBox->SetMesh(cube);
+			pRenderBox->SetShaderProgram(0, "white.program");
+		}
+	}
 
  	
 	gVars->pResourceManager->UpdateResourceLoading();
@@ -193,7 +275,7 @@ void CApplication::FrameUpdate()
  	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
  //	textMesh.SetText(text, font);
  
-	//gVars->pPhysicsSystem->SetDebugDraw(true);
+//	gVars->pPhysicsSystem->SetDebugDraw(true);
 	gVars->pPhysicsSystem->UpdateSimulation(frameTime);
 	UpdateColliderProxies();
 
@@ -326,6 +408,21 @@ void CApplication::FrameUpdate()
 		m_pRenderPipeline->mainCamera.transform.position += m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Backward * 500.0f * frameTime;
 	}
 
+	bool bSpawnCube = gVars->pOperatingSystem->JustPressedKey(Key::F1);
+	
+	STouchEvent touchEvent;
+	while (gVars->pOperatingSystem->PollTouchEvent(touchEvent))
+	{
+		bSpawnCube = bSpawnCube || (touchEvent.eventType == ETouchEventType::End);
+	}
+
+	if (bSpawnCube)
+	{
+
+		CBoxColliderNode* pNode = SpawnCube(m_pRenderPipeline->mainCamera.transform * Transform(Vec3::Forward * 50.0f, Quat(), Vec3(40.0f)));
+		pNode->Refresh();
+		pNode->AddImpulse(m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Forward * 100.0f);
+	}
 
 
 
@@ -360,6 +457,10 @@ void	CApplication::UpdateColliderProxies()
 	{
 		Transform transform;
 		gVars->pPhysicsSystem->GetRigidBodyTransform( proxy.pRigidBodyHandle, transform );
+		
+		Transform prevTransform;
+		proxy.pNode->GetGlobalTransform(prevTransform);
+		transform.scale = prevTransform.scale;
 
 		proxy.pNode->SetGlobalTransform( transform );
 	}

@@ -25,6 +25,8 @@ protected:
 	std::vector< size_t >				m_renderProxyIndices;
 };
 
+DEFINE_SMART_PTR(CMeshRenderNode)
+
 WHITEBOX_END
 
 #endif
