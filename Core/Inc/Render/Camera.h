@@ -11,6 +11,9 @@ public:
 	void				ComputeProjectionMatrix();
 	void				ComputeInverseTransformMatrix();
 
+	Vec3				GetNearPlaneHalfSize() const;
+	Vec3				GetWorldMousePos( const Vec2& mousePos ) const;
+
 	Transform			transform;
 
 	IRenderTargetPtr	pRenderTarget;

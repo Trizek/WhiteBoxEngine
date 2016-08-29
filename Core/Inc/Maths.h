@@ -677,6 +677,9 @@ class Matrix22
 	float a, b, c, d;
 };
 
+Vec3	ProjectPointOnLine( const Vec3& point, const Vec3& linePoint, const Vec3& lineDir );
+Vec3	ProjectLineOnLine( const Vec3& fromPoint, const Vec3& fromDir, const Vec3& toPoint, const Vec3& toDir );
+
 #if 0
 
 template< class T >

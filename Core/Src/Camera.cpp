@@ -19,4 +19,32 @@ void CCamera::ComputeInverseTransformMatrix()
 	inverseTransformMatrix.FromTransform( inverseTransform );
 }
 
+Vec3 CCamera::GetNearPlaneHalfSize() const
+{
+	Vec3 size;
+
+	float width = float(pRenderTarget->GetWidth());
+	float height = float(pRenderTarget->GetHeight());
+
+	Degree fov(45.0f);
+	size.z = Tan(fov * 0.5f) * 10.0f;
+	size.x = size.z * (width / height);
+	size.y = 10.0f;
+
+	return size;
+}
+
+Vec3 CCamera::GetWorldMousePos( const Vec2& mousePos ) const
+{
+	Vec3 nearPlaneHalfSize = GetNearPlaneHalfSize();
+
+	float width = float(pRenderTarget->GetWidth());
+	float height = float(pRenderTarget->GetHeight());
+
+	Vec2 normalizedMousePos( (mousePos.x / width) * 2.0f - 1.0f, 1.0f - (mousePos.y / height) * 2.0f );
+
+	Vec3 localMousePos( nearPlaneHalfSize.x * normalizedMousePos.x, nearPlaneHalfSize.y, nearPlaneHalfSize.z * normalizedMousePos.y );
+	return transform * localMousePos;
+}
+
 WHITEBOX_END

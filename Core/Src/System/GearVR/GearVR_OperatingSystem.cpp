@@ -2924,7 +2924,7 @@ bool	COperatingSystem::JustPressedKey(Key key) { return false; }
 
 bool	COperatingSystem::PollTouchEvent( STouchEvent& touchEvent )
 {
-	return PopTouchEvent( touchEvent );
+	return PopTouchEvent( touchEvent );w
 }
 
 float	COperatingSystem::Tick()

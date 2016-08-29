@@ -148,4 +148,22 @@ const Color Color::Red = Color( 1.0f, 0.0f, 0.0f );
 const Color Color::Green = Color( 0.0f, 1.0f, 0.0f );
 const Color Color::Blue = Color( 0.0f, 0.0f, 1.0f );
 
+
+Vec3	ProjectPointOnLine( const Vec3& point, const Vec3& linePoint, const Vec3& lineDir )
+{
+	float t = (point - linePoint) | lineDir;
+	return linePoint + t * lineDir;
+}
+
+Vec3 ProjectLineOnLine( const Vec3& fromPoint, const Vec3& fromDir, const Vec3& toPoint, const Vec3& toDir )
+{
+	float dirDot = fromDir | toDir;
+	Vec3 fromTo = toPoint - fromPoint;
+	float t = (fromTo | fromDir) * dirDot - (fromTo | toDir);
+	t /= 1 - dirDot * dirDot;
+
+	return toPoint + t * toDir;
+}
+
+
 WHITEBOX_END

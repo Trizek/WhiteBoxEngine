@@ -932,6 +932,7 @@ void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color, 
 {
 #ifndef __GEAR_VR
 	glUseProgram(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -940,9 +941,10 @@ void	CRenderer::DrawLine( const Vec3& from, const Vec3& to, const Color& color, 
 	glLoadMatrixf(&projectionMatrix.a11);
 
 	glLineWidth( 2.5f ); 
- 	glColor3f( color.r, color.g, color.b );
  	glBegin( GL_LINES );
+	glColor3f(color.r, color.g, color.b);
  	glVertex3f( from.x, from.z, -from.y );
+	glColor3f(color.r, color.g, color.b);
  	glVertex3f( to.x, to.z, -to.y );
  	glEnd();	
 #endif

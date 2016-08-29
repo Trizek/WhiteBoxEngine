@@ -33,11 +33,147 @@
 #include "Physics/ColliderNode.h"
 
 
+
 // #include <iostream>
 
 WHITEBOX_BEGIN
 
 
+class CGizmo
+{
+public:
+	float	ComputeAxisLength( const Transform& invCamTransf, float h, float n ) const
+	{
+		float scale = (invCamTransf * transform.position).y / n;
+		return h * size * scale * 2.0f;
+	}
+
+	float	GetRayDistToAxis( int axis, float axisLength, const Vec3& rayOrigin, const Vec3& rayDir, Vec3& projPoint, float& distOnAxis ) const
+	{
+		Vec3 axes[3] = { Vec3::Right, Vec3::Forward, Vec3::Up };
+
+		Vec3 axisOrigin = m_startPos;
+		Vec3 axisDir = transform.TransformVector( axes[axis] );
+
+		Vec3 projOnAxis = ProjectLineOnLine( rayOrigin, rayDir, axisOrigin, axisDir );
+		distOnAxis = (projOnAxis - axisOrigin) | axisDir;
+
+		float coeff = Clamp<float>( distOnAxis, 0.0f, axisLength );
+		projPoint = axisOrigin + coeff * axes[axis];
+
+		Vec3 projOnRay = ProjectPointOnLine( projPoint, rayOrigin, rayDir );
+		return (projOnRay - projPoint).Length();
+	}
+
+
+	int	GetClosestAxisToRay( const Transform& camTransf, float h, float n, const Vec3& rayDir, float& dist, Vec3* pProj = nullptr )
+	{
+		Transform invCamTransf = camTransf.GetInverse();
+		float axisLength = ComputeAxisLength( invCamTransf, h, n );
+		Vec3 rayDirNormalized = rayDir; rayDirNormalized.Normalize();
+
+		dist = FLT_MAX;
+		Vec3 minProj;
+		int minAxis = -1;
+		for (int i = 0; i < 3; ++i)
+		{
+			float distOnAxis;
+			Vec3 projPoint;
+			float axisDist = GetRayDistToAxis( i, axisLength, camTransf.position, rayDirNormalized, projPoint, distOnAxis );
+			if ( axisDist < dist )
+			{
+				dist = axisDist;
+				minAxis = i;
+				minProj = projPoint;
+			}
+		}
+
+		if ( pProj )
+		{
+			*pProj = minProj;
+		}
+
+		return minAxis;
+	}
+
+	bool	OnClickPress( const Transform& camTransf, float h, float n, const Vec3& rayDir )
+	{
+		Transform invCamTransf = camTransf.GetInverse();
+		float axisLength = ComputeAxisLength( invCamTransf, h, n );
+		Vec3 rayDirNormalized = rayDir; rayDirNormalized.Normalize();
+
+		m_startPos = transform.position;
+
+		Vec3 projPoint;
+		float dist;
+		int closestAxis = GetClosestAxisToRay( camTransf, h, n, rayDirNormalized, dist, &projPoint );
+		if ( dist <= selectDist )
+		{
+			m_curAxis = closestAxis;
+			GetRayDistToAxis( m_curAxis, axisLength, camTransf.position, rayDirNormalized, projPoint, m_startDist);
+			m_startPos = transform.position;
+			return true;
+		}
+
+		return false;
+	}
+
+	void	OnClickRelease()
+	{
+		m_curAxis = -1;
+	}
+
+	void	Update( const Transform& camTransf, float h, float n, const Vec3& rayDir, Transform& targetTransform )
+	{
+		if ( m_curAxis >= 0 )
+		{
+			Transform invCamTransf = camTransf.GetInverse();
+			float axisLength = ComputeAxisLength( invCamTransf, h, n );
+			Vec3 rayDirNormalized = rayDir; rayDirNormalized.Normalize();
+
+			Vec3 projPoint;
+			float dist;
+			float axisValue;
+			GetRayDistToAxis( m_curAxis, axisLength, camTransf.position, rayDirNormalized, projPoint, axisValue );
+
+			float absAxisValue = axisValue - m_startDist;
+
+			Vec3 axes[3] = { Vec3::Right, Vec3::Forward, Vec3::Up };
+
+			Vec3 axisDir = transform.TransformVector( axes[m_curAxis] );
+
+			targetTransform.position = m_startPos + axisDir * absAxisValue;
+		}
+	}
+
+
+	void	Draw( const Transform& camTransf, float h, float n )
+	{
+		Transform invCamTransf = camTransf.GetInverse();
+		float axisLength = ComputeAxisLength( invCamTransf, h, n );
+
+		Vec3 origin = transform.position;
+
+		gVars->pApplication->m_pRenderPipeline->DrawLine( origin, transform * (Vec3::Right * axisLength), Color::Red );
+		gVars->pApplication->m_pRenderPipeline->DrawLine( origin, transform * (Vec3::Forward * axisLength), Color::Green );
+		gVars->pApplication->m_pRenderPipeline->DrawLine( origin, transform * (Vec3::Up * axisLength), Color::Blue );
+	
+	}
+
+
+
+public:
+	Transform	transform;
+	float		size;
+	float		selectDist = 25.0f;
+
+	int			m_curAxis = -1;
+	Vec3		m_startPos;
+	float		m_startDist;
+};
+
+
+CGizmo gizmo;
 
 bool click = false;
 
@@ -226,7 +362,7 @@ void CApplication::InitApplication( uint width, uint height )
  	
 	gVars->pResourceManager->UpdateResourceLoading();
 
-
+	gizmo.transform.position.x = 200.0f;
 
 
 
@@ -355,7 +491,30 @@ void CApplication::FrameUpdate()
 	}
 
 
+	if (gVars->pOperatingSystem->IsPressingKey(Key::F2))
+	{
+		m_pRenderPipeline->mainCamera.transform.position = gizmo.transform.position - m_pRenderPipeline->mainCamera.transform.rotation * Vec3::Forward * 500.0f;
+	}
 
+
+	Degree fov(45.0f);
+	float h = Tan(fov * 0.5f) * 10.0f;
+
+	gizmo.size = 0.3f;
+
+
+	Vec2 mpos = gVars->pOperatingSystem->GetMousePos();
+	Vec3 ray = gVars->pApplication->m_pRenderPipeline->mainCamera.GetWorldMousePos(mpos) - m_pRenderPipeline->mainCamera.transform.position;
+
+
+	Vec3 projp;
+
+	float dist;
+	int axis = gizmo.GetClosestAxisToRay(m_pRenderPipeline->mainCamera.transform, h, 10.0f, ray, dist, &projp);
+
+	WbLog("Gizmo", "%d - %.2f", axis, dist);
+
+	m_pRenderPipeline->DrawLine(projp, gVars->pApplication->m_pRenderPipeline->mainCamera.GetWorldMousePos(mpos), Color::Blue);
 
 
 	bool bClick = gVars->pOperatingSystem->GetMouseButton(0);
@@ -364,31 +523,44 @@ void CApplication::FrameUpdate()
 	{
 		if (!click)
 		{
-			click = true;
-			prevPos = gVars->pOperatingSystem->GetMousePos();
+			gizmo.OnClickPress(m_pRenderPipeline->mainCamera.transform, h, 10.0f, ray);
+		
+			
+				click = true;
+				prevPos = gVars->pOperatingSystem->GetMousePos();
 		}
 		else
 		{
 
-			Vec2 newPos = gVars->pOperatingSystem->GetMousePos();
-			Vec2 delta = newPos - prevPos;
+			if (gizmo.m_curAxis == -1)
+			{
+
+				Vec2 newPos = gVars->pOperatingSystem->GetMousePos();
+				Vec2 delta = newPos - prevPos;
+
+				delta.x *= -200.0f / (float)m_pRenderPipeline->mainCamera.pRenderTarget->GetWidth();
+				delta.y *= -200.0f / (float)m_pRenderPipeline->mainCamera.pRenderTarget->GetHeight();
+
+				yaw += delta.x;
+				pitch += delta.y;
+
+				m_pRenderPipeline->mainCamera.transform.rotation = Quat(Degree(yaw), Degree(pitch), Degree(0.0f));
+
+				prevPos = newPos;
+			}
+
 			
-			delta.x *= -200.0f / (float)m_pRenderPipeline->mainCamera.pRenderTarget->GetWidth();
-			delta.y *= -200.0f / (float)m_pRenderPipeline->mainCamera.pRenderTarget->GetHeight();
-
-			yaw += delta.x;
-			pitch += delta.y;
-
-			m_pRenderPipeline->mainCamera.transform.rotation = Quat( Degree(yaw), Degree(pitch), Degree(0.0f) );
-
-			prevPos = newPos;
-
 		}
 	}
 	else
 	{
+		gizmo.OnClickRelease();
 		click = false;
 	}
+	gizmo.Draw(m_pRenderPipeline->mainCamera.transform, h, 10.0f);
+	gizmo.Update(m_pRenderPipeline->mainCamera.transform, h, 10.0f, ray, gizmo.transform);
+
+	pThird->SetGlobalTransform(gizmo.transform);
 
 
 	if ( gVars->pOperatingSystem->IsPressingKey( Key::D ) )
