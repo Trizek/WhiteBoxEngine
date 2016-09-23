@@ -30,6 +30,7 @@ void CMtlExporter::Export( const String& assetFolder, const String& resourceFold
 			{
 				if (bTex)
 				{
+					textureName.ConvertToUnixPath();
 					textureName = textureName.get_path_base() + textureName.get_path_name() + extension;
 					matHelper.m_textureLayers[0].m_textureName = filePath.get_path_base() + textureName;
 				}
@@ -62,6 +63,7 @@ void CMtlExporter::Export( const String& assetFolder, const String& resourceFold
 	{
 		if ( bTex )
 		{
+			textureName.ConvertToUnixPath();
 			textureName = textureName.get_path_base() + textureName.get_path_name() + ".dds";
 			matHelper.m_textureLayers[0].m_textureName = filePath.get_path_base() + textureName;
 		}

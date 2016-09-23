@@ -93,6 +93,29 @@ bool	CDataStream::WriteByte( char byte )
 	return true;
 }
 
+
+char	CDataStream::operator ++()
+{
+	++m_cursor;
+	return Get();
+}
+
+char	CDataStream::operator+=( size_t offset )
+{
+	m_cursor += offset;
+	return Get();
+}
+
+char	CDataStream::Get() const
+{
+	return ((char const*)m_pData)[ m_cursor ];
+}
+
+bool	CDataStream::EndOfStream() const
+{
+	return ( m_cursor >= m_size );
+}
+
 bool	CDataStream::ReadString( String& str )
 {
 	size_t length = 0;

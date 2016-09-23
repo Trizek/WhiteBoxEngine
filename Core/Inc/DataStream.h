@@ -22,6 +22,11 @@ public:
 	
 	bool	ReadByte( char&	byte );
 	bool	WriteByte( char byte );
+
+	char	operator++();
+	char	operator+=( size_t offset );
+	char	Get() const;
+	bool	EndOfStream() const;
 	
 	void	Destroy();
 	

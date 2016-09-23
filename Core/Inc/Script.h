@@ -3,6 +3,7 @@
 
 #include "BaseTypes.h"
 #include "DataStream.h"
+#include "Tokenizer.h"
 
 WHITEBOX_BEGIN
 
@@ -52,62 +53,15 @@ public:
 	SScriptNodePtr Parse( CDataStream& dataStream );
 
 private:
-	// Lexical analysis
-	void ConsumeIdentifier();
-	void ConsumeInt();
-	void ConsumeFloat();
-	void ConsumeVector();
-	void ConsumeString();
-	void ConsumeOpenBracket();
-	void ConsumeCloseBracket();
-	void ConsumeOpenPar();
-	void ConsumeClosePar();	
-	void ConsumeEqual();
-
-	// Lexical analysis bufferization
-	void PushChar( char c );
-	void PushDigit( char digit );
-	void PushDecimal( char digit );
-
-	// Consume char in the lexical analyser
-	void ConsumeChar( char c );
-
-	enum EAnaLexState
-	{
-		eALS_None = 0,
-		eALS_Identifier,
-		eALS_String,
-		eALS_Int,
-		eALS_Float,
-	};
-
-	enum EAnaSynState
-	{
-		eASS_Node = 0,
-		eASS_NodeOrAttributeName,
-		eASS_AttributeVal,
-		eASS_VectorVal,
-	};
-
-	static const int STRING_BUFFER_SIZE = 512;
-
-	EAnaLexState m_anaLexState;
-	EAnaSynState m_anaSynState;
-
-	// Lexical analysis buffer
-	char	m_stringBuffer[ STRING_BUFFER_SIZE ];
-	int		m_stringBufferLength;
-
-	int		m_intBuffer;
-	float	m_floatBuffer;
-	float	m_floatArrayBuffer[ 4 ];
-	size_t	m_curFloat;
-	int		m_floatDecimal;
+	bool	ConsumeInstruction();
+	
+	bool	ConsumeScope();
+	bool	ConsumeAttribute();
 
 	// Syntaxic analysis buffer
-	String	m_identifierBuffer;
-
-	std::vector< SScriptNodePtr > m_nodeStack;
+	String							m_identifierBuffer;
+	std::vector< SScriptNodePtr >	m_nodeStack;
+	CTokenizer						m_tokenizer;
 };
 
 class CScriptFileWriter

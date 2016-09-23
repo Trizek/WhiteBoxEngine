@@ -1,668 +1,145 @@
 #include "Script.h"
+#include "Tokenizer.h"
 
 WHITEBOX_BEGIN
 
-#define CASE_SPACE	case ' ': \
-case '\n': \
-case '\t': \
-
-#define CASE_DIGIT	case '0': \
-case '1': \
-case '2': \
-case '3': \
-case '4': \
-case '5': \
-case '6': \
-case '7': \
-case '8': \
-case '9': \
-
-#define CASE_LETTER	case 'a': \
-case 'b': \
-case 'c': \
-case 'd': \
-case 'e': \
-case 'f': \
-case 'g': \
-case 'h': \
-case 'i': \
-case 'j': \
-case 'k': \
-case 'l': \
-case 'm': \
-case 'n': \
-case 'o': \
-case 'p': \
-case 'q': \
-case 'r': \
-case 's': \
-case 't': \
-case 'u': \
-case 'v': \
-case 'w': \
-case 'x': \
-case 'y': \
-case 'z': \
-case 'A': \
-case 'B': \
-case 'C': \
-case 'D': \
-case 'E': \
-case 'F': \
-case 'G': \
-case 'H': \
-case 'I': \
-case 'J': \
-case 'K': \
-case 'L': \
-case 'M': \
-case 'N': \
-case 'O': \
-case 'P': \
-case 'Q': \
-case 'R': \
-case 'S': \
-case 'T': \
-case 'U': \
-case 'V': \
-case 'W': \
-case 'X': \
-case 'Y': \
-case 'Z': \
-
-#define CASE_SCORE	case '-': \
-case '_': \
-
-
 CScriptStreamReader::CScriptStreamReader()
-	: m_anaLexState(eALS_None)
-	, m_anaSynState(eASS_Node)
-	, m_stringBufferLength(0)
-	, m_intBuffer(0)
-	, m_floatBuffer(0.0f)
-	, m_curFloat(0)
-	, m_floatDecimal(10)
-{
-	m_floatArrayBuffer[ 0 ] = 0.0f;
-	m_floatArrayBuffer[ 1 ] = 0.0f;
-	m_floatArrayBuffer[ 2 ] = 0.0f;
-	m_floatArrayBuffer[ 3 ] = 0.0f;
-}
+{}
 
 SScriptNodePtr CScriptStreamReader::Parse( CDataStream& dataStream )
 {
 	SScriptNode* pRootNode = new SScriptNode();
 	pRootNode->m_name = "Root";
 	m_nodeStack.push_back( pRootNode );
-	
-	char character;
-	while( dataStream.ReadByte( character ) )
-	{
-		ConsumeChar( character );
-	}
-	
+
+	m_tokenizer.SetDataStream( dataStream );
+
+	while ( ConsumeInstruction() );
+
 	return pRootNode;
 }
 
 
-void CScriptStreamReader::ConsumeIdentifier()
+bool	CScriptStreamReader::ConsumeInstruction()
 {
-	m_stringBuffer[m_stringBufferLength] = '\0';
-	// WbLog( "Default", "TokenIdentifier(%s)\n", m_stringBuffer);	
-	String identifier( m_stringBuffer );
+	if ( !m_tokenizer.ReadToken() )
+	{
+		return false;
+	}
 
- 	if ( m_anaSynState == eASS_Node )
- 	{
-		m_identifierBuffer = m_stringBuffer;
-		m_anaSynState = eASS_NodeOrAttributeName;
- 	}
- 	else
- 	{
- 		// Fail
- 	}	
-
-	m_stringBufferLength = 0;
-}
-
-void CScriptStreamReader::ConsumeInt()
-{
-	//WbLog( "Default", "TokenInt(%d)\n", m_intBuffer);
+	if ( m_tokenizer.GetTokenType() != (int)ETokenType::eIdentifier )
+	{
+		// Expected identifier
+		return false;
+	}
+	m_identifierBuffer = m_tokenizer.GetString();
 	
-	if ( m_anaSynState == eASS_AttributeVal )
+	if ( !m_tokenizer.ReadToken() )
 	{
-		if ( !m_nodeStack.empty() )
-		{
-			SScriptNodePtr pCurNode = m_nodeStack.back();
-			if ( pCurNode )
-			{
-				SScriptNode::SAttribute intAttribute;
-				intAttribute.m_type = SScriptNode::SAttribute::eT_Int;
-				intAttribute.m_int = m_intBuffer;
-			
-				// TODO: check there isnt already an attribute with that name
-				pCurNode->m_attributes[ m_identifierBuffer ] = intAttribute;
-			
-				m_anaSynState = eASS_Node;
-			}
-		}
+		return false;
 	}
-	else if ( m_anaSynState == eASS_VectorVal )
+
+	if ( ConsumeScope() )
 	{
-		m_floatArrayBuffer[ m_curFloat++ ] = (float)m_intBuffer;
-	}		
-	else
-	{
-		// Fail
+		return true;
 	}
+	else if ( ConsumeAttribute() )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool	CScriptStreamReader::ConsumeScope()
+{
+	if ( m_nodeStack.empty() || !m_nodeStack.back() )
+	{
+		// error
+		return false;
+	}
+
+	if ( m_tokenizer.GetTokenType() != '{' )
+	{
+		return false;
+	}
+
+	SScriptNodePtr pCurNode = m_nodeStack.back();
 	
-	m_intBuffer = 0;
-}	
+	SScriptNode* pChildNode = new SScriptNode();
+	pChildNode->m_name = m_identifierBuffer;
+	pCurNode->m_childrenNodes.push_back( pChildNode );
+	m_nodeStack.push_back( pChildNode );
 
-void CScriptStreamReader::ConsumeFloat()
-{
-	// WbLog( "Default", "TokenFloat(%.5f)\n", m_floatBuffer);
+	while( ConsumeInstruction() );
 
-	if ( m_anaSynState == eASS_AttributeVal )
+	if ( m_tokenizer.GetTokenType() != '}' )
 	{
-		if ( !m_nodeStack.empty() )
-		{
-			SScriptNodePtr pCurNode = m_nodeStack.back();
-			if ( pCurNode )
-			{
-				SScriptNode::SAttribute floatAttribute;
-				floatAttribute.m_type = SScriptNode::SAttribute::eT_Float;
-				floatAttribute.m_float = m_floatBuffer;
-
-				// TODO: check there isnt already an attribute with that name
-				pCurNode->m_attributes[ m_identifierBuffer ] = floatAttribute;
-
-				m_anaSynState = eASS_Node;
-			}
-		}
-	}
-	else if ( m_anaSynState == eASS_VectorVal )
-	{
-		m_floatArrayBuffer[ m_curFloat++ ] = m_floatBuffer;
-	}	
-	else
-	{
-		// Fail
+		// error expected }
+		return false;
 	}
 
-	m_floatBuffer = 0.0f;
-	m_floatDecimal = 10;
-}	
-
-void CScriptStreamReader::ConsumeString()
-{
-	m_stringBuffer[m_stringBufferLength] = '\0';
-	// WbLog( "Default", "TokenString(%s)\n", m_stringBuffer);
-
-	if ( m_anaSynState == eASS_AttributeVal )
+	if ( m_nodeStack.size() > 1 ) // Don't pop root node...
 	{
-		if ( !m_nodeStack.empty() )
-		{
-			SScriptNodePtr pCurNode = m_nodeStack.back();
-			if ( pCurNode )
-			{
-				SScriptNode::SAttribute stringAttribute;
-				stringAttribute.m_type = SScriptNode::SAttribute::eT_String;
-				stringAttribute.m_string = m_stringBuffer;
-
-				// TODO: check there isnt already an attribute with that name
-				pCurNode->m_attributes[ m_identifierBuffer ] = stringAttribute;
-
-				m_anaSynState = eASS_Node;
-			}
-		}
-	}
-	else
-	{
-		// Fail
+		m_nodeStack.pop_back();
 	}
 
-	m_stringBufferLength = 0;
-}	
-
-void CScriptStreamReader::ConsumeOpenBracket()
-{
-	// WbLog( "Default", "TokenOpenBracket\n");
-
-	if ( m_anaSynState == eASS_NodeOrAttributeName )
-	{
-		if ( !m_nodeStack.empty() )
-		{
-			SScriptNodePtr pCurNode = m_nodeStack.back();
-			if ( pCurNode )
-			{
-				SScriptNode* pChildNode = new SScriptNode();
-				pChildNode->m_name = m_identifierBuffer;
-
-				pCurNode->m_childrenNodes.push_back( pChildNode );
-
-				m_nodeStack.push_back( pChildNode );
-
-				m_anaSynState = eASS_Node;
-			}
-		}
-	}
-	else
-	{
-		// Fail
-	}
+	return true;
 }
 
-void CScriptStreamReader::ConsumeCloseBracket()
+bool	CScriptStreamReader::ConsumeAttribute()
 {
-	// WbLog( "Default", "TokenCloseBracket\n");
+	SScriptNodePtr pCurNode;
+	if ( m_nodeStack.empty() || !m_nodeStack.back() )
+	{
+		// error
+		return false;
+	}
 
-	if ( m_anaSynState == eASS_Node )
+	if ( m_tokenizer.GetTokenType() != '=' )
 	{
-		if ( m_nodeStack.size() > 1 ) // Don't pop root node...
-		{
-			m_nodeStack.pop_back();
-		}
+		return false;
 	}
-	else
+
+	if ( !m_tokenizer.ReadToken() )
 	{
-		// Fail
+		return false;
 	}
+
+	pCurNode = m_nodeStack.back();
+	if ( m_tokenizer.GetTokenType() == (int)ETokenType::eInt )
+	{
+		SScriptNode::SAttribute intAttribute;
+		intAttribute.m_type = SScriptNode::SAttribute::eT_Int;
+		intAttribute.m_int = m_tokenizer.GetInt();
+
+		pCurNode->m_attributes[ m_identifierBuffer ] = intAttribute;
+
+		return true;
+	}
+	else if ( m_tokenizer.GetTokenType() == (int)ETokenType::eFloat )
+	{
+		SScriptNode::SAttribute floatAttribute;
+		floatAttribute.m_type = SScriptNode::SAttribute::eT_Float;
+		floatAttribute.m_float = m_tokenizer.GetFloat();
+
+		pCurNode->m_attributes[ m_identifierBuffer ] = floatAttribute;
+
+		return true;
+	}
+	else if  ( m_tokenizer.GetTokenType() == (int)ETokenType::eString )
+	{
+		SScriptNode::SAttribute stringAttribute;
+		stringAttribute.m_type = SScriptNode::SAttribute::eT_String;
+		stringAttribute.m_string = m_tokenizer.GetString();
+
+		pCurNode->m_attributes[ m_identifierBuffer ] = stringAttribute;
+
+		return true;
+	}
+
+	return false;
 }
-
-void CScriptStreamReader::ConsumeOpenPar()
-{
-	if ( m_anaSynState == eASS_AttributeVal )
-	{
-		m_anaSynState = eASS_VectorVal;
-		m_floatArrayBuffer[ 0 ] = 0.0f;
-		m_floatArrayBuffer[ 1 ] = 0.0f;
-		m_floatArrayBuffer[ 2 ] = 0.0f;
-		m_floatArrayBuffer[ 3 ] = 0.0f;
-		m_curFloat = 0;		
-	}
-	else
-	{
-		// Fail
-	}
-}
-
-void CScriptStreamReader::ConsumeClosePar()
-{
-	if ( m_anaSynState == eASS_VectorVal )
-	{
-		// Consume vector
-		if ( !m_nodeStack.empty() )
-		{
-			SScriptNodePtr pCurNode = m_nodeStack.back();
-			if ( pCurNode )
-			{
-				SScriptNode::SAttribute vectorAttribute;
-				vectorAttribute.m_type = SScriptNode::SAttribute::eT_Vector;
-				vectorAttribute.m_vector.x = m_floatArrayBuffer[ 0 ];
-				vectorAttribute.m_vector.y = m_floatArrayBuffer[ 1 ];
-				vectorAttribute.m_vector.z = m_floatArrayBuffer[ 2 ];
-				vectorAttribute.m_vector.w = m_floatArrayBuffer[ 3 ];
-				
-				m_floatArrayBuffer[ 0 ] = 0.0f;
-				m_floatArrayBuffer[ 1 ] = 0.0f;
-				m_floatArrayBuffer[ 2 ] = 0.0f;
-				m_floatArrayBuffer[ 3 ] = 0.0f;
-				m_curFloat = 0;
-
-				// TODO: check there isnt already an attribute with that name
-				pCurNode->m_attributes[ m_identifierBuffer ] = vectorAttribute;
-
-				m_anaSynState = eASS_Node;
-			}
-		}		
-	}
-	else
-	{
-		// Fail
-	}
-}	
-
-void CScriptStreamReader::ConsumeEqual()
-{
-	// WbLog( "Default", "TokenEqualBracket\n");
-
-	if ( m_anaSynState == eASS_NodeOrAttributeName )
-	{
-		m_anaSynState = eASS_AttributeVal;
-	}
-	else
-	{
-		// Fail
-	}
-}
-
-void CScriptStreamReader::PushChar( char c )
-{
-	m_stringBuffer[ m_stringBufferLength++ ] = c;
-}
-
-void CScriptStreamReader::PushDigit( char digit )
-{
-	m_intBuffer = m_intBuffer * 10 + (digit - (int)'0');
-}
-
-void CScriptStreamReader::PushDecimal( char digit )
-{
-	m_floatBuffer += (digit - (int)'0') / float(m_floatDecimal);
-	m_floatDecimal *= 10;
-}	
-
-void CScriptStreamReader::ConsumeChar( char c )
-{
-	switch( m_anaLexState )
-	{
-		case eALS_None:
-		{
-			switch( c )
-			{
-				CASE_LETTER
-				{
-					PushChar( c );
-					m_anaLexState = eALS_Identifier;
-				}
-				break;
-
-				CASE_DIGIT
-				{
-					PushDigit( c );
-					m_anaLexState = eALS_Int;
-				}
-
-				break;
-
-				case '\"':
-				{
-					m_anaLexState = eALS_String;
-				}
-				break;
-				
-				case '(':
-				{
-					ConsumeOpenPar();
-					m_anaLexState = eALS_None;
-				}
-				break;
-				
-				case ')':
-				{
-					ConsumeClosePar();
-					m_anaLexState = eALS_None;
-				}
-				break;				
-
-				case '{':
-				{
-					ConsumeOpenBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '}':
-				{
-					ConsumeCloseBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '=':
-				{
-					ConsumeEqual();
-					m_anaLexState = eALS_None;
-				}
-				break;	
-
-				case ',':
-				CASE_SPACE
-				break;
-
-				default:
-				{
-					// FAIL
-				}
-			}
-		}
-
-		break;
-
-		case eALS_Identifier:
-		{
-			switch( c )
-			{
-				CASE_DIGIT
-				CASE_LETTER
-				CASE_SCORE
-				{
-					PushChar( c );
-				}
-				break;
-
-				case '\"':
-				{
-					ConsumeIdentifier();
-					m_anaLexState = eALS_String;
-				}
-				break;
-
-				case '{':
-				{
-					ConsumeIdentifier();
-					ConsumeOpenBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '}':
-				{
-					ConsumeIdentifier();
-					ConsumeCloseBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '=':
-				{
-					ConsumeIdentifier();
-					ConsumeEqual();
-					m_anaLexState = eALS_None;
-				}
-				break;	
-
-				CASE_SPACE
-				{
-					ConsumeIdentifier();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				default:
-				{
-					// FAIL
-				}	
-			}
-		}
-
-		break;
-
-		case eALS_String:
-		{
-			switch( c )
-			{
-				case '\"':
-				{
-					ConsumeString();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				default:
-				{
-					PushChar( c );
-				}
-			}
-		}
-		break;	
-
-		case eALS_Int:
-		{
-			switch( c )
-			{
-				CASE_LETTER
-				{
-					ConsumeInt();
-					PushChar( c );
-					m_anaLexState = eALS_Identifier;
-				}
-				break;
-
-				CASE_DIGIT
-				{
-					PushDigit( c );
-				}
-				break;
-
-				case '\"':
-				{
-					ConsumeInt();
-					m_anaLexState = eALS_String;
-				}
-				break;
-				
-				case ')':
-				{
-					ConsumeInt();
-					ConsumeClosePar();
-					m_anaLexState = eALS_None;
-				}
-				break;					
-
-				case '{':
-				{
-					ConsumeInt();
-					ConsumeOpenBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '}':
-				{
-					ConsumeInt();
-					ConsumeCloseBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '=':
-				{
-					ConsumeInt();
-					ConsumeEqual();
-					m_anaLexState = eALS_None;
-				}
-				break;	
-
-				case '.':
-				{
-					m_floatBuffer = (float)m_intBuffer;
-					m_intBuffer = 0;
-					m_anaLexState = eALS_Float;
-				}
-				break;
-
-				case ',':
-				CASE_SPACE
-				{
-					ConsumeInt();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				default:
-				{
-					// FAIL
-				}
-			}
-		}
-		break;
-
-		case eALS_Float:
-		{
-			switch( c )
-			{
-				CASE_LETTER
-				{
-					ConsumeFloat();
-					PushChar( c );
-					m_anaLexState = eALS_Identifier;
-				}
-				break;
-
-				CASE_DIGIT
-				{
-					PushDecimal( c );
-				}
-				break;
-
-				case '\"':
-				{
-					ConsumeFloat();
-					m_anaLexState = eALS_String;
-				}
-				break;
-				
-				case ')':
-				{
-					ConsumeFloat();
-					ConsumeClosePar();
-					m_anaLexState = eALS_None;
-				}
-				break;					
-
-				case '{':
-				{
-					ConsumeFloat();
-					ConsumeOpenBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '}':
-				{
-					ConsumeInt();
-					ConsumeCloseBracket();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				case '=':
-				{
-					ConsumeFloat();
-					ConsumeEqual();
-					m_anaLexState = eALS_None;
-				}
-				break;	
-
-				case ',':
-				CASE_SPACE
-				{
-					ConsumeFloat();
-					m_anaLexState = eALS_None;
-				}
-				break;
-
-				default:
-				{
-					// FAIL
-				}
-			}
-		}
-		break;
-	}
-}
-
 
 
 CScriptFileWriter::CScriptFileWriter( const char* filePath )
@@ -713,6 +190,8 @@ void CScriptFileWriter::WriteNode( const SScriptNodePtr& pNode )
  			
  			case SScriptNode::SAttribute::eT_Vector:
  			{
+				break;
+
  				fprintf( m_pFile, "%s = ", attIt.GetKey().c_str() );
  				if ( attribute.m_vector.w == 0.0f )
  				{

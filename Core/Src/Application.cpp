@@ -218,6 +218,9 @@ CSceneNodePtr pEzioRoot;
 CSkinnedMeshRenderNodePtr pThird;
 CMeshPtr cube;
 
+std::vector<CSkinnedMeshRenderNodePtr> chars;
+std::vector<float> seeds;
+
 CBoxColliderNode*	SpawnCube(const Transform& transform)
 {
 	CBoxColliderNode* pBox = new CBoxColliderNode;
@@ -239,6 +242,8 @@ CBoxColliderNode*	SpawnCube(const Transform& transform)
 	return pBox;
 }
 
+
+int charCount = 1;
 
 void CApplication::InitApplication( uint width, uint height )
 {
@@ -277,12 +282,12 @@ void CApplication::InitApplication( uint width, uint height )
  
  	CMeshRenderNode* pHouse = new CMeshRenderNode;
  	pHouse->AttachTo(&rootNode);
- 	pHouse->SetLocalTransform(Transform(Vec3(0.0f, 800.0f, 0.0f), Quat(), Vec3(5.0f)));
- 	pHouse->SetMesh("Interior/house.msh");
- 	pHouse->SetShaderProgram(0, "white.program");
+ 	pHouse->SetLocalTransform(Transform(Vec3(0.0f, 800.0f, 0.0f), Quat(), Vec3(1.0f)));
+	pHouse->SetMesh("Sponza/sponza.msh");// Interior / house.msh");
+	pHouse->SetShaderProgram(0, "tex.program"); // white.program");
 
 	CStaticMeshColliderNode* pHouseCol = new CStaticMeshColliderNode;
-	pHouseCol->SetMesh("Interior/house.msh");
+	pHouseCol->SetMesh("Sponza/sponza.msh");// "Interior/house.msh");
 	pHouseCol->AttachTo(pHouse);
 
 
@@ -293,10 +298,26 @@ void CApplication::InitApplication( uint width, uint height )
 	pSphere->AttachTo(&rootNode);
 	pSphere->SetLocalTransform(Transform(Vec3(0.0f, 0.0f, 250.0f), Quat()));
 
+
+
 	pThird = new CSkinnedMeshRenderNode;
 	pThird->AttachTo(pSphere);
 	pThird->SetMesh("SK_Mannequin.msh");
 	pThird->SetShaderProgram(0, "skinning.program");
+
+	for (int i = 0; i < charCount; ++i)
+	{
+		CSkinnedMeshRenderNodePtr pNod = new CSkinnedMeshRenderNode;
+
+		pNod->SetLocalTransform(Transform(Vec3(200 * i, 0, 0), Quat()));
+
+		pNod->AttachTo(pSphere);
+		pNod->SetMesh("SK_Mannequin.msh");
+		pNod->SetShaderProgram(0, "skinning.program");
+
+		chars.push_back(pNod);
+		seeds.push_back(((float)rand() / (float)RAND_MAX));
+	}
 
 	
 	CMeshHelper mh;
@@ -359,6 +380,8 @@ void CApplication::InitApplication( uint width, uint height )
 		}
 	}
 
+	SpawnCube(Transform());
+
  	
 	gVars->pResourceManager->UpdateResourceLoading();
 
@@ -408,6 +431,9 @@ void CApplication::FrameUpdate()
 	
 	float fps = 1.0f / frameTime; (void)fps;
 
+	if (((int)(frameTime * 1000)) % 1000 == 0)
+		printf("fps %.2f\n", fps);
+
  	CText text( String("Drawcalls : ") + ToString((int)m_pRenderPipeline->GetDrawCalls()) + String("\nPolycount : ") + ToString((int)m_pRenderPipeline->GetPolyCount()) + String("\nFramerate : ") + ToString(fps));
  //	textMesh.SetText(text, font);
  
@@ -422,9 +448,9 @@ void CApplication::FrameUpdate()
 	{
 		size_t boneCount = skel->GetBones().size();
 
-	
 
-	
+
+
 
 		auto itBoneInfo = skel->GetBoneNameToIndexMap().FindElement("spine_03");
 
@@ -433,11 +459,11 @@ void CApplication::FrameUpdate()
 		pose.m_boneTransforms.resize(boneCount);
 		pose.Zero();
 
-
+		{
 		float factor = 1.f;
 
 
-	/*	tim = 4.95f;*/
+		/*	tim = 4.95f;*/
 		if (tim < 4.0f)
 		{
 			blendWeight = 0;
@@ -469,11 +495,11 @@ void CApplication::FrameUpdate()
 		float length = (1.0f - blendWeight) * pAnim1->m_length + blendWeight * pAnim2->m_length;
 		float speed = 1.0f / length;
 		normalizedTime += speed * frameTime * factor;
-		
+
 		float w = 0.0f;
 
-		pAnim1->AccumulateSamplePose( normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w );
-		pAnim2->AccumulateSamplePose( normalizedTime * pAnim2->m_length, blendWeight, pose, w );
+		pAnim1->AccumulateSamplePose(normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w);
+		pAnim2->AccumulateSamplePose(normalizedTime * pAnim2->m_length, blendWeight, pose, w);
 
 		//pAnim1->AccumulateSamplePose(normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w);
 		//pAnim2->AccumulateSamplePose(normalizedTime * pAnim2->m_length, blendWeight, pose, w);
@@ -488,6 +514,39 @@ void CApplication::FrameUpdate()
 		skel->ComputeSkinningPose(pose, pose);
 
 		pThird->ApplySkinningPose(pose);
+	}
+
+		
+
+		for (int i = 0; i < chars.size(); ++i)
+		{
+			pose.Zero();
+			/*blendWeight = 1.0f;*/
+
+			// 		normalizedTime = 0.60f;
+
+			float length = (1.0f - blendWeight) * pAnim1->m_length + blendWeight * pAnim2->m_length;
+			float speed = 1.0f / length;
+
+			float w = 0.0f;
+
+			pAnim1->AccumulateSamplePose((normalizedTime + seeds[i]) * pAnim1->m_length, 1.0f - blendWeight, pose, w);
+			pAnim2->AccumulateSamplePose((normalizedTime + seeds[i]) * pAnim2->m_length, blendWeight, pose, w);
+
+			//pAnim1->AccumulateSamplePose(normalizedTime * pAnim1->m_length, 1.0f - blendWeight, pose, w);
+			//pAnim2->AccumulateSamplePose(normalizedTime * pAnim2->m_length, blendWeight, pose, w);
+
+			pose.Normalize(w);
+
+
+
+			skel->ConvertFromBindToLocalSpace(pose);
+			skel->ComputeGlobalPose(pose, pose);
+
+			skel->ComputeSkinningPose(pose, pose);
+
+			chars[i]->ApplySkinningPose(pose);
+		}
 	}
 
 
@@ -512,7 +571,7 @@ void CApplication::FrameUpdate()
 	float dist;
 	int axis = gizmo.GetClosestAxisToRay(m_pRenderPipeline->mainCamera.transform, h, 10.0f, ray, dist, &projp);
 
-	WbLog("Gizmo", "%d - %.2f", axis, dist);
+//	WbLog("Gizmo", "%d - %.2f", axis, dist);
 
 	m_pRenderPipeline->DrawLine(projp, gVars->pApplication->m_pRenderPipeline->mainCamera.GetWorldMousePos(mpos), Color::Blue);
 
