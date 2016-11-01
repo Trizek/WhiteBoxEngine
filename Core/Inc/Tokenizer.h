@@ -8,7 +8,7 @@ WHITEBOX_BEGIN
 
 enum class ETokenType
 {
-	eString = 1 << sizeof(char),
+	eString = 1 << sizeof(char) * 8,
 	eInt,
 	eFloat,
 	eIdentifier,
@@ -23,6 +23,7 @@ public:
 	void	AddKeyword( const String& name, int val );
 
 	bool	ReadToken();
+	void	SkipLine();
 
 	int		GetTokenType() const;
 	int		GetInt() const;

@@ -38,7 +38,7 @@ public:
 	void	AddBlendWeight( size_t attributePosition, float boneIndex, float boneWeight );
 
 	
-	void	AddMeshPart();
+	CMeshPartHelper*	AddMeshPart();
 	CMeshPartHelper*	GetMeshPart( size_t index );
 
 	void	ComputeNormals();

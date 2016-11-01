@@ -131,9 +131,11 @@ void CMeshHelper::AddBlendWeight( size_t attributePosition, float boneIndex, flo
 	m_blendBoneArray[ attributePosition ].push_back( SVertexBlendWeight(boneIndex, boneWeight) );
 }
 
-void CMeshHelper::AddMeshPart()
+CMeshPartHelper* CMeshHelper::AddMeshPart()
 {
-	m_meshParts.push_back( new CMeshPartHelper() );
+	CMeshPartHelper* pPart = new CMeshPartHelper;
+	m_meshParts.push_back( pPart );
+	return pPart;
 }
 
 CMeshPartHelper*	CMeshHelper::GetMeshPart( size_t index )

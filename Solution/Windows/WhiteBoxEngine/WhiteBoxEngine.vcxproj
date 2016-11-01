@@ -194,6 +194,7 @@
     <ClInclude Include="..\..\..\Core\Inc\Animation\SkeletonSerializer.h" />
     <ClInclude Include="..\..\..\Core\Inc\Application.h" />
     <ClInclude Include="..\..\..\Core\Inc\BaseTypes.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Behavior.h" />
     <ClInclude Include="..\..\..\Core\Inc\BehaviorComponent.h" />
     <ClInclude Include="..\..\..\Core\Inc\BehaviorManager.h" />
     <ClInclude Include="..\..\..\Core\Inc\Command.h" />
@@ -293,6 +294,7 @@
     <ClCompile Include="..\..\..\Core\Src\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Animation\SkeletonSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Application.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Behavior.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Camera.cpp" />
     <ClCompile Include="..\..\..\Core\Src\DataStream.cpp" />
     <ClCompile Include="..\..\..\Core\Src\FontSystem.cpp" />

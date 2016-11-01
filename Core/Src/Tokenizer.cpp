@@ -30,6 +30,7 @@ bool	CTokenizer::ReadToken()
 
 	if ( m_dataStream.EndOfStream() )
 	{
+		m_tokenType = -1;
 		return false;
 	}
 
@@ -45,6 +46,15 @@ bool	CTokenizer::ReadToken()
 	WbLog( "Tokenizer", "Invalid token" );
 
 	return false;
+}
+
+void	CTokenizer::SkipLine()
+{
+	while ( !m_dataStream.EndOfStream() && m_dataStream.Get() != '\n' )
+	{
+		++m_dataStream;
+	}
+	++m_dataStream;
 }
 
 int		CTokenizer::GetTokenType() const
@@ -128,6 +138,9 @@ bool	CTokenizer::ReadOperators( char firstChar )
 		case '{':
 		case '}':
 		case '=':
+		case '#':
+		case '/':
+		case '\\':
 		{
 			++m_dataStream;
 			m_tokenType = firstChar;
