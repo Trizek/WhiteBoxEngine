@@ -4,7 +4,7 @@
 #include "GlobalVariables.h"
 #include "Animation/Skeleton.h"
 #include "Render/RenderPipeline.h"
-#include "Application.h"
+#include "Engine.h"
 
 WHITEBOX_BEGIN
 
@@ -19,7 +19,7 @@ void CSkinnedMeshRenderNode::Refresh()
 	{
 		size_t proxyIndex = m_renderProxyIndices[ i ];
 
-		SRenderProxy& renderProxy = gVars->pApplication->m_pRenderPipeline->m_proxies[ proxyIndex ];
+		SRenderProxy& renderProxy = gVars->pEngine->m_pRenderPipeline->m_proxies[ proxyIndex ];
 		renderProxy.uniformValues.SetUniformValue< void* >( GET_CLAMPED_ELEM(m_shaderPrograms, i), "SkinningMatrices", m_skinMatricesBufferId ); 
 	}
 }

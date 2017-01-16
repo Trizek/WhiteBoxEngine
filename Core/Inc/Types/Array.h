@@ -6,21 +6,23 @@
 WHITEBOX_BEGIN
 
 
-template<class T, bool bConstructObjects = true>
+template< class T, bool bConstructObject = true >
 class Array
 {
 public:
-	Array() : m_Elements(nullptr), m_Size(0) {}
+	Array() : m_Elements(nullptr), m_Size(0), m_Capacity(0) {}
 	~Array() { Deallocate(); }
 
 	size_t	GetSize() const { return m_Size; }
 
 	void	SetSize(size_t size)
 	{
-		if (size != m_Size)
+		if (size > m_Capacity)
 		{
-			Allocate(size);
+			Allocate( m_Capacity == 0 ? size * 2 : m_Capacity * 2 );
 		}
+		
+		m_Size = size;
 	}
 
 	const T& operator[](size_t index) const { return m_Elements[index]; }
@@ -30,36 +32,42 @@ private:
 	void	Allocate(size_t capacity)
 	{
 		T*	elements;
-		if (bConstructObjects)
+		elements = reinterpret_cast<T*>(new char[sizeof(T) * capacity]); // don't call constructors
+
+		if ( m_Elements != nullptr )
 		{
-			elements = new T[capacity]; // call constructors
-		}
-		else
-		{
-			elements = reinterpret_cast<T*>(new char[sizeof(T) * capacity]); // don't call constructors
+			if ( bConstructObject )
+			{
+				for( size_t i = 0; i < m_Size; ++i )
+				{
+					new (&elements[i]) T(std::move(m_Elements[i]));
+				}
+			}
+			
+			Deallocate();
 		}
 		
 		m_Elements = elements;
-		m_Size = capacity;
+		m_Capacity = capacity;
 	}
 
 	void	Deallocate()
 	{
 		if (m_Elements != nullptr)
 		{
-			if (bConstructObjects)
+			if ( bConstructObject )
 			{
-				delete[] m_Elements; // call destructors
+				for ( size_t i = 0; i < m_Size; ++i )
+				{
+					m_Elements[i].~T();
+				}
 			}
-			else
-			{
-				delete[] reinterpret_cast<char*>(m_Elements); // don't call destructors
-			}
+			delete[] reinterpret_cast<char*>(m_Elements); // don't call destructors
 		}
 	}
 
 	T*		m_Elements;
-	size_t	m_Size;
+	size_t	m_Size, m_Capacity;
 };
 
 WHITEBOX_END

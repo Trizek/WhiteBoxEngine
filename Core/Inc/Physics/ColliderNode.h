@@ -22,6 +22,7 @@ public:
 protected:
 	virtual TColliderHandle		CreateCollider() = 0;
 
+public:
 	TColliderHandle		m_colliderHandle;
 	TRigidBodyHandle	m_rigidBodyHandle;
 

@@ -6,7 +6,7 @@
 #include "Render/Mesh.h"
 #include "System/OperatingSystem.h"
 
-#include "Application.h"
+#include "Engine.h"
 #include "Animation/Skeleton.h"
 
 WHITEBOX_BEGIN

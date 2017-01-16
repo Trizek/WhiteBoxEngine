@@ -5,7 +5,7 @@
 
 WHITEBOX_BEGIN
 
-class CApplication;
+class CEngine;
 
 struct SVertexInfo
 {
@@ -57,7 +57,7 @@ DEFINE_SMART_PTR( IRenderApplication );
 
 struct SRenderAPI
 {
-	IRenderApplicationPtr	CreateRenderApplication( CApplication& application );	
+	IRenderApplicationPtr	CreateRenderApplication( CEngine& application );	
 };
 
 WHITEBOX_END

@@ -4,7 +4,7 @@
 
 #include "GlobalVariables.h"
 #include "Render/Renderer.h"
-#include "Application.h"
+#include "Engine.h"
 
 #ifndef __GEAR_VR
 #include <SDL.h>
@@ -186,13 +186,13 @@ void	COperatingSystem::Init(uint width, uint height)
 		return;
 	}
 
-	gVars->pApplication->InitApplication( width, height );
+	gVars->pEngine->InitEngine( width, height );
 
 	m_frameTimer.Start();
 
 	while (ProcessEvents(*this, static_cast<SSDLData*>(m_pSpecificData)))
 	{
-		gVars->pApplication->FrameUpdate();
+		gVars->pEngine->FrameUpdate();
 		SDL_GL_SwapWindow(window);
 	}
 
@@ -205,7 +205,7 @@ void	COperatingSystem::Init(uint width, uint height)
 
 void	COperatingSystem::Reshape( uint width, uint height )
 {
-	gVars->pApplication->Resize( width, height );
+	gVars->pEngine->Resize( width, height );
 }
 
 Vec2	COperatingSystem::GetMousePos()

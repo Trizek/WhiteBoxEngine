@@ -34,6 +34,8 @@ public:
 	virtual void					GetRigidBodyTransform( TRigidBodyHandle rigidBody, WhiteBox::Transform& transform ) override;
 	virtual void					AddImpulse( TRigidBodyHandle rigidBody, const Vec3& impulse, const Vec3& localPoint = Vec3::Zero ) override;
 	virtual void					AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint = Vec3::Zero ) override;
+	virtual void					AddTorque( TRigidBodyHandle rigidBody, const Vec3& torque ) override;
+	virtual void					AddHingeConstraint( TRigidBodyHandle rbA, TRigidBodyHandle rbB, const Vec3& ptA, const Vec3& ptB, const Vec3& axisA, const Vec3& axisB, float low, float high ) override;
 
 	virtual void					SetDebugDraw( bool m_bDebug ) override;
 

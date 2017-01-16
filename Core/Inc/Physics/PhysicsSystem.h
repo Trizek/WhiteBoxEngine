@@ -26,6 +26,9 @@ public:
 	virtual void					GetRigidBodyTransform( TRigidBodyHandle rigidBody, Transform& transform ) = 0;
 	virtual void					AddImpulse( TRigidBodyHandle rigidBody, const Vec3& impulse, const Vec3& localPoint = Vec3::Zero ) = 0;
 	virtual void					AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint = Vec3::Zero ) = 0;
+	virtual void					AddTorque( TRigidBodyHandle rigidBody, const Vec3& torque ) = 0;
+
+	virtual void					AddHingeConstraint( TRigidBodyHandle rbA, TRigidBodyHandle rbB, const Vec3& ptA, const Vec3& ptB, const Vec3& axisA, const Vec3& axisB, float low, float high ) = 0;
 
 	virtual void					SetDebugDraw( bool m_bDebug ) = 0;
 

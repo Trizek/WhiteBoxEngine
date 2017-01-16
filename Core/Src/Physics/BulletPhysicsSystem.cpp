@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 #include "TriMesh.h"
-#include "Application.h"
+#include "Engine.h"
 #include "GlobalVariables.h"
 #include "Render/RenderPipeline.h"
 
@@ -29,7 +29,7 @@ public:
 		Vec3 p0( scale * from.x(), -scale * from.z(), scale * from.y() );
 		Vec3 p1( scale * to.x(), -scale * to.z(), scale * to.y() );
 
-		gVars->pApplication->m_pRenderPipeline->DrawLine( p0, p1, Color(color.x(), color.y(), color.z()));
+		gVars->pEngine->m_pRenderPipeline->DrawLine( p0, p1, Color(color.x(), color.y(), color.z()));
 	}
 
 	virtual void   drawSphere(const btVector3& p, btScalar radius, const btVector3& color)
@@ -205,6 +205,26 @@ void	CBulletPhysicsSystem::AddImpulse( TRigidBodyHandle rigidBody, const Vec3& i
 void	CBulletPhysicsSystem::AddForce( TRigidBodyHandle rigidBody, const Vec3& force, const Vec3& localPoint /*= Vec3::Zero*/ )
 {
 	((SBulletRigidyBody*)rigidBody)->pRigidBody->applyImpulse( btVector3(force.x, force.z, -force.y), btVector3(localPoint.x, localPoint.z, -localPoint.y) );
+}
+
+void	CBulletPhysicsSystem::AddTorque( TRigidBodyHandle rigidBody, const Vec3& torque )
+{
+	((SBulletRigidyBody*)rigidBody)->pRigidBody->applyTorque(btVector3(torque.x, torque.z, -torque.y));
+}
+
+void	CBulletPhysicsSystem::AddHingeConstraint( TRigidBodyHandle rbA, TRigidBodyHandle rbB, const Vec3& ptA, const Vec3& ptB, const Vec3& axisA, const Vec3& axisB, float low, float high )
+{
+	btRigidBody& rA = *(((SBulletRigidyBody*)rbA)->pRigidBody);
+	btRigidBody& rB = *(((SBulletRigidyBody*)rbB)->pRigidBody);
+	btVector3 pA(m_scale * ptA.x, m_scale * ptA.z, -m_scale * ptA.y);
+	btVector3 pB(m_scale * ptB.x, m_scale * ptB.z, -m_scale * ptB.y);
+	btVector3 aA(axisA.x, axisA.z, -axisA.y);
+	btVector3 aB(axisB.x, axisB.z, -axisB.y);
+	btHingeConstraint* pConstraint = new btHingeConstraint( rA, rB, pA, pB, aA, aB );
+
+	//pConstraint->setLimit( low, high );
+
+	m_dynamicsWorld->addConstraint( pConstraint, true );
 }
 
 void	CBulletPhysicsSystem::SetDebugDraw( bool m_bDebug )

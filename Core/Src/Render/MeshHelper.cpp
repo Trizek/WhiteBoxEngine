@@ -158,7 +158,7 @@ void	CMeshHelper::ComputeNormals()
 			Vec3 B = m_positionArray[pPart->GetIndexArray()[i + 1]];
 			Vec3 C = m_positionArray[pPart->GetIndexArray()[i + 2]];
 
-			Vec3 n = (B - A) * (C - A);
+			Vec3 n = (B - A) ^ (C - A);
 			n.Normalize();
 
 			m_normalArray[pPart->GetIndexArray()[i]] = m_normalArray[pPart->GetIndexArray()[i]] + n;

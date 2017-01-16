@@ -48,7 +48,7 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 
 #include "System/GearVR/WhiteBoxGearLibrary.h"
 
-#include "Application.h"
+#include "Engine.h"
 #include "GlobalVariables.h"
 
 
@@ -58,7 +58,7 @@ Copyright	:	Copyright 2015 Oculus VR, LLC. All Rights reserved.
 
 #include "GlobalVariables.h"
 #include "Render/Renderer.h"
-#include "Application.h"
+#include "Engine.h"
 
 
 #include "LogSystem/LogSystem.h"
@@ -1608,7 +1608,7 @@ static ovrFrameParms ovrRenderer_RenderFrame(ovrRenderer * renderer, const ovrJa
 	projectionMatrixTransposed = ovrMatrix4f_Transpose(&renderer->ProjectionMatrix);
 
 	// set projection matrix (force)
-	gVars->pApplication->m_pRenderPipeline->mainCamera.projectionMatrix = *((Matrix44*)&projectionMatrixTransposed);
+	gVars->pEngine->m_pRenderPipeline->mainCamera.projectionMatrix = *((Matrix44*)&projectionMatrixTransposed);
 
 	// set eye matrices
 	ovrMatrix4f* inverseEyeMatrices = (ovrMatrix4f*)gVars->pOperatingSystem->GetInverseEyeMatrices();
@@ -1677,7 +1677,7 @@ static ovrFrameParms ovrRenderer_RenderFrame(ovrRenderer * renderer, const ovrJa
 // 		GL(glUseProgram(0));
 
 
-		gVars->pApplication->FrameUpdate();
+		gVars->pEngine->FrameUpdate();
 
 		// Explicitly clear the border texels to black because OpenGL-ES does not support GL_CLAMP_TO_BORDER.
 		{
@@ -1801,7 +1801,7 @@ void * RenderThreadFunction(void * parm)
 	GetCurrentPackagePath(java.Env, java.ActivityObject, packagePath, 1024);
 	WbLog("GearVR", "Package path %s", packagePath);
 
-	gVars->pApplication->InitApplication(screenWidth, screenHeight);
+	gVars->pEngine->InitEngine(screenWidth, screenHeight);
 
 	for (; ; )
 	{
@@ -2537,7 +2537,7 @@ void * AppThreadFunction(void * parm)
 	WbLog("GearVR", "Package path %s", packagePath);
 
 
-	gVars->pApplication->InitApplication(screenWidth, screenHeight);
+	gVars->pEngine->InitEngine(screenWidth, screenHeight);
 #endif
 
 

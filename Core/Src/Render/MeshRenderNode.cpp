@@ -1,7 +1,7 @@
 
 #include "Render/MeshRenderNode.h"
 #include "Render/RenderPipeline.h"
-#include "Application.h"
+#include "Engine.h"
 
 WHITEBOX_BEGIN
 
@@ -30,7 +30,7 @@ void	CMeshRenderNode::PropagateTransform( const Transform& globalParentTransform
 
 	for( size_t proxyIndex : m_renderProxyIndices )
 	{
-		SRenderProxy& renderProxy = gVars->pApplication->m_pRenderPipeline->m_proxies[ proxyIndex ];
+		SRenderProxy& renderProxy = gVars->pEngine->m_pRenderPipeline->m_proxies[ proxyIndex ];
 		renderProxy.transformMatrix.FromTransform( transform );
 	}
 }
@@ -42,7 +42,7 @@ void	CMeshRenderNode::Refresh()
 
 	for ( size_t i = 0; i < m_pMesh->GetPartCount(); ++i )
 	{
-		SRenderProxy& renderProxy = gVars->pApplication->m_pRenderPipeline->AddRenderProxy();
+		SRenderProxy& renderProxy = gVars->pEngine->m_pRenderPipeline->AddRenderProxy();
 
 		CMesh::CPart* pPart = m_pMesh->GetPart( i );
 		renderProxy.pIndexBuffer = pPart->GetIndexBuffer();

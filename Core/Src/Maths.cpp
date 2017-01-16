@@ -1,7 +1,30 @@
 #include "BaseTypes.h"
+#include <random>
+
+std::default_random_engine generator;
+
 
 
 WHITEBOX_BEGIN
+
+float RandomFloat( float minVal, float maxVal )
+{
+	float normalizedRand = (float)rand() / (float)RAND_MAX;
+
+	return minVal + (maxVal - minVal) * normalizedRand;
+}
+
+int		RandomInt( int minVal, int maxVal )
+{
+	std::uniform_int_distribution<int> distribution(minVal, maxVal);
+	return distribution(generator);
+}
+
+
+bool	RandomProbability( float probability )
+{
+	return RandomFloat(0.0f, 1.0f) <= probability;
+}
 
 
 Degree::Degree( float _angle )

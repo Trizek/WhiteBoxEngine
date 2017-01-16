@@ -1,6 +1,6 @@
 #include "Physics/ColliderNode.h"
 #include "GlobalVariables.h"
-#include "Application.h"
+#include "Engine.h"
 
 WHITEBOX_BEGIN
 
@@ -14,7 +14,7 @@ void CColliderNode::Refresh()
 	m_rigidBodyHandle = gVars->pPhysicsSystem->CreateRigidyBody( m_colliderHandle, globalTransform, m_mass );
 	gVars->pPhysicsSystem->AddRigidyBody( m_rigidBodyHandle );
 
-	gVars->pApplication->AddColliderProxy( this, m_rigidBodyHandle );
+	gVars->pEngine->AddColliderProxy( this, m_rigidBodyHandle );
 
 	CSceneNode::Refresh();
 }

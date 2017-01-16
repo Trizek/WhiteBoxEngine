@@ -5,7 +5,7 @@
 #include "Render/Renderer.h"
 #include "System/OperatingSystem.h"
 #include "ResourceManager.h"
-#include "Application.h"
+#include "Engine.h"
 #include "LogSystem/LogSystem.h"
 #include "Physics/BulletPhysicsSystem.h"
 #include "BehaviorManager.h"
@@ -23,7 +23,7 @@ void SGlobalVariables::Init()
 	gVars->pFontSystem = new CFontSystem();
 	gVars->pRenderer = new CRenderer();
 	gVars->pOperatingSystem = new COperatingSystem();
-	gVars->pApplication = new CApplication();
+	gVars->pEngine = new CEngine();
 	gVars->pResourceManager = new CResourceManager();
 	gVars->pPhysicsSystem = new CBulletPhysicsSystem();
 	gVars->pBehaviorManager = new CBehaviorManager();
