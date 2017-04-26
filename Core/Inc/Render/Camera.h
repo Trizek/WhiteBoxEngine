@@ -5,7 +5,7 @@
 
 WHITEBOX_BEGIN
 
-class CCamera
+class CCamera : public CSmartPointerData
 {
 public:
 	void				ComputeProjectionMatrix();
@@ -21,6 +21,10 @@ public:
 	Matrix34			inverseTransformMatrix;
 };
 
+
+DEFINE_SMART_PTR(CCamera);
+
 WHITEBOX_END
+
 
 #endif

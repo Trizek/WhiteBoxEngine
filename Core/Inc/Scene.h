@@ -3,22 +3,28 @@
 
 #include "BaseTypes.h"
 #include "SceneNode.h"
+#include "Resource.h"
 
 WHITEBOX_BEGIN
 
-class CScene : public CSmartPointerData
+class CScene : public IResource
 {
 public:
-	void	AddNode( CSceneNodePtr node )
+	DECLARE_RESOURCE_TYPE(CScene);
+
+public:
+	void Refresh()
 	{
-		node->AttachTo( &rootNode, ENodeAttachMode::ConserveGlobalTransform );
+		for( CSceneNodePtr& node : nodes )
+		{
+			node->Refresh();
+		}
 	}
 
-private:
-	CSpatialNode	rootNode;
+	std::vector<CSceneNodePtr>	nodes;
 };
 
-DEFINE_SMART_PTR(CScene);
+DECLARE_RESOURCE_POINTER(CScene);
 
 WHITEBOX_END
 

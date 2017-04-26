@@ -17,6 +17,7 @@
 #include "Animation/Skeleton.h"
 #include "Animation/AnimationSerializer.h"
 #include "Animation/Animation.h"
+#include "SceneSerializer.h"
 
 WHITEBOX_BEGIN
 
@@ -36,6 +37,8 @@ CResourceManager::CResourceManager()
 	AddResourceType< CShaderProgram, CShaderProgramSerializer >( "program" );
 
 	AddResourceType< CFont, CFontSerializer >( "ttf" );
+
+	AddResourceType< CScene, CSceneSerializer >( "scene" );
 }
 
 void CResourceManager::AddResourceType( const String& name, const String& extension, IResourceSerializer* pSerializer )

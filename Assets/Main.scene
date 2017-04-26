@@ -1,0 +1,187 @@
+
+
+    Class
+    {
+      ClassName = "CSkinnedMeshRenderNode"
+      name = "Char"
+      mesh = "SK_Mannequin.msh"
+      
+      localTransform
+      {
+        position = (200.00000, 500.00000)
+        rotation = (1.00000)
+        scale = (1.00000, 1.00000, 1.00000)
+      }
+	 
+	  
+      shaderPrograms
+      {
+		Program
+        {
+          name = "skinning.program"
+        }
+      }
+    }
+
+
+        Class
+        {
+          ClassName = "CMeshRenderNode"
+          name = "Vanquish"
+
+		  Children
+		  {
+		     
+
+
+        Class
+        {
+          ClassName = "CBhv"
+          name = "RotateBhv"      
+
+        }
+
+
+		  }
+
+
+          mesh = "Vanquish/vanquish.msh"
+          
+          localTransform
+          {
+            position = (-100.00000, 500.00000)
+            rotation = (1.00000)
+            scale = (100.00000, 100.00000, 100.00000)
+          }
+          
+          shaderPrograms
+          {
+            
+            Program
+            {
+              name = "tex.program"
+            }
+          }
+
+        }
+
+		        Class
+        {
+          ClassName = "CMeshRenderNode"
+          name = "Vanquish"
+          mesh = "Vanquish/vanquish.msh"
+          
+          localTransform
+          {
+            position = (-200.00000, 500.00000)
+            rotation = (1.00000)
+            scale = (100.00000, 100.00000, 100.00000)
+          }
+          
+          shaderPrograms
+          {
+            
+            Program
+            {
+              name = "tex.program"
+            }
+          }
+        }
+
+
+
+         Class
+        {
+          ClassName = "CMeshRenderNode"
+          name = "EzioMesh"
+          mesh = "Ezio/Ezio.msh"
+          
+          Children
+          {
+            
+
+        Class
+        {
+          ClassName = "CBhv"
+          name = "RotateBhv"      
+
+        }
+
+            Class
+            {
+              ClassName = "CStaticMeshColliderNode"
+              name = "EzioCol"
+              mass = 0.00000
+              mesh = "Ezio/Ezio.msh"
+              
+              localTransform
+              {
+                position = ()
+                rotation = (1.00000)
+                scale = (1.00000, 1.00000, 1.00000)
+              }
+            }
+          }
+          
+          localTransform
+          {
+            position = (0.00000, 500.00000)
+            rotation = (1.00000)
+            scale = (100.00000, 100.00000, 100.00000)
+          }
+          
+          shaderPrograms
+          {
+            
+            Program
+            {
+              name = "tex.program"
+            }
+          }
+        }
+    
+
+
+
+    Class
+    {
+      ClassName = "CMeshRenderNode"
+      name = "House"
+      mesh = "Sponza/sponza.msh"
+      
+      Children
+      {
+        
+        Class
+        {
+          ClassName = "CStaticMeshColliderNode"
+          name = "HouseCol"
+          mass = 0.00000
+          mesh = "Sponza/sponza.msh"
+          
+          localTransform
+          {
+            position = ()
+            rotation = (1.00000)
+            scale = (1.00000, 1.00000, 1.00000)
+          }
+        }
+      }
+      
+      localTransform
+      {
+        position = (0.00000, 800.00000)
+        rotation = (1.00000)
+        scale = (1.00000, 1.0000, 1.00000)
+      }
+      
+      shaderPrograms
+      {
+        
+        Program
+        {
+          name = "tex.program"
+        }
+      }
+	 }
+

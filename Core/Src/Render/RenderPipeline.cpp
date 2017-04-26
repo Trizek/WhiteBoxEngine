@@ -47,25 +47,10 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 	polyCount = 0;
 
 	Matrix44	invCamMatrixFormated;
-	
-#ifdef __GEAR_VR
- 	SceneMatrices* matrices = (SceneMatrices*)gVars->pRenderer->LockUniformBuffer(m_sceneMatUniformBufferId, 0, sizeof(SceneMatrices) );
- 	
-	matrices->projectionMatrix = projectionMatrix;
-	matrices->eyeViewMatrices[ 0 ] = gVars->pOperatingSystem->GetInverseEyeMatrices()[ 0 ];
-	matrices->eyeViewMatrices[ 1 ] = gVars->pOperatingSystem->GetInverseEyeMatrices()[ 1 ];
 
-	Matrix44 formatInCamMatrix;
-	gVars->pRenderer->FormatTransformMatrix(invCamMatrix, formatInCamMatrix);
-	matrices->eyeViewMatrices[0] = formatInCamMatrix * matrices->eyeViewMatrices[0];
-	matrices->eyeViewMatrices[1] = formatInCamMatrix * matrices->eyeViewMatrices[1];
-
- 	gVars->pRenderer->UnlockUniformBuffer();
-#else
 	Matrix44* matrices = (Matrix44*)gVars->pRenderer->LockUniformBuffer( m_sceneMatUniformBufferId, 0, sizeof(Matrix44) );
 	matrices[0] = projectionMatrix;
 	gVars->pRenderer->UnlockUniformBuffer();
-#endif
 
 	Vec3 lightDir = Vec3(-1.0f, 0.0f, -1.0f);
 
@@ -86,16 +71,11 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 
 		// Uniforms
  		Matrix44 transformMatrix;
-#ifndef __GEAR_VR
+
 		gVars->pRenderer->FormatTransformMatrix(invCamMatrix * renderProxy.transformMatrix, transformMatrix);
 
 		renderProxy.uniformValues.SetUniformValue< Matrix44 >( renderProxy.pShaderProgram, "modelViewMatrix", transformMatrix );
-#else
-		gVars->pRenderer->FormatTransformMatrix(renderProxy.transformMatrix, transformMatrix);
 
-		Matrix44 r;
-		renderProxy.uniformValues.SetUniformValue< Matrix44 >(renderProxy.pShaderProgram, "modelMatrix", renderProxy.transformMatrix);
-#endif
  		renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "SceneMatrices", m_sceneMatUniformBufferId);
  		//renderProxy.uniformValues.SetUniformValue< void* >(renderProxy.pShaderProgram, "Lighting", m_lightUniformBufferId);
 
@@ -142,21 +122,19 @@ void	CRenderPipeline::RenderQueue( TRenderProxies& renderProxies, IRenderTargetP
 
 
 void* pFontId;
-void			CRenderPipeline::Init( uint width, uint height )
+void			CRenderPipeline::InitPipeline( uint width, uint height )
 {
-	mainCamera.pRenderTarget = gVars->pRenderer->CreateRenderWindow( 0, 0, width, height );
+	m_pRenderWindow = gVars->pRenderer->CreateRenderWindow( 0, 0, width, height );
 
 
-#ifdef __GEAR_VR
-	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(SceneMatrices) );
-	m_lightUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Vec3)  );
-#else
 	m_sceneMatUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Matrix44) );
 	m_lightUniformBufferId = gVars->pRenderer->CreateUniformBuffer( sizeof(Vec3)  );
-#endif
+}
 
-
-
+void			CRenderPipeline::ResizeRenderTarget( uint width, uint height )
+{
+	m_pRenderWindow->SetWidth( width );
+	m_pRenderWindow->SetHeight( height );
 }
 
 
@@ -167,29 +145,22 @@ void			CRenderPipeline::Render()
 
 
 
-#ifndef __GEAR_VR
- gVars->pRenderer->StartRenderFrame();
-	gVars->pRenderer->BindRenderWindow( static_cast<CRenderWindow*>( mainCamera.pRenderTarget.get() ) );
+	gVars->pRenderer->StartRenderFrame();
+	gVars->pRenderer->BindRenderWindow( static_cast<CRenderWindow*>( m_pRenderWindow.get() ) );
 
- 	mainCamera.ComputeProjectionMatrix();
-#endif
 
-	
-	mainCamera.ComputeInverseTransformMatrix();
 
-//  	CRenderPipeline::RenderQueue( mainRenderQueue, mainCamera.pRenderTarget, mainCamera.projectionMatrix, m_drawCalls, m_polyCount );
-//  	mainRenderQueue.clear();
 
-	RenderQueue(proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
+	RenderQueue(proxies, m_pRenderWindow, m_camera.inverseTransformMatrix, m_camera.projectionMatrix, m_drawCalls, m_polyCount);
  	proxies.clear();
 
 
-	RenderQueue(m_proxies, mainCamera.pRenderTarget, mainCamera.inverseTransformMatrix, mainCamera.projectionMatrix, m_drawCalls, m_polyCount);
+	RenderQueue(m_proxies, m_pRenderWindow, m_camera.inverseTransformMatrix, m_camera.projectionMatrix, m_drawCalls, m_polyCount);
 
-	Transform invCam = mainCamera.transform.GetInverse();
+	//Transform invCam = mainCamera.transform.GetInverse();
 	for (const SDrawLine& drawLine : m_drawLines)
 	{
-		gVars->pRenderer->DrawLine(invCam * drawLine.p0, invCam * drawLine.p1, drawLine.color, mainCamera.projectionMatrix);
+		//gVars->pRenderer->DrawLine(invCam * drawLine.p0, invCam * drawLine.p1, drawLine.color, mainCamera.projectionMatrix);
 	}
 	m_drawLines.clear();
 

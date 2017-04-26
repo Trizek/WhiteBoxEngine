@@ -16,11 +16,11 @@ void CMaterialHelper::SaveToFile( const String& filePath )
 	
 	scriptNodeWriter.BeginGroup( "Material" );
 	{
-		scriptNodeWriter.Value( "emissiveColor", m_emissiveColor );
-		scriptNodeWriter.Value( "ambientColor", m_ambientColor );
-		scriptNodeWriter.Value( "diffuseColor", m_diffuseColor );
-		scriptNodeWriter.Value( "specularColor", m_specularColor );
-		scriptNodeWriter.Value( "shininess", m_shininess );
+		//scriptNodeWriter.Value( "emissiveColor", m_emissiveColor );
+		//scriptNodeWriter.Value( "ambientColor", m_ambientColor );
+		//scriptNodeWriter.Value( "diffuseColor", m_diffuseColor );
+		//scriptNodeWriter.Value( "specularColor", m_specularColor );
+		//scriptNodeWriter.Value( "shininess", m_shininess );
 		
 		for( size_t iLayer = 0 ; iLayer < CMaterial::MAX_TEXTURE_LAYER ; ++iLayer )
 		{

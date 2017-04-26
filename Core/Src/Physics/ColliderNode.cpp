@@ -39,6 +39,12 @@ void	CColliderNode::AddForce( const Vec3& force, const Vec3& localPoint /*= Vec3
 	gVars->pPhysicsSystem->AddForce( m_rigidBodyHandle, force, localPoint );
 }
 
+void	CColliderNode::Serialize( ISerializer& serializer )
+{
+	CSpatialNode::Serialize( serializer );
+	serializer.Value( "mass", m_mass );
+}
+
 
 
 void	CSphereColliderNode::SetRadius( float radius )
@@ -60,7 +66,15 @@ TColliderHandle		CSphereColliderNode::CreateCollider()
 	return gVars->pPhysicsSystem->CreateSphereCollider( globalTransform.scale.x * m_radius );
 }
 
+void	CSphereColliderNode::Serialize( ISerializer& serializer )
+{
+	CColliderNode::Serialize( serializer );
+	serializer.Value( "radius", m_radius );
+}
 
+
+
+DEFINE_SERIALIZABLE_CLASS(CSphereColliderNode)
 
 
 
@@ -83,6 +97,15 @@ TColliderHandle		CBoxColliderNode::CreateCollider()
 	return gVars->pPhysicsSystem->CreateBoxCollider( Vec3(m_size.x * scale.x, m_size.y * scale.y, m_size.z * scale.z) );
 }
 
+void	CBoxColliderNode::Serialize( ISerializer& serializer )
+{
+	CColliderNode::Serialize( serializer );
+	serializer.Value( "size", m_size );
+}
+
+
+DEFINE_SERIALIZABLE_CLASS(CBoxColliderNode)
+
 void	CStaticMeshColliderNode::SetMesh( CMeshPtr pMesh )
 {
 	m_pMesh = pMesh;
@@ -103,6 +126,14 @@ TColliderHandle		CStaticMeshColliderNode::CreateCollider()
 
 	return gVars->pPhysicsSystem->CreateStaticMeshCollider( m_pMesh->GetTriMesh().get(), transform );
 }
+
+void	CStaticMeshColliderNode::Serialize( ISerializer& serializer )
+{
+	CColliderNode::Serialize( serializer );
+	serializer.Value<CMeshPtr>( "mesh", m_pMesh );
+}
+
+DEFINE_SERIALIZABLE_CLASS(CStaticMeshColliderNode)
 
 
 WHITEBOX_END

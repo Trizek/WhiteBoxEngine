@@ -5,83 +5,98 @@
 
 WHITEBOX_BEGIN
 
-template< class BaseClass >
 class CSerializableFactory
 {
 public:
-	struct IBaseClassInterface
+	struct ISerializable
 	{
 		virtual const String& GetClassName() const = 0;
 		virtual void Serialize( ISerializer& serializer ) = 0;
+		virtual ~ISerializable() {};
 	};
 
-	template< class DerivedClass >
-	void RegisterClass()
+	static CSerializableFactory&	Get()
 	{
-		m_instantiateDerivedClassFuncMap[ DerivedClass::GetStaticClassName() ] = &DerivedClassInstantiator< DerivedClass >::Instantiate;	
+		static CSerializableFactory s_instance;
+		return s_instance;
 	}
-	
-	void Serialize( BaseClass*& pDerivedClass, ISerializer& serializer )
+
+	template< class T >
+	bool RegisterNewClass()
 	{
-		String derivedClassName;
+		m_loadFuncMap[ T::GetStaticClassName() ] = &LoadStaticFunc< T >;
+		return true;
+	}
+
+	template< class T >
+	void Serialize( T*& pObject, ISerializer& serializer )
+	{
+		String className;
 	
 		if ( serializer.IsReading() )
 		{
-			// delete pBaseClass ?
-			if ( pDerivedClass )
+			if ( serializer.BeginGroup( "Class" ) )
 			{
-				SAFE_DELETE( pDerivedClass );
-			}
-			serializer.Value( "DerivedClassName", derivedClassName );
-			if ( m_instantiateDerivedClassFuncMap.find( derivedClassName ) != m_instantiateDerivedClassFuncMap.end() )
-			{
-				pDerivedClass = m_instantiateDerivedClassFuncMap[ derivedClassName ]();
-			}
-			else
-			{
-				pDerivedClass = NULL;
+				serializer.Value( "ClassName", className );
+
+				TLoadFunc* pLoadFunc = m_loadFuncMap.FindElement( className );
+				if ( pLoadFunc )
+				{
+					if ( pObject )
+					{
+						SAFE_DELETE( pObject );
+					}
+
+					pObject = static_cast<T*>( (*pLoadFunc)( serializer ) );
+				}
+
+				serializer.EndGroup();
 			}
 		}
 		else
 		{
-			derivedClassName = pDerivedClass->GetClassName();
-			serializer.Value( "DerivedClassName", derivedClassName );
-		}
-		
-		if ( serializer.BeginGroup( derivedClassName ) )
-		{
-			pDerivedClass->Serialize( serializer );
+			className = pObject->GetClassName();
+			serializer.BeginGroup( "Class" );
+			serializer.Value( "ClassName", className );
+			pObject->Serialize( serializer );
 			serializer.EndGroup();
 		}
 	}
 
 private:
-	template< class DerivedClass >
-	struct DerivedClassInstantiator
+	template< class T >
+	static ISerializable* LoadStaticFunc( ISerializer& serializer )
 	{
-		static BaseClass*	Instantiate()
-		{
-			return new DerivedClass();
-		}
-	};
+		T* pObject = new T;
+		pObject->Serialize( serializer );
+		return pObject;
+	}
 
-	typedef BaseClass* (*TInstantiateDerivedClassFunc)();
-	
-	Map< String, TInstantiateDerivedClassFunc > m_instantiateDerivedClassFuncMap;
+	typedef ISerializable* (*TLoadFunc)( ISerializer& serializer );
+
+	Map< String, TLoadFunc > m_loadFuncMap;
 };
 
-#define DECLARE_SERIALIZABLE_FACTORY(className) \
+
+
+WHITEBOX_END
+
+#define DECLARE_SERIALIZABLE_CLASS(className) \
 	public: \
 	static const String& GetStaticClassName() \
 	{ \
 		static String name(#className); \
 		return name; \
 	} \
-	virtual const String& GetClassName() const \
+	virtual const String& GetClassName() const override\
 	{ \
 		return GetStaticClassName(); \
 	} \
 
-WHITEBOX_END
+#define DEFINE_SERIALIZABLE_CLASS(className) \
+	namespace className##SerializeNamespace \
+	{ \
+		bool bDummy = CSerializableFactory::Get().RegisterNewClass< className >(); \
+	};
 
 #endif

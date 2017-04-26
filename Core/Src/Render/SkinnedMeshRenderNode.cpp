@@ -8,6 +8,8 @@
 
 WHITEBOX_BEGIN
 
+DEFINE_SERIALIZABLE_CLASS(CSkinnedMeshRenderNode)
+
 void CSkinnedMeshRenderNode::Refresh()
 {
 	CMeshRenderNode::Refresh();
@@ -22,6 +24,11 @@ void CSkinnedMeshRenderNode::Refresh()
 		SRenderProxy& renderProxy = gVars->pEngine->m_pRenderPipeline->m_proxies[ proxyIndex ];
 		renderProxy.uniformValues.SetUniformValue< void* >( GET_CLAMPED_ELEM(m_shaderPrograms, i), "SkinningMatrices", m_skinMatricesBufferId ); 
 	}
+
+	CPose pose;
+	pose.m_boneTransforms.resize(64);
+	ApplySkinningPose( pose );
+		
 }
 
 void	CSkinnedMeshRenderNode::ApplySkinningPose( const CPose& skinningPose )

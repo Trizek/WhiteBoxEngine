@@ -33,6 +33,11 @@ bool	CScriptStreamReader::ConsumeInstruction()
 		return false;
 	}
 	m_identifierBuffer = m_tokenizer.GetString();
+
+	if (m_identifierBuffer == "shaderPrograms")
+	{
+		int x = 2;
+	}
 	
 	if ( !m_tokenizer.ReadToken() )
 	{
@@ -137,6 +142,39 @@ bool	CScriptStreamReader::ConsumeAttribute()
 
 		return true;
 	}
+	else if ( m_tokenizer.GetTokenType() == '(' )
+	{
+		float vector[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		for( int _digit = 0; _digit < 4; ++_digit )
+		{
+			m_tokenizer.ReadToken();
+			if ( m_tokenizer.GetTokenType() == ',' )
+			{
+				m_tokenizer.ReadToken();
+			}
+			
+			if ( m_tokenizer.GetTokenType() == ')' )
+			{
+				break;
+			}
+			else if ( m_tokenizer.GetTokenType() == (int)ETokenType::eFloat )
+			{
+				vector[ _digit ] = m_tokenizer.GetFloat();
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		SScriptNode::SAttribute vectorAttribute;
+		vectorAttribute.m_type = SScriptNode::SAttribute::eT_Vector;
+		vectorAttribute.m_vector = *((Vec4*)vector);
+
+		pCurNode->m_attributes[ m_identifierBuffer ] = vectorAttribute;
+
+		return true;
+	}
 
 	return false;
 }
@@ -190,8 +228,6 @@ void CScriptFileWriter::WriteNode( const SScriptNodePtr& pNode )
  			
  			case SScriptNode::SAttribute::eT_Vector:
  			{
-				break;
-
  				fprintf( m_pFile, "%s = ", attIt.GetKey().c_str() );
  				if ( attribute.m_vector.w == 0.0f )
  				{

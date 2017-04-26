@@ -2,7 +2,10 @@
 
 WHITEBOX_BEGIN
 
+DEFINE_SERIALIZABLE_CLASS(CSceneNode);
+
 CSceneNode::CSceneNode() : m_parent(nullptr){}
+CSceneNode::CSceneNode( const String& _name ) : name(_name), m_parent(nullptr){}
 
 CSceneNode::~CSceneNode(){}
 
@@ -59,7 +62,7 @@ void	CSceneNode::DetachFromParent()
 
 void	CSceneNode::PropagateTransform( const Transform& globalParentTransform )
 {
-	for ( NodePtr child : m_children )
+	for ( SceneNodePtr child : m_children )
 	{
 		child->PropagateTransform( globalParentTransform );
 	}
@@ -97,15 +100,56 @@ void	CSceneNode::SetGlobalTransform( const Transform& globalTransform )
 	
 void	CSceneNode::Refresh()
 {
-	for ( NodePtr child : m_children )
+	for ( SceneNodePtr child : m_children )
 	{
 		child->Refresh();
 	}
 }
 
 
+void	CSceneNode::Serialize( ISerializer& serialize )
+{
+	serialize.Value( "name", name );
+
+	if ( serialize.IsReading() )
+	{
+		if ( serialize.BeginGroup("Children") )
+		{
+			for(;;)
+			{
+				CSceneNode* pChild = nullptr;
+				CSerializableFactory::Get().Serialize( pChild, serialize );
+				if ( pChild )
+				{
+					pChild->AttachTo( this );
+					m_children.push_back( pChild );
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			serialize.EndGroup();
+		}
+	}
+	else if ( !m_children.empty() )
+	{
+		serialize.BeginGroup("Children");
+
+		for( SceneNodePtr& child : m_children )
+		{
+			CSceneNode* pChild = child.get();
+			CSerializableFactory::Get().Serialize( pChild, serialize ); 
+		}
+
+		serialize.EndGroup();
+	}
+}
 
 
+
+DEFINE_SERIALIZABLE_CLASS(CSpatialNode);
 
 
 void	CSpatialNode::GetLocalTransform( Transform& localTransform )
@@ -130,6 +174,24 @@ void	CSpatialNode::GetGlobalTransform( Transform& globalTransform )
 	globalTransform = m_globalTransform;
 }
 
+
+void	CSpatialNode::Rotate( Degree Yaw, Degree Pitch, Degree Roll )
+{
+	m_localTransform.rotation = Quat( Yaw, Pitch, Roll ) * m_localTransform.rotation;
+	UpdateGlobalTransform();
+}
+
+void	CSpatialNode::Serialize( ISerializer& serialize )
+{
+	CSceneNode::Serialize( serialize );
+
+	serialize.Value( "localTransform", m_localTransform );
+	
+	if ( serialize.IsReading() )
+	{
+		m_globalTransform = m_localTransform;
+	}
+}
 
 void	CSpatialNode::UpdateGlobalTransform()
 {

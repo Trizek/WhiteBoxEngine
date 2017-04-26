@@ -3,7 +3,10 @@
 #include "Render/RenderPipeline.h"
 #include "Engine.h"
 
+
 WHITEBOX_BEGIN
+
+DEFINE_SERIALIZABLE_CLASS(CMeshRenderNode);
 
 
 void	CMeshRenderNode::SetMesh( CMeshPtr pMesh )
@@ -56,6 +59,44 @@ void	CMeshRenderNode::Refresh()
 
 	CSceneNode::Refresh();
 }
+
+void	CMeshRenderNode::Serialize( ISerializer& serializer )
+{
+	CSpatialNode::Serialize( serializer );
+
+	serializer.Value<CMeshPtr>( "mesh", m_pMesh );
+
+	if ( serializer.IsReading() )
+	{
+		if ( serializer.BeginGroup("shaderPrograms") )
+		{
+			if ( serializer.BeginGroup("Program") )
+			{
+				CShaderProgramPtr pProgram;
+				serializer.Value<CShaderProgramPtr>( "name", pProgram );
+				m_shaderPrograms.push_back( pProgram );
+				serializer.EndGroup();
+			}
+
+			serializer.EndGroup();
+		}
+	}
+	else
+	{
+		if ( serializer.BeginGroup("shaderPrograms") )
+		{
+			for( CShaderProgramPtr& pProgram : m_shaderPrograms )
+			{
+				serializer.BeginGroup("Program");
+				serializer.Value<CShaderProgramPtr>( "name", pProgram );
+				serializer.EndGroup();
+			}
+
+			serializer.EndGroup();
+		}
+	}
+}
+
 
 
 WHITEBOX_END

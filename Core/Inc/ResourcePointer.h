@@ -14,6 +14,8 @@ template< class TResourceType >
 class CResourcePointer
 {
 public:
+	typedef TResourceType TMappedType;
+
 	CResourcePointer()
 		: m_pDescriptor(NULL){}
 
@@ -136,6 +138,11 @@ public:
 		return ( m_pDescriptor != NULL && m_pDescriptor->GetResource() != NULL );
 	}	
 		
+	const CResourceDescriptor&	GetDescriptor() const
+	{
+		return *m_pDescriptor;
+	}
+
 private:
 	CResourceDescriptor*	m_pDescriptor;
 };

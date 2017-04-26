@@ -8,11 +8,9 @@
 #include "FbxConv.h"
 #pragma optimize( "", off ) 
 
-#include "Application.h"
+#include "Engine.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Animation.h"
-
-SBone skel;
 
 using namespace fbxconv;
 using namespace WhiteBox;

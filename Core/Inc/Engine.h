@@ -7,13 +7,7 @@
 #include "Physics/PhysicsSystem.h"
 
 #include "Scene.h"
-
-struct SBone
-{
-	WhiteBox::Transform t;
-	std::vector<SBone> children;
-};
-
+#include "Render/Camera.h"
 
 WHITEBOX_BEGIN
 
@@ -33,11 +27,14 @@ public:
 
 	void	FrameUpdate();
 
-	class CRenderPipeline*	m_pRenderPipeline;
+	
 
 	size_t	AddColliderProxy( CSceneNode* pNode, TRigidBodyHandle	pRigidBodyHandle );
 	void	RemoveColliderProxy( size_t index );
 	void	UpdateColliderProxies();
+
+	CCameraPtr				pMainCamera;
+	class CRenderPipeline*	m_pRenderPipeline;
 
 private:
 	float	m_camYaw = 0.0f;
@@ -46,9 +43,10 @@ private:
 	Vec2	m_prevMousePos;
 	bool	m_bMovingCamera = false;
 
+
 	std::vector< SColliderProxy >	m_colliderProxies;
 
-	CScenePtr	m_curScene;
+	//CScenePtr	m_curScene;
 };
 
 WHITEBOX_END

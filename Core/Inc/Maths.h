@@ -22,6 +22,10 @@ T	Clamp( const T& x, const T& a, const T& b )
 	return Min( Max( x, a ), b );
 }
 
+float	RandomFloat( float minVal, float maxVal );
+int		RandomInt( int minVal, int maxVal );
+bool	RandomProbability(float probability);
+
 #define PI 3.1419f
 #define DEG2RAD (PI/180.0f)
 
@@ -137,10 +141,15 @@ struct Vec3
 	{
 		return x*rhs.x + y*rhs.y + z*rhs.z;
 	}
-	
-	Vec3 operator*( const Vec3& rhs ) const
+
+	Vec3 operator^( const Vec3& rhs ) const
 	{
 		return Vec3( y*rhs.z - z*rhs.y, z*rhs.x - x*rhs.z, x*rhs.y - y*rhs.x );
+	}
+	
+	Vec3 operator*(const Vec3& rhs) const
+	{
+		return Vec3( x*rhs.x, y*rhs.y, z*rhs.z );
 	}
 	
 	bool IsNull( float epsilon = 0.01f ) const

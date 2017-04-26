@@ -11,12 +11,20 @@ WHITEBOX_BEGIN
 
 class CMeshRenderNode : public CSpatialNode
 {
+DECLARE_SERIALIZABLE_CLASS(CMeshRenderNode)
+
 public:
+	CMeshRenderNode() = default;
+	CMeshRenderNode( const String& _name ) : CSpatialNode(_name) {}
+
+
 	void			SetMesh( CMeshPtr pMesh );
 	void			SetShaderProgram( size_t index, CShaderProgramPtr pShaderProgram );
 	virtual void	PropagateTransform( const Transform& globalParentTransform ) override;
 	
 	virtual void	Refresh() override;
+
+	virtual void	Serialize( ISerializer& serializer ) override;
 	
 protected:
 	CMeshPtr							m_pMesh;

@@ -105,6 +105,21 @@ struct SRenderProxy
 
 typedef std::vector< SRenderProxy >	TRenderProxies;
 
+struct SRenderCamera
+{
+	SRenderCamera() = default;
+	SRenderCamera(const CCamera& cam)
+		: projectionMatrix(cam.projectionMatrix)
+		, inverseTransformMatrix(cam.inverseTransformMatrix)
+		{
+			pRenderTarget = cam.pRenderTarget;
+		}
+
+	IRenderTargetPtr	pRenderTarget;
+	Matrix44			projectionMatrix;
+	Matrix34			inverseTransformMatrix;
+};
+
 struct SDrawLine
 {
 	Vec3 p0, p1;
@@ -119,17 +134,32 @@ public:
 	static CShaderUniformsValues&		AddRenderProxyToQueue( CMesh* pMesh, size_t part, TRenderProxies& renderProxies, const Transform& meshTransform, CShaderProgram* pShaderProgram, bool bCullFace );
 	void				RenderQueue( TRenderProxies& renderProxies, IRenderTargetPtr pRenderTarget, const Matrix34& invCamMatrix, const Matrix44& projectionMatrix, size_t& drawCalls, size_t& polyCount );
 
-	void					Init( uint width, uint height );
+	void					InitPipeline( uint width, uint height );
+	void					ResizeRenderTarget( uint width, uint height );
 	void					Render();
 
 	size_t					GetDrawCalls() const;
 	size_t					GetPolyCount() const;
 
-	CCamera					mainCamera;;
+	void					SetCamera(const CCamera& camera)
+	{
+		m_camera = SRenderCamera(camera);
+		if ( !camera.pRenderTarget )
+		{
+			m_camera.pRenderTarget = m_pRenderWindow;
+		}
+	}
+
+
 
 	TRenderProxies			proxies;
 
+
+	IRenderTargetPtr		m_pRenderWindow;
+	SRenderCamera			m_camera;
+	
 	TRenderProxies			m_proxies;
+
 
 	SRenderProxy&			AddRenderProxy();
 	void					RemoveRenderProxy( const SRenderProxy& proxy );

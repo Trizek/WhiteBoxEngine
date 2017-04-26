@@ -1608,7 +1608,7 @@ static ovrFrameParms ovrRenderer_RenderFrame(ovrRenderer * renderer, const ovrJa
 	projectionMatrixTransposed = ovrMatrix4f_Transpose(&renderer->ProjectionMatrix);
 
 	// set projection matrix (force)
-	gVars->pEngine->m_pRenderPipeline->mainCamera.projectionMatrix = *((Matrix44*)&projectionMatrixTransposed);
+	gVars->pEngine->pMainCamera->projectionMatrix = *((Matrix44*)&projectionMatrixTransposed);
 
 	// set eye matrices
 	ovrMatrix4f* inverseEyeMatrices = (ovrMatrix4f*)gVars->pOperatingSystem->GetInverseEyeMatrices();

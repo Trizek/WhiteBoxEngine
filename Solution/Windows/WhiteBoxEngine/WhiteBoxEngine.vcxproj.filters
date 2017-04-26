@@ -63,9 +63,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Core\Inc\Application.h">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Inc\BaseTypes.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
@@ -330,9 +327,6 @@
     <ClInclude Include="..\..\..\Core\Inc\Animation\AnimationSerializer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\Inc\PhysicSystem.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Inc\Physics\BulletPhysicsSystem.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -360,11 +354,17 @@
     <ClInclude Include="..\..\..\Core\Inc\Behavior.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Engine.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\Scene.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\SceneSerializer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Core\Src\Application.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\Camera.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
@@ -558,6 +558,12 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\Behavior.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\Engine.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Src\SceneSerializer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

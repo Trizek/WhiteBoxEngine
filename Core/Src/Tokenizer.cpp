@@ -141,6 +141,7 @@ bool	CTokenizer::ReadOperators( char firstChar )
 		case '#':
 		case '/':
 		case '\\':
+		case ',':
 		{
 			++m_dataStream;
 			m_tokenType = firstChar;

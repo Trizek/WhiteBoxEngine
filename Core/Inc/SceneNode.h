@@ -2,6 +2,7 @@
 #define __SCENENODE_H__
 
 #include "BaseTypes.h"
+#include "SerializableFactory.h"
 
 WHITEBOX_BEGIN
 
@@ -11,12 +12,14 @@ enum class ENodeAttachMode
 	ConserveGlobalTransform,
 };
 
-class CSceneNode : public CSmartPointerData
+class CSceneNode : public CSmartPointerData, public CSerializableFactory::ISerializable
 {
 public:
+	DECLARE_SERIALIZABLE_CLASS(CSceneNode);
 
-	typedef CSmartPointer<CSceneNode> NodePtr;
+	typedef CSmartPointer<CSceneNode> SceneNodePtr;
 
+	CSceneNode( const String& _name );
 	CSceneNode();
 	virtual ~CSceneNode();
 
@@ -28,7 +31,7 @@ public:
 	template< class TFunctor >
 	bool ForEachChild( TFunctor functor )
 	{
-		for( NodePtr child : m_children )
+		for( SceneNodePtr child : m_children )
 		{
 			if ( !functor( child ) || !child->ForEachChild< TFunctor >( functor ) )
 			{
@@ -48,10 +51,15 @@ public:
 	
 	virtual void	Refresh();
 
+	virtual void	Serialize( ISerializer& serialize ) override;
+
+public:
+	String					name;
+
 
 private:
 	CSceneNode*				m_parent;
-	std::vector< NodePtr >	m_children;
+	std::vector< SceneNodePtr >	m_children;
 };
 
 DEFINE_SMART_PTR(CSceneNode)
@@ -60,12 +68,20 @@ DEFINE_SMART_PTR(CSceneNode)
 class CSpatialNode : public CSceneNode
 {
 public:
+	DECLARE_SERIALIZABLE_CLASS(CSpatialNode);
+
+	CSpatialNode() = default;
+	CSpatialNode( const String& _name ) : CSceneNode(_name) {}
 
 	virtual void	GetLocalTransform( Transform& localTransform ) override;
 	virtual void	SetLocalTransform( const Transform& localTransform ) override;
 
 	virtual void	PropagateTransform( const Transform& globalParentTransform ) override;
 	virtual void	GetGlobalTransform( Transform& globalTransform ) override;
+
+	void			Rotate( Degree Yaw, Degree Pitch, Degree Roll );
+	
+	virtual void	Serialize( ISerializer& serialize ) override;
 
 private:
 	void	UpdateGlobalTransform();

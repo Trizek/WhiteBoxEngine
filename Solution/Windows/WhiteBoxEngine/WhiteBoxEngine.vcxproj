@@ -192,7 +192,7 @@
     <ClInclude Include="..\..\..\Core\Inc\Animation\AnimationTrack.h" />
     <ClInclude Include="..\..\..\Core\Inc\Animation\Skeleton.h" />
     <ClInclude Include="..\..\..\Core\Inc\Animation\SkeletonSerializer.h" />
-    <ClInclude Include="..\..\..\Core\Inc\Application.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Engine.h" />
     <ClInclude Include="..\..\..\Core\Inc\BaseTypes.h" />
     <ClInclude Include="..\..\..\Core\Inc\Behavior.h" />
     <ClInclude Include="..\..\..\Core\Inc\BehaviorComponent.h" />
@@ -212,7 +212,6 @@
     <ClInclude Include="..\..\..\Core\Inc\Object.h" />
     <ClInclude Include="..\..\..\Core\Inc\ObjectManager.h" />
     <ClInclude Include="..\..\..\Core\Inc\PhysicsAPI.h" />
-    <ClInclude Include="..\..\..\Core\Inc\PhysicSystem.h" />
     <ClInclude Include="..\..\..\Core\Inc\Physics\BulletPhysicsSystem.h" />
     <ClInclude Include="..\..\..\Core\Inc\Physics\ColliderNode.h" />
     <ClInclude Include="..\..\..\Core\Inc\Physics\PhysicsSystem.h" />
@@ -252,7 +251,9 @@
     <ClInclude Include="..\..\..\Core\Inc\ResourceSpecificManager.h" />
     <ClInclude Include="..\..\..\Core\Inc\ResourceType.h" />
     <ClInclude Include="..\..\..\Core\Inc\RigidBodyComponent.h" />
+    <ClInclude Include="..\..\..\Core\Inc\Scene.h" />
     <ClInclude Include="..\..\..\Core\Inc\SceneNode.h" />
+    <ClInclude Include="..\..\..\Core\Inc\SceneSerializer.h" />
     <ClInclude Include="..\..\..\Core\Inc\Script.h" />
     <ClInclude Include="..\..\..\Core\Inc\ScriptResourceSerializer.h" />
     <ClInclude Include="..\..\..\Core\Inc\ScriptSerializer.h" />
@@ -293,7 +294,7 @@
     <ClCompile Include="..\..\..\Core\Src\Animation\AnimationTrack.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Animation\SkeletonSerializer.cpp" />
-    <ClCompile Include="..\..\..\Core\Src\Application.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\Engine.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Behavior.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Camera.cpp" />
     <ClCompile Include="..\..\..\Core\Src\DataStream.cpp" />
@@ -332,6 +333,7 @@
     <ClCompile Include="..\..\..\Core\Src\ResourcePointer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\ResourceSpecificManager.cpp" />
     <ClCompile Include="..\..\..\Core\Src\SceneNode.cpp" />
+    <ClCompile Include="..\..\..\Core\Src\SceneSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\Script.cpp" />
     <ClCompile Include="..\..\..\Core\Src\ScriptResourceSerializer.cpp" />
     <ClCompile Include="..\..\..\Core\Src\ScriptSerializer.cpp" />
