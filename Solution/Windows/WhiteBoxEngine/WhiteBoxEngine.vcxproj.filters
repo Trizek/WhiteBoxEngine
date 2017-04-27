@@ -258,9 +258,6 @@
     <ClInclude Include="..\..\..\Editor\Inc\CopyExporter.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Editor\Inc\FbxExporter.h">
-      <Filter>Fichiers d%27en-tête\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Editor\Inc\MtlExporter.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
@@ -485,9 +482,6 @@
     <ClCompile Include="..\..\..\Editor\Src\CopyExporter.cpp">
       <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Editor\Src\FbxExporter.cpp">
-      <Filter>Fichiers sources\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Editor\Src\main.cpp">
       <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
@@ -528,9 +522,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\Animation\SkeletonSerializer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Editor\Libs\FbxConv\src\modeldata\Serialization.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Src\Animation\AnimationSerializer.cpp">

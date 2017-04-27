@@ -38,6 +38,8 @@
 #include "SerializableFactory.h"
 #include "ScriptSerializer.h"
 
+#include "CommandBuffer.h"
+
 
 // #include <iostream>
 
@@ -256,7 +258,25 @@ CEngine::CEngine()
 	: m_pRenderPipeline(nullptr){}
 
 
+class CCommandLoadResource
+{
+public:
+	void Execute()
+	{
+		if ( pDescriptor == nullptr )
+		{
+			return;
+		}
 
+		CDataStream dataStream;
+		gVars->pOperatingSystem->GetDataStream( pDescriptor->GetPath(), dataStream, pDescriptor->GetSize() );
+		IResource* pResource = pDescriptor->GetResourceType()->GetSerializer()->Load( dataStream, *pDescriptor );
+
+		pDescriptor->SetResource( pResource );
+	}
+
+	CResourceDescriptor* pDescriptor;
+};
 
 void CEngine::InitEngine( uint width, uint height )
 {
@@ -269,16 +289,18 @@ void CEngine::InitEngine( uint width, uint height )
 
 
 
+	CThreadedCommandBuffer buf;
 
 
-	
+	buf.PushCommand< CCommandLoadResource >({ nullptr });
+	buf.PushCommand< CCommandLoadResource >({ nullptr });
 
-
+	buf.ExecuteCommands();
 
 	
 
  	CAssetManager assetManager;
-//	assetManager.Export( "../../../Assets", "" );
+	//assetManager.Export( "../../../Assets", "" );
 
 
 
