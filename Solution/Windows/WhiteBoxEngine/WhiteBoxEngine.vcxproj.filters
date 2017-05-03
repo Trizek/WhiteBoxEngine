@@ -360,6 +360,9 @@
     <ClInclude Include="..\..\..\Core\Inc\SceneSerializer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\Inc\ResourceLoadingThread.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Src\Camera.cpp">

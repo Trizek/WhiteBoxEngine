@@ -17,6 +17,10 @@ public:
 		: m_pObject(nullptr)
 		, m_pStaticFunction(nullptr){}
 
+	CMemberCallback( void* pObject, TFunctionPointer pStaticFunction )
+		: m_pObject(pObject)
+		, m_pStaticFunction(pStaticFunction) {}
+
 	template< class Type, void (Type::*MemberFunc)(void) >
 	CMemberCallback& Bind(Type& type)
 	{
@@ -24,6 +28,12 @@ public:
 		m_pStaticFunction = &StaticCallback< Type, MemberFunc >;
 
 		return *this;
+	}
+
+	template< class Type, void (Type::*MemberFunc)(void) >
+	static CMemberCallback Create( Type& type )
+	{
+		return CMemberCallback( &type, &StaticCallback< Type, MemberFunc > );
 	}
 
 	void operator()() const

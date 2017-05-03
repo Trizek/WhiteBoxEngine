@@ -7,6 +7,7 @@
 
 WHITEBOX_BEGIN
 
+
 class CResourceSpecificManager;
 class CResourceManager
 {
