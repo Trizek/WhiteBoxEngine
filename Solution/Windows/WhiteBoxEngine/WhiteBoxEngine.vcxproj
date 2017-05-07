@@ -110,7 +110,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv;..\..\..\Core\Libs\Bullet\bin</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib;LinearMath_vs2010.lib;%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -138,7 +138,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv;..\..\..\Core\Libs\Bullet\bin</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);LinearMath_vs2010.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib;LinearMath_vs2010.lib;%(AdditionalDependencies);LinearMath_vs2010.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Cook for Android|Win32'">
@@ -157,7 +157,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\..\Editor\Libs\FbxSdk\2015.1\lib\vs2013\x86\release;..\..\..\Core\Libs\Glew\lib\Release\Win32;..\..\..\Core\Libs\FreeType\objs;..\..\..\Core\Libs\SDL\lib\x86;..\..\..\Editor\Libs\FreeImage\Dist\x32;..\..\..\Editor\Libs\FbxConv;%(AdditionalLibraryDirectories);..\..\..\Editor\Libs\FbxConv</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype240MT.lib;SDL2.lib;FreeImage.lib;BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib;LinearMath_vs2010.lib;%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
