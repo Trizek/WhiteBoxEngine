@@ -17,6 +17,7 @@ class CResourceManager;
 class CLogSystem;
 class IPhysicsSystem;
 class CBehaviorManager;
+class CResourceLoadingThread;
 struct SGlobalVariables
 {
 	static void Init();
@@ -28,6 +29,7 @@ struct SGlobalVariables
 	COperatingSystem*	pOperatingSystem;
 	CEngine*			pEngine;
 	CResourceManager*	pResourceManager;
+	CResourceLoadingThread*	pResourceLoadingThread;
 	IPhysicsSystem*		pPhysicsSystem;
 	CBehaviorManager*	pBehaviorManager;
 };

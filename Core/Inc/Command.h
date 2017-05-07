@@ -7,15 +7,20 @@ WHITEBOX_BEGIN
 class CCommand
 {
 public:
-	template< class Type >
-	static CCommand& AddCommandToBuffer( void* bufferData, void*& commandObjectAddr )
-	{
-		CCommand* pCommand = new (bufferData) CCommand();
-		commandObjectAddr = ((char*)bufferData) + sizeof(CCommand);
-		pCommand->SetCommandObject< Type >( commandObjectAddr );
+	typedef void(*TCommandFunc)(void*);
 
+	template< class TCommandObj >
+	static CCommand& AddCommandToBuffer( void* pBuffer, const TCommandObj& commandObject )
+	{
+		CCommand* pCommand = new (pBuffer) CCommand{ &Execute<TCommandObj>, &Destroy<TCommandObj> };
+		new (pCommand->m_pCommandObject) TCommandObj{ commandObject };
 		return *pCommand;
 	}
+
+	CCommand( TCommandFunc executeFunc, TCommandFunc destroyFunc )
+		: m_executeFunc(executeFunc)
+		, m_destroyFunc(destroyFunc)
+	{}
 
 	~CCommand()
 	{
@@ -27,22 +32,14 @@ public:
 		m_executeFunc(m_pCommandObject);
 	}
 
-	size_t	GetTotalSize() const
-	{
-		return m_totalSize;
-	}
-
 private:
 	template< class Type >
 	void SetCommandObject( void* commandObjectAddr )
 	{
 		m_pCommandObject = commandObjectAddr;
 		m_totalSize = sizeof(CCommand) + sizeof(Type); // padding ?
-		m_executeFunc = &Execute< Type >;
-		m_destroyFunc = &Destroy< Type >;
-	}
 
-	typedef void(*TCommandFunc)(void*);
+	}
 
 	template< class Type >
 	static void Execute( void* pCommandObject )
@@ -56,10 +53,11 @@ private:
 		((Type*)pCommandObject)->~Type();
 	}
 
-	void*			m_pCommandObject;
-	size_t			m_totalSize;
+	static const size_t s_MaxCommandObjectSize = 512;
+
 	TCommandFunc	m_executeFunc;
 	TCommandFunc	m_destroyFunc;
+	char			m_pCommandObject[ s_MaxCommandObjectSize ];
 };
 
 WHITEBOX_END

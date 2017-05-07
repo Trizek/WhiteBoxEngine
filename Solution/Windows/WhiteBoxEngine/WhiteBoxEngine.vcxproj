@@ -245,6 +245,7 @@
     <ClInclude Include="..\..\..\Core\Inc\Render\VertexBuffer.h" />
     <ClInclude Include="..\..\..\Core\Inc\Resource.h" />
     <ClInclude Include="..\..\..\Core\Inc\ResourceDescriptor.h" />
+    <ClInclude Include="..\..\..\Core\Inc\ResourceLoadingThread.h" />
     <ClInclude Include="..\..\..\Core\Inc\ResourceManager.h" />
     <ClInclude Include="..\..\..\Core\Inc\resourcepointer.h" />
     <ClInclude Include="..\..\..\Core\Inc\ResourceSerializer.h" />
