@@ -560,5 +560,11 @@
     <ClCompile Include="..\..\..\Core\Src\SceneSerializer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Editor\Src\FbxExporter.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Editor\Libs\FbxConv\src\modeldata\Serialization.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

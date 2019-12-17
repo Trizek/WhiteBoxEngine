@@ -269,15 +269,6 @@ void CEngine::InitEngine( uint width, uint height )
 	pMainCamera->pRenderTarget = m_pRenderPipeline->m_pRenderWindow;
 
 
-
-	CThreadedCommandBuffer buf;
-
-
-	buf.PushCommand< CCommandLoadResource >({ nullptr });
-	buf.PushCommand< CCommandLoadResource >({ nullptr });
-
-	buf.ExecuteCommands();
-
 	
 
  	CAssetManager assetManager;
@@ -660,36 +651,36 @@ void CEngine::FrameUpdate()
 	{
 		pMainCamera->transform.position += pMainCamera->transform.rotation * Vec3::Backward * 500.0f * frameTime;
 	}
-// 
-// 	bool bMovingCamera = gVars->pOperatingSystem->GetMouseButton(0);
-// 	if (m_bMovingCamera != bMovingCamera)
-// 	{
-// 		//m_prevMousePos = gVars->pOperatingSystem->GetMousePos();
-// 	}
-// 	if ( m_bMovingCamera )
-// 	{
-// 		Vec2 mousePos = gVars->pOperatingSystem->GetMousePos();
-// 		pMainCamera->transform.rotation.
-// 	}
+ 
+ 	//bool bMovingCamera = gVars->pOperatingSystem->GetMouseButton(0);
+ 	//if (m_bMovingCamera != bMovingCamera)
+ 	//{
+ 	//	//m_prevMousePos = gVars->pOperatingSystem->GetMousePos();
+ 	//}
+ 	//if ( m_bMovingCamera )
+ 	//{
+ 	//	Vec2 mousePos = gVars->pOperatingSystem->GetMousePos();
+ 	//	pMainCamera->transform.rotation.
+ 	//}
 
-/*
 
-	bool bSpawnCube = gVars->pOperatingSystem->JustPressedKey(Key::F1);
-	
-	STouchEvent touchEvent;
-	while (gVars->pOperatingSystem->PollTouchEvent(touchEvent))
-	{
-		bSpawnCube = bSpawnCube || (touchEvent.eventType == ETouchEventType::End);
-	}
 
-	if (bSpawnCube)
-	{
+	//bool bSpawnCube = gVars->pOperatingSystem->JustPressedKey(Key::F1);
 
-		CBoxColliderNode* pNode = SpawnCube(pMainCamera->transform * Transform(Vec3::Forward * 50.0f, Quat(), Vec3(40.0f)));
-		pNode->Refresh();
-		pNode->AddImpulse(pMainCamera->transform.rotation * Vec3::Forward * 100.0f);
-	}
-*/
+	//STouchEvent touchEvent;
+	//while (gVars->pOperatingSystem->PollTouchEvent(touchEvent))
+	//{
+	//	bSpawnCube = bSpawnCube || (touchEvent.eventType == ETouchEventType::End);
+	//}
+
+	//if (bSpawnCube)
+	//{
+
+	//	CBoxColliderNode* pNode = SpawnCube(pMainCamera->transform * Transform(Vec3::Forward * 50.0f, Quat(), Vec3(40.0f)));
+	//	pNode->Refresh();
+	//	pNode->AddImpulse(pMainCamera->transform.rotation * Vec3::Forward * 100.0f);
+	//}
+
 
 	pMainCamera->ComputeProjectionMatrix();
 	pMainCamera->ComputeInverseTransformMatrix();

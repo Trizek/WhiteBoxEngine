@@ -19,7 +19,7 @@ WHITEBOX_BEGIN
 CAssetManager::CAssetManager()
 {
 
-	//AddExporter( "FBX", new CFbxExporter() );
+	AddExporter( "FBX", new CFbxExporter() );
 
 	AddExporter( "obj", new CObjExporter() );
 	AddExporter( "mtl", new CMtlExporter() );

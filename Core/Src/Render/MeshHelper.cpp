@@ -268,7 +268,7 @@ char*	 CMeshHelper::BuildVertexArray( const CVertexFormat& vertexFormat ) const
 				SVertexBoneWeights boneWeights( m_blendBoneArray[0][iVertex].index, m_blendBoneArray[0][iVertex].weight,
 					m_blendBoneArray[1][iVertex].index, m_blendBoneArray[1][iVertex].weight,
 					m_blendBoneArray[2][iVertex].index, m_blendBoneArray[2][iVertex].weight,
-					m_blendBoneArray[3][iVertex].index, m_blendBoneArray[3][iVertex].weight );
+					0, 0.0);/*m_blendBoneArray[3][iVertex].index, m_blendBoneArray[3][iVertex].weight*/ 
 
 				*((SVertexBoneWeights*)pCursor) = boneWeights;
 				pCursor += sizeof(SVertexBoneWeights);
