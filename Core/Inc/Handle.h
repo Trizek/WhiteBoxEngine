@@ -1,6 +1,4 @@
-#ifndef __HANDLE_H__
-#define __HANDLE_H__
-
+#pragma once
 #include "BaseTypes.h"
 #include "SmartPointer.h"
 
@@ -221,5 +219,3 @@ private:
 };
 
 WHITEBOX_END
-
-#endif
